@@ -56,7 +56,7 @@ The Query function allows the user to perform read functions on the SQL database
 
 <hr>
 
-<b><a id="#alink_query">INSPECT: Visualize and process architectural features.</a></b>
+<b><a id="#alink_inspect">INSPECT: Visualize and process architectural features.</a></b>
 
 <p>The Inspect function works by issuing a lookup on the existing datasets in the database, depending on the 3C  data-source-path as the keyname for the stored data. The keyname is only a String-value written at the time of	logging the data with Ingest. It is not necessary for the keyname to point to a real location reachable on the user computer running Lariat.</p>
 
