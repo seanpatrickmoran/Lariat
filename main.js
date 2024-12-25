@@ -1,12 +1,24 @@
 const path = require('path');
 const { BrowserWindow, app, Menu, ipcMain, } = require('electron');
+const { dialog } = require('electron')
 
 
 const isMac = process.platform === 'darwin';
 
-const createWindow = () => {
+const createMainWindow = () => {
+//BrowserWindow.getAllWindows().length === 0 || 
+
+	//Only one main window
+	if (browserWindowArray['mainWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['mainWindow']) != null){
+		// dialog.showErrorBox("Error", "Main Window already open.") 
+		return
+	}
+
+	//show modal only the first time
+	const flagVal = BrowserWindow.fromId(browserWindowArray['mainWindow']) === null;
+
 	const mainWindow = new BrowserWindow({
-		title: "Lariat",
+		title: "mainWindow",
 		width: 800,
 		height: 600,
 		webPreferences:{
@@ -15,11 +27,23 @@ const createWindow = () => {
 		}
 	});
 
+	if (browserWindowArray['mainWindow'] === -2 && flagVal === true){
+		mainWindow.webContents.on('did-finish-load', ()=>{
+	  	mainWindow.webContents.send("show-start-mosaic","visible");
+      });
+	};
+
 	if (process.env.NODE_ENV !== 'production') {
 	mainWindow.webContents.openDevTools();
 	}
+
+	browserWindowArray['mainWindow'] = mainWindow.id;
 	mainWindow.loadFile("index.html")
-}
+
+	return undefined
+	}
+	//
+
 
 // const popWelcomePage = () => {
 
@@ -52,13 +76,19 @@ const createAboutWindow = () => {
 
 
 const createPopWindow = () => {
+	if (browserWindowArray['pasteboardWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['pasteboardWindow']) != undefined) {
+		// dialog.showErrorBox("Error", "Pasteboard already being used, dummy.") 
+		return undefined
+	}
 
-	// const aboutWindow = new BrowserWindow({
-	// 	title: "Pasteboard",
-	// 	width: 420,
-	// 	height: 360,
-	// });
-	// aboutWindow.loadFile("popBoard.html")
+	const pasteboardWindow = new BrowserWindow({
+		title: "Pasteboard",
+		width: 480,
+		height: 360,
+	});
+	browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
+	pasteboardWindow.loadFile("popBoard.html")
+	return undefined
 }
 
 // const createWelcomeWindow = () => {
@@ -84,13 +114,15 @@ const createPopWindow = () => {
 // }
 
 
+let browserWindowArray = { "" : 0,
+	'mainWindow': -2,
+	'pasteboardWindow': -2
+	}
+
 app.whenReady().then(()=> {
-	createWindow();
-	// createWelcomeWindow();
-	//implement menu
+	createMainWindow();
 	const mainMenu = Menu.buildFromTemplate(menu);
 	Menu.setApplicationMenu(mainMenu)
-	// popWelcomePage();
 });
 
 
@@ -118,9 +150,11 @@ const menu = [
   {
     label: 'File',
     submenu: [      
-      // { label: 'Pasteboard', accelerator: "CmdOrCtrl+T", click: () => app.emit('openPasteBoard'),} //HERE **
-      process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
-      { role: 'quit' },
+      { label: 'New Main', accelerator: "CmdOrCtrl+N", click: createMainWindow,},
+      { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},//() => app.emit('openPasteBoard'),}, //HERE **
+      { label: 'Close Window', accelerator: "CmdOrCtrl+W",},
+      // process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
+      { role: 'Quit' },
     ]
   },
 
@@ -227,12 +261,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-	if (BrowserWindow.getAllWindows().length === 0){
-	createWindow();
-	}
+	createMainWindow();
 });
-
-
 
 //IPC view
 
@@ -240,21 +270,32 @@ app.on('activate', () => {
 //query.html view
 
 ipcMain.on('change-view-to-query', ()=>{
-    BrowserWindow.getAllWindows()[0].loadFile('children/query.html')
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('children/query.html');
 });
 
 ipcMain.on('change-view-to-inspect', ()=>{
-    BrowserWindow.getAllWindows()[0].loadFile('children/inspect.html')
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('children/inspect.html')
 });
 
 ipcMain.on('change-view-to-viewer', ()=>{
-    BrowserWindow.getAllWindows()[0].loadFile('children/viewer.html')
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('children/viewer.html')
 });
 
 ipcMain.on('change-view-to-pairs', ()=>{
-    BrowserWindow.getAllWindows()[0].loadFile('children/pairs.html')
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('children/pairs.html')
 });
 
 ipcMain.on('back-to-previous', ()=>{
-    BrowserWindow.getAllWindows()[0].loadFile('index.html')
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('index.html')
+
+	if (browserWindowArray['mainWindow'] != -2){
+	selectWindow.webContents.on('did-finish-load', ()=>{
+	  selectWindow.webContents.send("show-start-mosaic","hidden");
+      });
+	};
 });

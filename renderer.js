@@ -27,11 +27,12 @@ viewToPairsButton.addEventListener('click',()=>{
     api.send('change-view-to-pairs');
 });
 
+window.api.recieve("show-start-mosaic",(value) => {
+	const showStartMosaic = document.getElementById('showStartMosaic');
+	showStartMosaic.style = `visibility: ${value}`;
+});
 
-// function createChild() {
-//     let
-// }
-
-// document.querySelector('#btnEd').addEventListener('click', () => {
-//     getData()
-// })
+const backButton = document.getElementById('backBtn');
+backButton.addEventListener('click',()=>{
+    api.send('back-to-previous');
+});
