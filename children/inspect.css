@@ -45,6 +45,11 @@ ul {
   align-items: flex-start;
 }
 
+
+#query-legend {
+  margin-right: 20px;
+}
+
 .content {
     position: fixed;
     left: 4px;
