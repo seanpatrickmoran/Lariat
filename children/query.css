@@ -50,3 +50,20 @@ input#sqlite3-query{
   inset 1px 1px 0px 0px #fff,
   inset -1px -1px 0px 0px #999;*/
 }
+
+.pbcontent {
+    position: relative;
+    top: 10px;
+    z-index: 2;
+    font-size: 12px;
+    font-weight: normal;
+    height: 300;
+    width: 500;
+    margin: 100px auto 0;
+    border: 1px solid #111;
+    background: #ccc;
+    box-shadow:
+  1px 2px #111,
+  inset 1px 1px 0px 0px #fff,
+  inset -1px -1px 0px 0px #999;
+}

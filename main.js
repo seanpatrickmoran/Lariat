@@ -52,12 +52,13 @@ const createAboutWindow = () => {
 
 
 const createPopWindow = () => {
-	const aboutWindow = new BrowserWindow({
-		title: "Pasteboard",
-		width: 420,
-		height: 360,
-	});
-	aboutWindow.loadFile("popBoard.html")
+
+	// const aboutWindow = new BrowserWindow({
+	// 	title: "Pasteboard",
+	// 	width: 420,
+	// 	height: 360,
+	// });
+	// aboutWindow.loadFile("popBoard.html")
 }
 
 // const createWelcomeWindow = () => {
@@ -89,7 +90,7 @@ app.whenReady().then(()=> {
 	//implement menu
 	const mainMenu = Menu.buildFromTemplate(menu);
 	Menu.setApplicationMenu(mainMenu)
-	popWelcomePage();
+	// popWelcomePage();
 });
 
 
@@ -117,23 +118,57 @@ const menu = [
   {
     label: 'File',
     submenu: [      
-      { label: 'Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
-      isMac ? { role: 'close' } : { role: 'quit' },
+      // { label: 'Pasteboard', accelerator: "CmdOrCtrl+T", click: () => app.emit('openPasteBoard'),} //HERE **
+      process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
       { role: 'quit' },
     ]
   },
 
   {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-  ]},
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+  ...(process.platform !== 'darwin'
+        ? [
+            { role: 'pasteAndMatchStyle' },
+            { role: 'delete' },
+            { role: 'selectAll' },
+            { type: 'separator' },
+            {
+              label: 'Speech',
+              submenu: [
+                { role: 'startSpeaking' },
+                { role: 'stopSpeaking' }
+              ]
+            }
+          ]
+        : [
+            { role: 'delete' },
+            { type: 'separator' },
+            { role: 'selectAll' }
+          ])
+    ]
+  },
+  // { role: 'viewMenu' }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
   ...(process.platform !== 'darwin'
     ? [
         {
@@ -182,6 +217,7 @@ const menu = [
       	},
 ];
 
+// exports.menu = menu;
 
 
 
@@ -195,6 +231,7 @@ app.on('activate', () => {
 	createWindow();
 	}
 });
+
 
 
 //IPC view

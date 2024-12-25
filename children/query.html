@@ -15,6 +15,9 @@
       $( function() {
           $( "#content" ).draggable({ handle: "h1.title" });
       } );
+      $( function() {
+          $( "#pbcontent" ).draggable({ handle: "h1.title" });
+      } );
     </script>
 
     </nav>
@@ -56,6 +59,22 @@
     </div>
     </section>
   </div>
+
+  <div id="hide-popboard" style="display: none" class="pbcontent">
+    <div class="control-box close-box"><a class="control-box-inner"></a></div>
+    <div class="control-box zoom-box"><div class="control-box-inner"><div class="zoom-box-inner"></div></div></div>
+    <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
+    <h1 class="title">Popboard</h1>
+    <div id="hide-body" style="display: none">
+      <select multiple size=20></select>
+    </div>
+  </div>
+
+
+
+
+
+
 
     <script src="query_form.js"></script>
     <link rel="stylesheet" href="../style.css" />

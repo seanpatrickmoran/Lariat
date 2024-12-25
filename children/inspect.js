@@ -203,8 +203,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // let finalarr = kronecker(reshapedArray,Math.floor(250/dimensionStr))
-    // normalizeToImageData(finalarr, vMax, canvas);
 });
 
 document.querySelector('#field-select').addEventListener('change', async () => {
@@ -214,35 +212,6 @@ document.querySelector('#field-select').addEventListener('change', async () => {
     let divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
 });
-
-
-
-// document.querySelector('#left-select').addEventListener('change', async () => {
-//     var search = document.getElementById('left-select');
-//     console.log(search);
-//     let nameString = queryToSelectbox(search);
-//     console.log(nameString);
-//     let divNames = document.getElementById("populate-left");
-//     divNames.innerHTML = "<option />" + nameString;
-// });
-
-
-
-
-
-
-
-
-// document.querySelector('#names-field').addEventListener('change', async () => {
-//     var search = document.getElementById('names-field');
-//     var value = search.value;
-//     var text = search.options[search.selectedIndex].text;
-//     console.log(search);
-//     var preloadedValues = JSON.parse(JSON.stringify(singlularQuery(text)));
-//     let divNames =document.querySelector("input#filter1")
-//     divNames.placeHolder = divNames;
-// });
-
 
 document.querySelector('#inspectBtn').addEventListener('click', async () => {
     // var search = document.getElementById('field-select');
@@ -292,14 +261,10 @@ document.querySelector('#inspectBtn').addEventListener('click', async () => {
     canvas.height = 325;
     let finalarr = kronecker(reshapedArray,Math.ceil(325/dimensions))
     normalizeToImageData(finalarr, viewing_vmax, canvas);
-
-    //set canvas
     let divNames = document.getElementById("sql-query-payload");
-    // divNames.innerHTML = "<ul>"
     let splitCoords = inspectedImageArray["coordinates"].split(',');
     inspectedImageArray["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<br>${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}`
     divNames.innerHTML = `<p><class "s">${inspectedImageArray["dataset"]}<br>${inspectedImageArray["name"]}<br>${inspectedImageArray["coordinates"]}</p>`
-    // divNames.innerHTML += "<br>"
 });
 
 document.querySelector('input#filter1').addEventListener('change', async () => {
@@ -324,34 +289,3 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     let finalarr = kronecker(reshapedArray,Math.ceil(325/dimensions))
     normalizeToImageData(finalarr, pixelMaxValue, canvas);
 });
-
-
-
-// document.querySelector('#leftViewBtn').addEventListener('click', async () => {
-//     var nameToSearch = document.getElementById('populate-left').value;
-//     var names = window.api.getNames(nameToSearch);
-//     let arrStr = names.map((elem) => {
-//         return elem.numpyarr
-//     }).join("");
-//     let dimensionStr = names.map((elem) => {
-//         return elem.dimensions
-//     }).join("");
-//     let vMax = names.map((elem) => {
-//         return elem.viewing_vmax
-//     }).join("");
-
-//     const decodedBytes = Uint8Array.from(atob(arrStr), c => c.charCodeAt(0));
-//     const float32Array = new Float32Array(decodedBytes.buffer);
-//     const rows = dimensionStr, cols = dimensionStr;
-//     const reshapedArray = [];
-//     for (let i = 0; i < rows; i++) {
-//         reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
-//     }
-
-//     const canvas = document.getElementById('canvas-left');
-//     canvas.width = 250;
-//     canvas.height = 250;
-//     let finalarr = kronecker(reshapedArray,Math.floor(250/dimensionStr))
-//     normalizeToImageData(finalarr, vMax, canvas);
-
-// });
