@@ -3,43 +3,25 @@ const { BrowserWindow, app, Menu, ipcMain, } = require('electron');
 
 
 const isMac = process.platform === 'darwin';
-// let welcomeWindow;
-//create the main window
+
 const createWindow = () => {
 	const mainWindow = new BrowserWindow({
 		title: "Lariat",
 		width: 800,
 		height: 600,
 		webPreferences:{
-			// contextIsolation: true,
 			nodeIntegration: true,
 			preload: path.join(__dirname, 'preload.js')
-			// preload: path.resolve(app.getAppPath(), 'preload.js'),
 		}
 	});
-	// const isDevMode = 
+
 	if (process.env.NODE_ENV !== 'production') {
 	mainWindow.webContents.openDevTools();
 	}
 	mainWindow.loadFile("index.html")
-	// const welcomeWindow = new BrowserWindow({
-
-
-	// const welcomeWindow = new BrowserWindow({
-	// 	parent: mainWindow,
-	// 	// modal: true,
-	// 	title: "Welcome!",
-	// 	// contextIsolation: true,
-	// 	width: 300,
-	// 	height: 300,
-	// 	// preload: path.join(__dirname, 'preload.js')
-	// });
-	// welcomeWindow.loadFile("children/welcome.html")
-
-	// createWelcomeWindow();
 }
 
-const popWelcomePage = () => {
+// const popWelcomePage = () => {
 
   // <div id="content" class="content">
   //   <div class="control-box close-box"><a class="control-box-inner"></a></div>
@@ -57,7 +39,7 @@ const popWelcomePage = () => {
   //     </ul>
   //     <button class="command_button">Reboot</button>
   //   </div>
-}
+// }
 
 const createAboutWindow = () => {
 	const aboutWindow = new BrowserWindow({
@@ -66,6 +48,16 @@ const createAboutWindow = () => {
 		height: 250,
 	});
 	aboutWindow.loadFile("about.html")
+}
+
+
+const createPopWindow = () => {
+	const aboutWindow = new BrowserWindow({
+		title: "Pasteboard",
+		width: 420,
+		height: 360,
+	});
+	aboutWindow.loadFile("popBoard.html")
 }
 
 // const createWelcomeWindow = () => {
@@ -81,38 +73,14 @@ const createAboutWindow = () => {
 // }
 
 
-const createHahahaWindow = () => {
-	const hahahaWindow = new BrowserWindow({
-		title: "WARN",
-		width: 150,
-		height: 150,
-	});
-	hahahaWindow.loadFile("hahaha.html")
-}
-
-
-// const createQueryWindow = () => {
-// 	const aboutWindow = new BrowserWindow({
-// 		title: "Query Window",
-// 		width: 800,
-// 		height: 600,
+// const createHahahaWindow = () => {
+// 	const hahahaWindow = new BrowserWindow({
+// 		title: "WARN",
+// 		width: 150,
+// 		height: 150,
 // 	});
-// 	aboutWindow.loadFile("query.html")
+// 	hahahaWindow.loadFile("hahaha.html")
 // }
-//app is ready
-
-
-// In main process.
-// const ipcMain = require('electron').ipcMain;
-
-// // in main process, outside of app.on:
-// ipcMain.on('load-page', (event, arg) => {
-//     mainWindow.loadURL(arg);
-// });
-
-
-
-
 
 
 app.whenReady().then(()=> {
@@ -148,10 +116,10 @@ const menu = [
   // {role: 'fileMenu',},
   {
     label: 'File',
-    submenu: [
+    submenu: [      
+      { label: 'Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
       isMac ? { role: 'close' } : { role: 'quit' },
-      { role: 'quit' }
-
+      { role: 'quit' },
     ]
   },
 
@@ -217,11 +185,6 @@ const menu = [
 
 
 
-
-
-
-
-
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit()
 
@@ -258,13 +221,3 @@ ipcMain.on('change-view-to-pairs', ()=>{
 ipcMain.on('back-to-previous', ()=>{
     BrowserWindow.getAllWindows()[0].loadFile('index.html')
 });
-
-// ipcMain.on('change-view-to-about', ()=>{
-//     // createHahahaWindow();
-//     createAboutWindow();
-// });
-
-
-// ipcMain.on('sql-query-images', ()=>{
-//     createHahahaWindow();
-// });

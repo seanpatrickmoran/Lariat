@@ -1,0 +1,30 @@
+body {
+/*    -moz-user-select: none;
+    -webkit-user-select: none;*/
+    background-image: url("img/patterns/139.png");
+    background-repeat: repeat;
+    margin: 0;
+    height: 100%;
+    font-family: 'ChicagoFLF', 'Times New Roman', 'Georgia', serif;
+    font-size: 12px;
+    font-weight: normal;
+    overflow: hidden;
+}
+
+.content {
+    position: fixed;
+    left: 80px;
+    top: -95px;
+    z-index: 2;
+    font-size: 12px;
+    font-weight: normal;
+    height: 300;
+    width: 500;
+    margin: 100px auto 0;
+    border: 1px solid #111;
+    background: #ccc;
+    box-shadow:
+  1px 2px #111,
+  inset 1px 1px 0px 0px #fff,
+  inset -1px -1px 0px 0px #999;
+}
