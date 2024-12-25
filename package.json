@@ -1,0 +1,29 @@
+{
+  "name": "Lariat",
+  "version": "0.0.1",
+  "description": "GUI interface to compare chromatin features, reads from SQL",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git remote -v https://github.com/seanpatrickmoran/Lariat.git"
+  },
+  "keywords": [
+    "Bioinformatics",
+    "loops",
+    "4DN",
+    "Nucleome",
+    "3D"
+  ],
+  "author": "Sean Moran",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-rebuild": "^3.2.9"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0"
+  }
+}

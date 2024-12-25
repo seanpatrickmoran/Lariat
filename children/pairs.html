@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <nav class="row-container">
+      <button id="backBtn">Main Menu</button>
+      <button id="viewToQueryBtn"> Query </button>
+      <button id="viewToInspectBtn"> Inspect </button>
+      <button id="viewToViewerBtn"> Viewer </button>
+      <button id="viewToPairsBtn"> Pairs </button>    
+      <!-- <button id='hahaha'> ????</button>   -->
+    </nav>
+    <!-- <title>Hello World!</title> -->
+  </head>
+  <body>
+
+
+  <div id="content" class="content">
+    <h1 class="title">Pairs</h1>
+    <div class="control-box close-box"><a class="control-box-inner"></a></div>
+    <div class="control-box zoom-box"><div class="control-box-inner"><div class="zoom-box-inner"></div></div></div>
+    <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
+
+
+      <div class="row-container">
+        <select class="row-selection" name="choose_left", id="left-select"></select>
+        <select class="row-selection" name="choose_right" id="right-select"></select>
+      </div>
+
+    <div class="row-container">
+      <button type="button" id="intersectBtn">a AND b</button>
+      <button type="button" id="aNotbBtn">a NOT b</button>
+      <button type="button" id="bNotaBtn">b NOT a</button>
+      <button type="button" id="inspectBtn">View</button>
+      <button type="button" id="sendToPasteBoard">Copy</button>
+    </div>
+
+    <div>
+      <select id="names" multiple size="16"> </select>
+    </div>
+
+  </div>
+    <script src="pairs.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="pairs.css" />
+  </body>
+</html>

@@ -1,0 +1,38 @@
+.row-container {
+  margin: 3px;
+  display: flex;
+  flex-direction: row;
+}
+
+.row-selection{
+  width: 225px;
+}
+
+#names {
+    border: 1px solid black;
+    margin: 3px;
+    width: 300px;
+    height: 323px;
+    overflow: auto;
+}
+
+.content {
+    position: fixed;
+    left: 4px;
+    top: -66px;
+    width: 600px;
+    height: 436px;
+}
+
+.select {
+  width: 100px;
+  overflow: auto;
+}
+
+/*#names {
+    border: 1px solid black;
+    width: 500px;
+    height: 300px;
+    overflow: auto;
+}
+*/

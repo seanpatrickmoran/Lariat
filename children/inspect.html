@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <nav class="row-container">
+      <button id="backBtn">Main Menu</button>
+      <button id="viewToQueryBtn"> Query </button>
+      <button id="viewToInspectBtn"> Inspect </button>
+      <button id="viewToViewerBtn"> Viewer </button>
+      <button id="viewToPairsBtn"> Pairs </button>    
+      <!-- <button id='hahaha'> ????</button>   -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+          $( "#content" ).draggable({ handle: "h1.title" });
+      } );
+    </script>
+
+    </nav>
+    <!-- <title>Hello World!</title> -->
+  </head>
+  <body>
+    <section>
+      <div id="content" class="content">
+        <div class="control-box close-box"><a class="control-box-inner"></a></div>
+        <div class="control-box zoom-box"><div class="control-box-inner"><div class="zoom-box-inner"></div></div></div>
+        <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
+        <h1 class="title">Inspect</h1>
+        <section class="container">
+          <div class="block">
+            <div class="row-container">
+              <label for="field-select">Dataset:</label>
+              <select name="fields" id="field-select"></select>
+            </div>
+            <div class="row-container">
+              <button type="button" id="inspectBtn">Inspect</button>
+              <button type="button" id='tail-sql'>Filter</button>
+              <button type="button" id="resetBtn">Export</button> 
+            </div>
+            <div>
+              <select id="names-field" size="10"> </select>
+            </div>
+          </div>
+          <div class="block">
+            <div class="row-container">
+              <input type="text" name="filter" placeholder="pixelMax" id="filter1" style="width: 65px"/><input type="text" name="filter" placeholder="PH1" id="filter2" style="width: 65px"/><input type="text" name="filter" placeholder="PH2" style="width: 65px"/><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
+            </div>
+            <div class="row-container">
+              <select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
+            </div>
+            <div class="row-container">
+               <canvas id="canvas-inspect" width="325" height="325"></canvas>
+            </div>
+            <div id="sql-query-payload" class="column-container">
+               <!-- <p id="sql-query-payload"><class "s"></p> -->
+               <!-- <p id="coordinates"><class "s">testing</p> -->
+            </div>
+          </div>
+        </section>
+  
+      </div>
+    </section>
+    <script src="inspect.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="inspect.css" />
+  </body>
+</html>

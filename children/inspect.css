@@ -1,0 +1,64 @@
+#names-field {
+    border: 1px solid black;
+    margin: 3px;
+    width: 256px;
+    height: 442px;
+    overflow: auto;
+}
+
+#field-select{
+  width: 201px;
+}
+
+#filter{
+  width: 50px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.container {
+  display: flex;
+/*  justify-content: space-between; /* Space between the blocks */*/
+/*  gap: 20px;  Optional gap between blocks */
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-right: 25px;
+}
+
+
+.row-container {
+  margin: 3px;
+  display: flex;
+  flex-direction: row;
+}
+
+.column-container {
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.content {
+    position: fixed;
+    left: 4px;
+    top: -66px;
+/*    z-index: 2;
+    font-size: 12px;
+    font-weight: normal;*/
+    width: 770px;
+    height: 520px;
+/*    margin: 100px auto 0;
+    border: 1px solid #111;
+    background: #ccc;
+    box-shadow:
+  1px 2px #111,
+  inset 1px 1px 0px 0px #fff,
+  inset -1px -1px 0px 0px #999;*/
+}

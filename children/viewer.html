@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- <title>Hello World!</title> -->
+    <nav class="row-container">
+      <button id="backBtn">Main Menu</button>
+      <button id="viewToQueryBtn"> Query </button>
+      <button id="viewToInspectBtn"> Inspect </button>
+      <button id="viewToViewerBtn"> Viewer </button>
+      <button id="viewToPairsBtn"> Pairs </button>    
+      <!-- <button id='hahaha'> ????</button>   -->
+    </nav>
+  </head>
+  <body>
+    <!-- <h2>Viewer</h2> -->
+  <div id="content" class="content">
+    <section>
+    <h1 class="title">Viewer</h1>
+    <div class="control-box close-box"><a class="control-box-inner"></a></div>
+    <div class="control-box zoom-box"><div class="control-box-inner"><div class="zoom-box-inner"></div></div></div>
+    <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
+
+
+    <section class="container">
+    <div class="block">
+      <div class="row-container">
+        <select name="choose_left" id="left-select"></select>
+      </div>
+      <div class="row-container">
+      <select id="populate-left" size="6"> </select>
+      </div>
+      <div class="row-container">
+      <!-- <button type="button" id="leftQueryBtn">Query</button> -->
+<!-- <option value="name">name</option> -->
+        <button type="button" id="leftInspectBtn">Load</button>
+        <button type="button" id="leftViewBtn">View</button>
+        <button type="button" id="leftResetBtn">Reset</button>
+      </div>
+      <div class="row-container">
+        <canvas id="canvas-left" width="256" height="256"></canvas>
+      </div>
+    </div>    
+    <div class="block">
+      <div class="row-container">
+        <select name="choose_right" id="right-select"></select>
+      </div>
+      <div class="row-container">
+        <select id="populate-right" size="6"> </select>
+      </div>
+      <div class="row-container">
+        <button type="button" id="rightInspectBtn">Load</button>
+        <button type="button" id="rightViewBtn">View</button>
+        <button type="button" id="rightResetBtn">Reset</button>
+      </div>
+      <div class="row-container">
+        <canvas id="canvas-right" width="256" height="256"></canvas>
+      </div>
+    </div>    
+    </section>
+  </div>
+<!-- 
+    <section>
+    <h2>SQL Query</h2>
+    <input type="text" id="sqlite3-query" placeholder="SQL text input"/>
+    <label for="field-select">Choose Field:</label>
+
+    <select name="fields" id="field-select">
+      <option value="name">name</option>
+      <option value="dataset">dataset</option>
+      <option value="condition">condition</option>
+      <option value="coordinates">coordinates</option>
+      <option value="viewing_vmax">viewing_vmax</option>
+      <option value="dimensions">dimensions</option>
+      <option value="hic_path">hic_path</option>
+      <option value="PUB_ID">PUB_ID</option>
+      <option value="resolution">resolution</option>
+    </select>
+    <button type="button" id="queryBtn">Query</button>
+    <button type="button" id="inspectBtn">Inspect</button>
+    <button type="button" id="resetBtn">Reset</button>
+    <br><br>
+    <div id="output"></div>
+    </section>
+
+    <div>
+      <select id="names" multiple size="16">
+      </select>
+
+    </div> -->
+
+    <script src="viewer.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="viewer.css" />
+  </body>
+</html>

@@ -1,0 +1,87 @@
+/*#names {
+    border: 1px solid black;
+    width: 300px;
+    height: 330px;
+    overflow: auto;
+}
+
+/*.button-container {
+  display: flex;
+  flex-direction: row;
+}*/
+
+
+.row-container {
+  margin: 3px;
+  display: flex;
+  flex-direction: row;
+}
+
+
+.content {
+    position: fixed;
+    left: 4px;
+    top: -66px;
+/*    z-index: 2;
+    font-size: 12px;
+    font-weight: normal;*/
+    width: 600px;
+    height: 436px;
+/*    margin: 100px auto 0;
+    border: 1px solid #111;
+    background: #ccc;
+    box-shadow:
+  1px 2px #111,
+  inset 1px 1px 0px 0px #fff,
+  inset -1px -1px 0px 0px #999;*/
+}
+
+
+
+
+
+
+
+.container {
+  display: flex;
+/*  justify-content: space-between; /* Space between the blocks */*/
+/*  gap: 20px;  Optional gap between blocks */
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: left; /* Center items within each block */
+/*  width: 200px; /* Fixed width for each block */*/
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: left; /* Center items within each block */
+}
+
+select {
+  margin-bottom: 10px; /* Space between the select box and buttons */
+/*  padding: 5px;*/
+/*  font-size: 14px;*/
+  width: 256px;
+/*  height: 100px;*/
+  overflow: auto;
+}
+
+.buttons {
+/*  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */*/
+}
+
+button {
+/*  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;*/
+}
+
+
+
+
