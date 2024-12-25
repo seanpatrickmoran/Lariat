@@ -3,12 +3,18 @@ Welcome to Lariat! A toolkit for architectural chromatin analysis.
 <h1>DOCUMENTATION</h1>
 
 <ul>
-  <li><a href="#alink_query">QUERY</a></li>
+<!--   <li><a href="#alink_query">QUERY</a></li>
   <li><a href="#alink_inspect">INSPECT</a></li>
   <li><a href="#INSERT_YOUR_OBJECT_NAME_HERE">VIEWER</a></li>
   <li><a href="#INSERT_YOUR_OBJECT_NAME_HERE">PAIRS</a></li>
-  <li><a href="#INSERT_YOUR_OBJECT_NAME_HERE">DUMP</a></li>
+  <li><a href="#INSERT_YOUR_OBJECT_NAME_HERE">DUMP</a></li> -->
 </ul>
+
+-[`QUERY`](#use-of-query)
+-[`INSPECT`](#use-of-inspect)
+-[`VIEWER`](#use-of-viewer)
+-[`PAIR`](#use-of-pair)
+
 
 
 The overall goal of Lariat is to provide a tool for anyone to easily perform rapid visualization and analysis of chromatin conformation capture results
@@ -22,7 +28,9 @@ Lariat is a convinient combination of tools to visualize, compare, and filter ch
 <br>
 <hr>
 
-<b><a id="#alink_query">QUERY: Access Database Using Known Keys.</a></b>
+<!-- <b><a id="#alink_query">QUERY: Access Database Using Known Keys.</a></b> -->
+### Use of QUERY
+QUERY: Access Database Using Known Keys.
 
 The Query function allows the user to perform read functions on the SQL database linked to Lariat. Query is also useful if the database's contents are not well understood or if the user seeks to combine data from many experiments from publically availible 3C-type data. By default, the database entries are written in exactly the same way via Ingest to the following schema:
 
@@ -56,7 +64,8 @@ The Query function allows the user to perform read functions on the SQL database
 
 <hr>
 
-<b><a id="#alink_inspect">INSPECT: Visualize and process architectural features.</a></b>
+### Use of INSPECT
+Visualize and process architectural features.
 
 <p>The Inspect function works by issuing a lookup on the existing datasets in the database, depending on the 3C  data-source-path as the keyname for the stored data. The keyname is only a String-value written at the time of	logging the data with Ingest. It is not necessary for the keyname to point to a real location reachable on the user computer running Lariat.</p>
 
@@ -90,7 +99,9 @@ but may also be changed here between Linear, Log Normalization, and Quantile Nor
 </p>
 
 <hr>
-<ul><li><a id="#alink_viewer">VIEWER: Visualize and process architectural features.</a></li></ul>
+
+### Use of VIEWER
+
 <p class="main-document">
 ...
 </p>
@@ -101,7 +112,8 @@ but may also be changed here between Linear, Log Normalization, and Quantile Nor
 
 <hr>
 
-<ul><li><a id="#alink_pairs">Pairs: Access Database Using Known Keys.</a></li></ul>
+### Use of PAIR
+
 <p class="main-document">
 ...
 </p>
