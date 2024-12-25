@@ -71,7 +71,7 @@ function tailOfSQLClick(){
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
-    divNames.innerHTML = nameString;
+    divNames.innerHTML = "<option />" + nameString;
 };
 
 function defaultRender(){
@@ -206,6 +206,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // let finalarr = kronecker(reshapedArray,Math.floor(250/dimensionStr))
     // normalizeToImageData(finalarr, vMax, canvas);
 });
+
 document.querySelector('#field-select').addEventListener('change', async () => {
     var search = document.getElementById('field-select').value;
     console.log(search);

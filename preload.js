@@ -31,6 +31,14 @@ const getVMax = (name) => {
 	return testmgr.getVMax(name);
 }
 
+const getResolution = (name) => {
+	return testmgr.getResolution(name);
+}
+
+const getDimensions = (name) => {
+	return testmgr.getDimensions(name);
+}
+
 const getTail = () => {
 	return testmgr.getTail();
 }
@@ -41,6 +49,10 @@ const pragma = () => {
 
 const getDistinctDatasets = () => {
 	return testmgr.getDistinctDatasets();
+}
+
+const getDistinctItems = (name) => {
+	return testmgr.getDistinctItems(name);
 }
 
 
@@ -89,6 +101,9 @@ contextBridge.exposeInMainWorld("api", {
 	getPubId: getPubId,
 	getTail: getTail,
 	getVMax: getVMax,
+	getResolution: getResolution,
+	getDimensions: getDimensions,
+	getDistinctItems: getDistinctItems,
 	getDistinctDatasets: getDistinctDatasets,
 	pragma: pragma,
     send: (channel, data) => ipcRenderer.send(channel, data),

@@ -30,20 +30,19 @@
 
     <h1 class="title">SQL Query</h1>
     <div class="row-container">
-    <input type="text" id="sqlite3-query" placeholder="SQL text input"/>
-    <label for="field-select">Choose Field:</label>
-    
-    <select name="fields" id="field-select">
-      <option value="name">name</option>
-      <option value="dataset">dataset</option>
-      <option value="condition">condition</option>
-      <option value="coordinates">coordinates</option>
-      <option value="viewing_vmax">viewing_vmax</option>
-      <option value="dimensions">dimensions</option>
-      <option value="hic_path">hic_path</option>
-      <option value="PUB_ID">PUB_ID</option>
-      <option value="resolution">resolution</option>
-    </select>
+      <label for="field-select">Field:</label>
+      <select name="fields" id="field-select">
+        <option value="name">name</option>
+        <option value="dataset">dataset</option>
+        <option value="condition">condition</option>
+        <option value="dimensions">dimensions</option>
+        <option value="hic_path">hic_path</option>
+        <option value="PUB_ID">PUB_ID</option>
+        <option value="resolution">resolution</option>
+      </select>
+      <label for="avail-field-select">Avail:</label>
+      <select name="available" id="avail-field-select"></select>
+      <input type="text" id="sqlite3-query" placeholder="SQL Query"/>
     </div>
 
     <div class="row-container">
@@ -53,7 +52,7 @@
       <button type="button" id="resetBtn">Reset</button> 
     </div>
     <div>
-      <select id="names" multiple size="10"> </select>
+      <select id="names" multiple size="10"><option /></option></select>
     </div>
     </section>
   </div>

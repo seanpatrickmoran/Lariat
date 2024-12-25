@@ -42,6 +42,21 @@ exports.getPubId = (name) => {
 	return result;
 };
 
+exports.getResolution = (name) => {
+	const sql = 'SELECT * FROM imag WHERE resolution = (?)';
+	let stmt = db.prepare(sql);
+	let result = stmt.all(parseInt(name));
+	// console.log(result);
+	return result;
+};
+
+exports.getDimensions = (name) => {
+	const sql = 'SELECT * FROM imag WHERE dimensions = (?)';
+	let stmt = db.prepare(sql);
+	let result = stmt.all(parseInt(name));
+	console.log(result,name);
+	return result;
+};
 
 exports.pragma = () => {
 	const sql = 'PRAGMA table_info(imag)'; 
@@ -73,6 +88,15 @@ exports.getDistinctDatasets = () => {
 	// console.log(result);
 	return result;
 }
+
+exports.getDistinctItems = (name) => {
+	const sql = `SELECT DISTINCT ${name} FROM imag ORDER BY name ASC;`
+	let stml = db.prepare(sql);
+	let result = stml.all();
+	console.log(result);
+	return result;
+}
+
 
 
 // exports.getNames = (name, colName="name") => {

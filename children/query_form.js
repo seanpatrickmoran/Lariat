@@ -32,7 +32,7 @@ viewToPairsButton.addEventListener('click',()=>{
 
 
 // Using Object.assign()
-let functionMapped = { "name" : window.api.getNames, "dataset" : window.api.getDataset, "condition" : window.api.getCondition, "hic_path" : window.api.getHiCPath, "PUB-ID" : window.api.getPubId,}; //write MAP method for each function, call MAP object from query_from_textbox.
+const functionMapped = { "name" : window.api.getNames, "dataset" : window.api.getDataset, "condition" : window.api.getCondition, "hic_path" : window.api.getHiCPath, "PUB_ID" : window.api.getPubId, "resolution" : window.api.getResolution, "dimensions" : window.api.getDimensions,}; //write MAP method for each function, call MAP object from query_from_textbox.
 
 
 function tailOfSQLClick(){
@@ -44,36 +44,34 @@ function tailOfSQLClick(){
     divNames.innerHTML = nameString;
 };
 
-function defaultRender(){
-    var names = window.api.pragma();
-    let divNames = document.getElementById("names");
-    let nameString = names.map((elem) => {
-        return elem.name
-    }).join("");
-    divNames.innerHTML = nameString;
-};
-
-// function query_with_textbox(){
-//     var search = document.getElementById('sqlite3-query').value;
-//     var names = window.api.getNames(search);
-//     let divNames = document.getElementById("names");
-//     let nameString = names.map((elem) => {
-//         return elem.name, elem.coordinates
-//     }).join("<option />");
-//     divNames.innerHTML = nameString;
-// }
-
 
 function query_with_textbox(keyname){
     var search = document.getElementById('sqlite3-query').value;
-    var names = functionMapped[keyname](search);
+    console.log(keyname, search);
+    var names = functionMapped[keyname](search)
+    console.log(names);
     let divNames = document.getElementById("names");
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
-    console.log(nameString);
+    // console.log(nameString);
     divNames.innerHTML = "<option />" + nameString;
-}
+};
+
+function queryToSelectbox(search){
+    var names = window.api.getDistinctItems(search);
+    // console.log(names)
+    let nameString = names.map((elem) => {
+        return elem[search]
+    }).join("<option />");
+    return nameString;
+};
+
+
+
+
+
+
 
 // function ShowImage(keyname){
 //     var search = document.getElementById('sqlite3-query').value;
@@ -91,10 +89,19 @@ function query_with_textbox(keyname){
 
 
 
-document.addEventListener('DOMContentLoaded', async () => {
-    defaultRender();
-});
+// document.addEventListener('DOMContentLoaded', async () => {
+//     defaultRender();
+// });
 
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    var search = document.getElementById('field-select').value;
+    var nameString = queryToSelectbox(search);
+    var divNames = document.getElementById("avail-field-select");
+    divNames.innerHTML = "<option /> ---Scroll for all--- </option><option />" + nameString;
+
+});
 
 document.querySelector('#tail-sql').addEventListener('click', async () => {
     tailOfSQLClick()
@@ -105,23 +112,44 @@ document.querySelector('#queryBtn').addEventListener('click', async () => {
     var fieldSelect = document.getElementById("field-select");
     var value = fieldSelect.value;
     var text = fieldSelect.options[fieldSelect.selectedIndex].text;
-    query_with_textbox(text);
+    if (document.getElementById("avail-field-select").value === " ---Scroll for all--- ") {
+        /*
+        Query and write to 
+        */
+    } else {
+        /*
+        Otherwise, there's a selected option, query these instead.
+        */
+    };
+
 });
 
-document.querySelector('#inspectBtn').addEventListener('click', async () => {
-    var colOfSelectedOpt = document.getElementById("names").selectedOptions; //This is how we call selected values
-    var values = [];
-    for(var i=0;i<colOfSelectedOpt.length;i++) {
-         values.push(colOfSelectedOpt[i].value);
-    }
-    console.log(values);
-    return values;
+
+document.getElementById('field-select').addEventListener('change', async () => {
+    var search = document.getElementById('field-select').value;
+    console.log(search);
+    var names = window.api.getDistinctItems(search);
+    let nameString = names.map((elem) => {
+        return elem[search]
+    }).join("<option />");
+    let divNames = document.getElementById("avail-field-select");
+    divNames.innerHTML = "<option /> ---Scroll for all--- </option><option />" + nameString;
 });
 
+// document.querySelector('#inspectBtn').addEventListener('click', async () => {
+//     var colOfSelectedOpt = document.getElementById("names").selectedOptions; //This is how we call selected values
+//     var values = [];
+//     for(var i=0;i<colOfSelectedOpt.length;i++) {
+//          values.push(colOfSelectedOpt[i].value);
+//     }
+//     console.log(values);
+//     return values;
+// });
 
-document.querySelector('#resetBtn').addEventListener('click', async () => {
-    defaultRender()
-});
+
+// document.querySelector('#resetBtn').addEventListener('click', async () => {
+//     // defaultRender()
+// });
 
 // document.querySelector('#viewBtn').addEventListener('click', async () => {
 //     var colOfSelectedOpt = document.getElementById("names").selectedOptions; //This is how we call selected values
