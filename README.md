@@ -1,6 +1,9 @@
+<p float="center" align="left"><h1><image src="./src/lariattmp.png" width=32px /> </image> Lariat</h1></p>
+
+
 Welcome to Lariat! A toolkit for architectural chromatin analysis.
 			<!-- <li>...</li> -->
-<h1>DOCUMENTATION</h1>
+<h2>DOCUMENTATION</h2>
 
 <ul>
 <!--   <li><a href="#alink_query">QUERY</a></li>
