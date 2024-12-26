@@ -126,6 +126,16 @@ document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
     window.api.mainDumpToPasteboard(dumpArr);
 });
 
+window.api.recieve("paste-board-to-noWindow",(values) => {
+    console.log('received')
+    var names = values[0];
+    let divNames = document.getElementById("names");
+    let nameString = names.map((elem) => {
+        return elem
+    }).join("<option />");
+    console.log(nameString);
+    divNames.innerHTML = "<option />" + nameString;
+});
 
 
 // function query_with_textbox(keyname,route){

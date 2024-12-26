@@ -339,11 +339,28 @@ ipcMain.handle('dialog:callPBoard', async (event, data) => {
 	return 
 });
 
-
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	selectWindow.webContents.send("main-to-pasteboard",response);
+});
+
+
+ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
+	const response = await data;
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow']);
+
+    const path = selectWindow.webContents.getURL();
+
+	if (BrowserWindow.fromId(browserWindowArray['mainWindow']) === null){
+	selectWindow.webContents.on('did-finish-load', ()=>{
+	  // selectWindow.webContents.send("show-start-mosaic","hidden");
+		selectWindow.loadFile('children/query.html')});
+	}
+	selectWindow.webContents.send("paste-board-to-noWindow",(response));
+    // const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
+	// selectWindow.webContents.send("main-to-pasteboard",response);
+
 });
 
 

@@ -44,10 +44,20 @@ pasteBoardRemove.addEventListener('click', async () => {
 	}
 });
 
-// const pasteBoardPasteTo = document.getElementById('pbPasteTo');
-// pasteBoardPasteTo.addEventListener('click', async () => {
-// 	//TODO
-// });
+const pasteBoardPasteTo = document.getElementById('pbPaste');
+pasteBoardPasteTo.addEventListener('click', async () => {
+	const pasteBoardSelectField = document.getElementById('pasteboard');
+    window.api.talkToMain('true');
+    // var fieldSelect = document.getElementById("names");
+    const optionsSelect = pasteBoardSelectField.selectedOptions;
+    const dumpArr = new Array(optionsSelect.length);
+    for (let i = 0; i < optionsSelect.length; i++) {
+      dumpArr[i] = optionsSelect[i].value;
+    }
+
+	window.api.pasteboardDumpToMain(dumpArr)
+
+});
 
 // const pasteBoardDump = document.getElementById('pbDump');
 // pasteBoardDump.addEventListener('click', async () => {
@@ -65,15 +75,13 @@ pasteBoardTalk.addEventListener('click', async () => {
 window.api.recieve("main-to-pasteboard",(valueArr) => {
 	let nameString = valueArr[0].join("<option />");
 	const target = document.getElementById('pasteboard');
-	target.innerHTML = "<option />" + nameString;
+	target.innerHTML += "<option />" + nameString;
 });
 
 window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
 
     	// talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
-
-
 });
 // window.api.recieve("main-to-pasteboard",(valueArr) => {
 // 	let nameString = valueArr[0].join("<option />");

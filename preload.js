@@ -77,7 +77,7 @@ contextBridge.exposeInMainWorld("api", {
 	talkToMain: (msg) => ipcRenderer.invoke('dialog:callMain', msg),
 	mainDumpToPasteboard: (data) => ipcRenderer.invoke('dialog:chooseMain', data),
 	talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
-	pasteboardDumpToMain: (data) => ipcRenderer.invoke('dialog:choosePBoard', data),
+	pasteboardDumpToMain: (data) => ipcRenderer.invoke('dialog:PBoardToMain', data),
 })
 
 
