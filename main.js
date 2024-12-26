@@ -326,15 +326,16 @@ ipcMain.handle('dialog:callMain', async (event, msg) => {
 	const result = await msg;
 	console.log(msg);
 	return result
-})
+});
 
 
 
 
 ipcMain.handle('dialog:callPBoard', async (event, data) => {
 	//need to check if Pboard exists from query 
-	createPopWindow();
-	});
+	await createPopWindow();
+	return 
+});
 
 
 // ipcMain.handle('dialog:callPBoard', async (event, data) => {
