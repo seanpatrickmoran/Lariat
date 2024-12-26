@@ -30,12 +30,11 @@ viewToPairsButton.addEventListener('click',()=>{
 
 
 /* Submit API call to renderer/main*/
+
 window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
+});
 
-
-
-/*-------------Globals---------------*/
 
 var stName;
 var stPUB_ID;
@@ -59,9 +58,6 @@ let inspectedImageArray = {
     "viewing_vmax": stViewing_vmax}
 
 let fromPasteboard = [];
-
-
-/*-------------methods---------------*/
 
 function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
@@ -153,6 +149,9 @@ function normalizeToImageData(reshapedArray, vMax, canvas) {
     ctx.putImageData(imageData, 0, 0);
 }
 
+
+
+
 function kronecker(inputArray, scaleFactor) {
     const rows = inputArray.length;
     const cols = inputArray[0].length;
@@ -177,9 +176,6 @@ function kronecker(inputArray, scaleFactor) {
     return outputArray;
 }
 
-
-
-/*-------------event listeners---------------*/
 
 document.addEventListener('DOMContentLoaded', async () => {
     optionFillViewer("field-select");

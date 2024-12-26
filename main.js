@@ -15,8 +15,6 @@ let mainWindowState = {
 	'mainWindow': "",
 	}
 
-
-
 const createMainWindow = () => {
 	//Only one main window
 	if (browserWindowArray['mainWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['mainWindow']) != null){
@@ -77,6 +75,8 @@ const createPopWindow = () => {
 	}
 	});
 	browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
+	var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
+    pasteboardWindow.setPosition(x+400,y-50);
 	pasteboardWindow.loadFile("popBoard.html")
 	// pasteboardWindow.setAlwaysOnTop(true)
 	// pasteboardWindow.api.send(browserWindowArray)
@@ -91,6 +91,7 @@ const createInspectToolsWindow = () => {
 		title: "inspectTools",
 		width: 60,
 		height: 436,
+	    hasShadow: false,
 		transparent: true, 
 		frame: false,
 		webPreferences:{
@@ -100,17 +101,30 @@ const createInspectToolsWindow = () => {
 	});
 
 	var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
-    inspectToolsWindow.setPosition(x-130,y+200);
+    inspectToolsWindow.setPosition(x-65,y+180);
 
 	browserWindowArray['inspectToolsWindow'] = inspectToolsWindow.id
 	inspectToolsWindow.loadFile("children/inspectTools.html")
 	// inspectToolsWindow.setAlwaysOnTop(true)
 	// inspectToolsWindow.setClosable(false)
 	inspectToolsWindow.setMaximizable(false)
+	inspectToolsWindow.setHasShadow(false)
+	inspectToolsWindow.invalidateShadow()
 	// inspectToolsWindow.setResizable(false)
 	// inspectToolsWindow.setMenuBarVisibility(false);
 	// pasteboardWindow.api.send(browserWindowArray)
 	return undefined
+}
+
+
+const closeFocusWindow = () => {
+	const selectWindow = BrowserWindow.getFocusedWindow()
+	if (selectWindow != null) {
+		var name = selectWindow.getTitle();
+		browserWindowArray[name] = -1;
+		selectWindow.close()
+	}
+	return
 }
 
 
@@ -150,7 +164,7 @@ const menu = [
     submenu: [      
       { label: 'New Main', accelerator: "CmdOrCtrl+N", click: createMainWindow,},
       { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
-      { label: 'Close Window', accelerator: "CmdOrCtrl+W",},
+      { label: 'Close Window', accelerator: "CmdOrCtrl+W", click: closeFocusWindow, },
       // process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
       { role: 'Quit' },
     ]

@@ -47,3 +47,11 @@ select#pasteboard {
 #pasteboard-commands{
 
 }
+
+.title:before{
+  width: 36%;
+}
+
+.title:after{
+  width: 36%;
+}
