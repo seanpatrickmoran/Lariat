@@ -36,3 +36,12 @@
     overflow: auto;
 }
 */
+
+
+.title:before{
+  width: 43%;
+}
+
+.title:after{
+  width: 43%;
+}

@@ -63,6 +63,13 @@ ul {
 
 /*-webkit-user-select: text;*/
 
+.title:before{
+  width: 45%;
+}
+
+.title:after{
+  width: 45%;
+}
 
 .content {
     position: fixed;

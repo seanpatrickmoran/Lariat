@@ -19,3 +19,12 @@
   margin: 15px;
   align-content: justify;
 }
+
+
+#main_title.title:before{
+  width: 31%;
+}
+
+#main_title.title:after{
+  width: 31%;
+}

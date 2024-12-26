@@ -51,6 +51,14 @@ input#sqlite3-query{
   inset -1px -1px 0px 0px #999;*/
 }
 
+.title:before{
+  width: 42%;
+}
+
+.title:after{
+  width: 42%;
+}
+
 .pbcontent {
     position: relative;
     top: 10px;

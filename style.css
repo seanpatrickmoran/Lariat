@@ -83,7 +83,8 @@ p {
   inset 1px 1px 0px 0px #fff,
   inset -1px -1px 0px 0px #999;
 }
-.title {
+
+/*.title {
     width: 100%;
     text-align: center;
     font-size: inherit;
@@ -91,7 +92,21 @@ p {
     padding: 1px 0;
     background-size: 3px 2px;
     margin: 0 0 0 0;
+}*/
+
+.title {
+  user-select: none;
+  app-region: drag;
+  text-align: center;
+  font-size: 12px;
+  font-weight: normal;
+  padding: 1px 0;
+  margin: 1px 0 0 0;
+  border-bottom: 1px solid #111;
+  background-color: #f0f0f0;
+  box-shadow: inset 1px -3px 0px -2px #a8a9b6;
 }
+
 .content .icon {
     text-align: center;
     margin: 1em 0;
@@ -178,6 +193,31 @@ p {
   inset 1px 1px 0px 0px #444,
   inset 2px 2px 0px 0px #555;
 }
+
+
+.title:before {
+  height: 11px;
+  width: 11px;
+  display: inline-block;
+  content: "";
+  background: url("img/lines.png");
+  background-repeat: repeat;
+  margin-right: 8px;
+}
+
+.title:after {
+  height: 11px;
+  width: 11px;
+  display: inline-block;
+  content: "";
+  background: url("img/lines.png");
+  background-repeat: repeat;
+  margin-left: 8px;
+}
+
+
+
+
 /* Hide only visually, but have it available for screenreaders & for SEO purposes. See h5bp.com/v */
 .visuallyhidden {
     border: 0;

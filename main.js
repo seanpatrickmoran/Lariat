@@ -89,8 +89,8 @@ const createInspectToolsWindow = () => {
 
 	const inspectToolsWindow = new BrowserWindow({
 		title: "inspectTools",
-		width: 120,
-		height: 400,
+		width: 60,
+		height: 436,
 		transparent: true, 
 		frame: false,
 		webPreferences:{
@@ -98,6 +98,10 @@ const createInspectToolsWindow = () => {
 		preload: path.join(__dirname, 'preload.js')
 	}
 	});
+
+	var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
+    inspectToolsWindow.setPosition(x-130,y+200);
+
 	browserWindowArray['inspectToolsWindow'] = inspectToolsWindow.id
 	inspectToolsWindow.loadFile("children/inspectTools.html")
 	// inspectToolsWindow.setAlwaysOnTop(true)

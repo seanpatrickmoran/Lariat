@@ -10,9 +10,33 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: left;
-  margin-right: 1px;
+/*  margin-right: 1px;*/
 }
 
+button{
+  height: 28px;
+  width: 28px;
+/*  margin-left: 1px;
+  margin-bottom: 1px;
+  margin-right: 1px;*/
+  margin: 0px;
+}
+
+button:hover{
+  transition: opacity 0.2s ease-in-out;
+  border: 1px solid #888;
+  background-color: #ddd;
+}
+
+button.big-button{
+  height: 56px;
+  width: 56px;
+}
+
+button.wide-button{
+  height: 28px;
+  width: 56px;
+}
 
 .row-container {
   margin: 1px;
@@ -29,10 +53,73 @@ ul {
 
 /*-webkit-user-select: text;*/
 
-.titlebar {
+/*.titlebar {
+
+}*/
+
+/*.title-bar {
   user-select: none;
   app-region: drag;
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 1.5rem;
+  margin: 0.1rem 0;
+  padding: 0.2rem 0.1rem;
+  background: linear-gradient(var(--secondary) 50%, transparent 50%);
+  background-size: 6.6666666667% 13.3333333333%;
+  background-clip: content-box;
+}*/
+
+.title {
+  width: 100%;
+  height: 8px;
+  user-select: none;
+  app-region: drag;
+  text-align: center;
+  font-size: 0;
+  font-weight: normal;
+  padding: 1px 0;
+  margin: 1px 0 0 0;
+  border-bottom: 1px solid #111;
+  background-color: #f0f0f0;
+  box-shadow: inset 1px -3px 0px -2px #a8a9b6;
 }
+
+
+.title:before{
+  height: 4px;
+  width: 40%;
+  margin-right: 0;
+}
+
+.title:after{
+  height: 4px;
+  width: 40%;
+  margin-left: 0;
+}
+
+/*.title:before {
+  height: 11px;
+  width: 28px;
+  display: inline-block;
+  content: "";
+  background: url("../img/lines.png");
+  background-repeat: repeat;
+  margin-right: 8px;
+}
+
+.title:after {
+  height: 11px;
+  width: 28px;
+  display: inline-block;
+  content: "";
+  background: url("../img/lines.png");
+  background-repeat: repeat;
+  margin-left: 8px;
+}*/
+
+
 
 .content {
     position: fixed;
@@ -41,8 +128,8 @@ ul {
 /*    z-index: 2;
     font-size: 12px;
     font-weight: normal;*/
-    width: 120px;
-    height: 400px;
+    width: 58px;
+    height: 431px;
 /*    margin: 100px auto 0;
     border: 1px solid #111;
     background: #ccc;
