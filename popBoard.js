@@ -18,12 +18,15 @@
 
 // })
 
+var queryMapped = new Map();
+
 const pasteBoardSelectAll = document.getElementById('pbSelect');
 pasteBoardSelectAll.addEventListener('click', async () => {
 	const pasteBoardSelectField = document.getElementById('pasteboard');
 	const length = pasteBoardSelectField.options.length;
 	for(var i = 0;i<length;i++){
 		document.getElementById("pasteboard").options[i].selected = "selected";
+
 	}
 })
 
@@ -54,7 +57,6 @@ pasteBoardPasteTo.addEventListener('click', async () => {
     for (let i = 0; i < optionsSelect.length; i++) {
       dumpArr[i] = optionsSelect[i].value;
     }
-
 	window.api.pasteboardDumpToMain(dumpArr)
 
 });
@@ -70,6 +72,8 @@ pasteBoardTalk.addEventListener('click', async () => {
   window.api.talkToMain(window.id)
 })
 
+
+//<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot">
 
 /* --------IPC type calls-------- */
 //To Main

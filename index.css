@@ -28,3 +28,12 @@
 #main_title.title:after{
   width: 31%;
 }
+
+
+#mosaic.title:before {
+  width: 28%;
+}
+
+#mosaic.title:after {
+  width: 28%;
+}

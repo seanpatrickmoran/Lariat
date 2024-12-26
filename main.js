@@ -298,7 +298,10 @@ ipcMain.on('change-view-to-pairs', ()=>{
 });
 
 ipcMain.on('back-to-previous', ()=>{
-    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    const selectWindow = BrowserWindow.getFocusedWindow();//fromId(browserWindowArray['mainWindow'])
+    if (selectWindow.getURL()==="file://"+__dirname+"index.html"){
+    	return
+    }
     selectWindow.loadFile('index.html')
 
 	if (browserWindowArray['mainWindow'] != -2){
@@ -308,18 +311,18 @@ ipcMain.on('back-to-previous', ()=>{
 	};
 });
 
+// 	if (browserWindowArray['mainWindow'] != -2){
+// 	selectWindow.webContents.on('did-finish-load', ()=>{
+// 	  selectWindow.webContents.send("show-start-mosaic","hidden");
+//       });
+// 	};
+// });
+
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
-	// const [page, response] = msg;
-	// console.log(page, response)
 	await createMainWindow();
-    // const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow']);
-	// if (BrowserWindow.fromId(browserWindowArray['mainWindow']) != page){
-	// 	selectWindow.loadFile(`children/${page}`)
-	// }
 	return
 });
-
 
 //need to check if Pboard exists from query 
 ipcMain.handle('dialog:callPBoard', async (event, data) => {
