@@ -47,7 +47,16 @@ a {
 }
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
-
+/*
+option {
+  -webkit-user-select: text;
+}*/
+/*
+p {
+  -moz-user-select: text;
+  -webkit-user-select: text;
+}
+*/
 /* Window layout */
 .content {
     position: relative;

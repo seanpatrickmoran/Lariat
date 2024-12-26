@@ -66,11 +66,15 @@ pasteBoardPasteTo.addEventListener('click', async () => {
 
 const pasteBoardTalk = document.getElementById('pbTalk');
 pasteBoardTalk.addEventListener('click', async () => {
-  window.api.talkToMain('hello!')
+  // window.api.talkToMain("index.html", window.id)
+  window.api.talkToMain(window.id)
 })
 
 
 /* --------IPC type calls-------- */
+//To Main
+
+//To Query
 
 window.api.recieve("main-to-pasteboard",(valueArr) => {
 	let nameString = valueArr[0].join("<option />");
@@ -81,10 +85,9 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
 
-    	// talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
+
 });
-// window.api.recieve("main-to-pasteboard",(valueArr) => {
-// 	let nameString = valueArr[0].join("<option />");
-// 	const target = document.getElementById('pasteboard');
-// 	target.innerHTML = "<option />" + nameString;
-// });
+
+
+//To Inspect
+

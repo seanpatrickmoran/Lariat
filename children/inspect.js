@@ -263,8 +263,8 @@ document.querySelector('#inspectBtn').addEventListener('click', async () => {
     normalizeToImageData(finalarr, viewing_vmax, canvas);
     let divNames = document.getElementById("sql-query-payload");
     let splitCoords = inspectedImageArray["coordinates"].split(',');
-    inspectedImageArray["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<br>${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}`
-    divNames.innerHTML = `<p><class "s">${inspectedImageArray["dataset"]}<br>${inspectedImageArray["name"]}<br>${inspectedImageArray["coordinates"]}</p>`
+    inspectedImageArray["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
+    divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray["coordinates"]}</p>`
 });
 
 document.querySelector('input#filter1').addEventListener('change', async () => {

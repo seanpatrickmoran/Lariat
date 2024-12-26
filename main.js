@@ -324,10 +324,14 @@ ipcMain.on('back-to-previous', ()=>{
 
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
+	// const [page, response] = msg;
+	// console.log(page, response)
 	await createMainWindow();
-	console.log(msg);
-	//can we populate it?
-	return 
+    // const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow']);
+	// if (BrowserWindow.fromId(browserWindowArray['mainWindow']) != page){
+	// 	selectWindow.loadFile(`children/${page}`)
+	// }
+	return
 });
 
 

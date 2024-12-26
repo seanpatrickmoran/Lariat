@@ -123,6 +123,9 @@ document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
     for (let i = 0; i < optionsSelect.length; i++) {
       dumpArr[i] = optionsSelect[i].value;
     }
+    if (dumpArr.length === 0){
+        return
+    }
     window.api.mainDumpToPasteboard(dumpArr);
 });
 
