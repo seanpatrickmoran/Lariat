@@ -11,15 +11,22 @@ body {
     overflow: hidden;
 }
 
+.row-container {
+  margin: 3px;
+  display: flex;
+  flex-direction: row;
+}
+
+
 .content {
     position: fixed;
-    left: 80px;
-    top: -95px;
+    left: 40px;
+    top: -80px;
     z-index: 2;
     font-size: 12px;
     font-weight: normal;
-    height: 300;
-    width: 500;
+    width: 400px;
+    height: 300px;
     margin: 100px auto 0;
     border: 1px solid #111;
     background: #ccc;
@@ -27,4 +34,16 @@ body {
   1px 2px #111,
   inset 1px 1px 0px 0px #fff,
   inset -1px -1px 0px 0px #999;
+}
+
+select#pasteboard {
+    border: 1px solid black;
+/*    margin: 3px;*/
+    width: 380px;
+    height: 245px;
+    overflow: auto;
+}
+
+#pasteboard-commands{
+
 }

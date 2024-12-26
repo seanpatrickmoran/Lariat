@@ -55,43 +55,6 @@ const getDistinctItems = (name) => {
 	return testmgr.getDistinctItems(name);
 }
 
-
-// exports.getDataset = (name) => {
-// 	const sql = 'SELECT * FROM imag WHERE (dataset) = (?)';
-// 	let stmt = db.prepare(sql);
-// 	let result = stmt.all(name);
-// 	console.log(result);
-// 	return result;
-// };
-
-// exports.getCondition = (name) => {
-// 	const sql = 'SELECT * FROM imag WHERE (condition) = (?)';
-// 	let stmt = db.prepare(sql);
-// 	let result = stmt.all(name);
-// 	console.log(result);
-// 	return result;
-// };
-
-// exports.getHiCPath = (name) => {
-// 	const sql = 'SELECT * FROM imag WHERE (hic_path) = (?)';
-// 	let stmt = db.prepare(sql);
-// 	let result = stmt.all(name);
-// 	console.log(result);
-// 	return result;
-// };
-
-// exports.getPubId = (name) => {
-// 	const sql = 'SELECT * FROM imag WHERE (PUB_ID) = (?)';
-// 	let stmt = db.prepare(sql);
-// 	let result = stmt.all(name);
-// 	// console.log(result);
-// 	return result;
-// };
-
-
-
-
-
 // contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer)
 contextBridge.exposeInMainWorld("api", {
 	getNames: getNames,
@@ -111,6 +74,23 @@ contextBridge.exposeInMainWorld("api", {
         channel,
         (event, ...args) => func(args),
         ),
+	talkToMain: (msg) => ipcRenderer.invoke('dialog:callMain', msg),
+	mainDumpToPasteboard: (data) => ipcRenderer.invoke('dialog:chooseMain', data),
+	talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
+	pasteboardDumpToMain: (data) => ipcRenderer.invoke('dialog:choosePBoard', data),
 })
+
+
+// contextBridge.exposeInIsolatedWorld('bridge', {
+//     send: (channel, data) => ipcRenderer.send(channel, data),
+//     recieve: (channel, func) => ipcRenderer.on(
+//         channel,
+//         (event, ...args) => func(args),
+//         ),
+//   }
+// )
+
+
+
 
 //frontend

@@ -1,22 +1,18 @@
 const path = require('path');
 const { BrowserWindow, app, Menu, ipcMain, } = require('electron');
-const { dialog } = require('electron')
+// const { dialog } = require('electron')
 
 
 const isMac = process.platform === 'darwin';
 
 const createMainWindow = () => {
-//BrowserWindow.getAllWindows().length === 0 || 
-
 	//Only one main window
 	if (browserWindowArray['mainWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['mainWindow']) != null){
 		// dialog.showErrorBox("Error", "Main Window already open.") 
 		return
 	}
-
 	//show modal only the first time
 	const flagVal = BrowserWindow.fromId(browserWindowArray['mainWindow']) === null;
-
 	const mainWindow = new BrowserWindow({
 		title: "mainWindow",
 		width: 800,
@@ -26,7 +22,6 @@ const createMainWindow = () => {
 			preload: path.join(__dirname, 'preload.js')
 		}
 	});
-
 	if (browserWindowArray['mainWindow'] === -2 && flagVal === true){
 		mainWindow.webContents.on('did-finish-load', ()=>{
 	  	mainWindow.webContents.send("show-start-mosaic","visible");
@@ -38,11 +33,27 @@ const createMainWindow = () => {
 	}
 
 	browserWindowArray['mainWindow'] = mainWindow.id;
+	mainWindowState["mainWindow"]="index.html";
 	mainWindow.loadFile("index.html")
-
 	return undefined
 	}
 	//
+
+
+// async function talkToMain (msg) {
+//   const strname = await msg;
+//   console.log(strname);
+//   return strname
+// }
+
+async function mainDumpToPasteboard (data) {
+	// well, we don't want to call the selected options from pasteboard, we want to call them from QUERY, INSPECT, etc.
+	// instead, we can read the options from pasteboard into the current open window?
+  const strname = await data;
+  console.log('runs here');
+  return
+}
+
 
 
 // const popWelcomePage = () => {
@@ -70,6 +81,7 @@ const createAboutWindow = () => {
 		title: "About Lariat",
 		width: 250,
 		height: 250,
+
 	});
 	aboutWindow.loadFile("about.html")
 }
@@ -85,9 +97,15 @@ const createPopWindow = () => {
 		title: "Pasteboard",
 		width: 480,
 		height: 360,
+		webPreferences:{
+		nodeIntegration: true,
+		preload: path.join(__dirname, 'preload.js')
+	}
 	});
 	browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
 	pasteboardWindow.loadFile("popBoard.html")
+	// pasteboardWindow.api.send(browserWindowArray)
+
 	return undefined
 }
 
@@ -119,10 +137,16 @@ let browserWindowArray = { "" : 0,
 	'pasteboardWindow': -2
 	}
 
+let mainWindowState = {
+	'mainWindow': "",
+	}
+
 app.whenReady().then(()=> {
 	createMainWindow();
 	const mainMenu = Menu.buildFromTemplate(menu);
 	Menu.setApplicationMenu(mainMenu)
+	// ipcMain.handle('dialog:callMain', talkToMain)
+	// ipcMain.handle('dialog:chooseData', mainDumpToPasteboard)
 });
 
 
@@ -264,13 +288,10 @@ app.on('activate', () => {
 	createMainWindow();
 });
 
-//IPC view
-
-//index.html view
-//query.html view
-
+//IPC on MAIN
 ipcMain.on('change-view-to-query', ()=>{
     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+	mainWindowState["mainWindow"]='children/query.html';
     selectWindow.loadFile('children/query.html');
 });
 
@@ -299,3 +320,55 @@ ipcMain.on('back-to-previous', ()=>{
       });
 	};
 });
+
+// ipcMain.on('main-to-pasteboard', ()=>{
+//     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow'])
+//     const fields_take = 
+//     selectWindow.webContents.send()
+// });
+
+
+// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
+// viewToPairsButton.addEventListener('click',()=>{
+//     api.send('copy-to-pasteboard');
+// });
+
+ipcMain.handle('dialog:callMain', async (event, msg) => {
+	const result = await msg;
+	console.log(msg);
+	return result
+})
+
+
+ipcMain.handle('dialog:chooseMain', async (event, data) => {
+	const response = await data;
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
+    console.log('main');
+    console.log(response);
+    console.log(typeof(response));
+	selectWindow.webContents.send("main-to-pasteboard",response);
+});
+
+
+// ipcMain.on('dialog:callMain', (msg) => {
+// 	// ipcMain.handle()
+// 	ipcMain.handle('dialog:callMain', talkToMain(msg))
+// 	// const pasteboardWindow = browserWindowArray['pasteboardWindow'];
+
+// 	// if (browserWindowArray['pasteboardWindow'] === -2){
+// 	// 	pasteboardWindow.webContents.on('did-finish-load', ()=>{
+// 	//   	pasteboardWindow.webContents.send(var1,var2);
+//     //   });
+// 	// };    
+// 	console.log('here2');
+// 	console.log(msg.data);
+
+// });
+
+//IPC on RENDERER
+
+// 	'pasteboard-select', ()=>{
+// 	console.log('yes');
+// })
+
+

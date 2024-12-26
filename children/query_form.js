@@ -23,7 +23,11 @@ viewToPairsButton.addEventListener('click',()=>{
     api.send('change-view-to-pairs');
 });
 
-
+// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
+// copyToPasteboardButton.addEventListener('click',()=>{
+//     await 
+//     api.send('copy-to-pasteboard');
+// });
 // const viewPopAboutButton = document.getElementById('aboutBtn');
 // viewPopAboutButton.addEventListener('click',()=>{
 //     api.send('change-view-to-about');
@@ -47,14 +51,11 @@ function tailOfSQLClick(){
 
 function query_with_textbox(keyname,route){
     var search = document.getElementById(route).value;
-    console.log(keyname, search);
     var names = functionMapped[keyname](search)
-    console.log(names);
     let divNames = document.getElementById("names");
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
-    console.log(nameString);
     divNames.innerHTML = "<option />" + nameString;
 };
 
@@ -87,7 +88,7 @@ document.querySelector('#queryBtn').addEventListener('click', async () => {
     var fieldSelect = document.getElementById("field-select");
     var value = fieldSelect.value;
     var text = fieldSelect.options[fieldSelect.selectedIndex].text;
-    console.log(document.getElementById("avail-field-select").value);
+    // console.log(document.getElementById("avail-field-select").value);
     if (document.getElementById("avail-field-select").value === "---Scroll for all results---") {
         query_with_textbox(text,'sqlite3-query');
     } else {
@@ -96,10 +97,8 @@ document.querySelector('#queryBtn').addEventListener('click', async () => {
 
 });
 
-
 document.getElementById('field-select').addEventListener('change', async () => {
     var search = document.getElementById('field-select').value;
-    console.log(search);
     var names = window.api.getDistinctItems(search);
     let nameString = names.map((elem) => {
         return elem[search]
@@ -107,3 +106,56 @@ document.getElementById('field-select').addEventListener('change', async () => {
     let divNames = document.getElementById("avail-field-select");
     divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
 });
+
+
+
+// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
+// copyToPasteboardButton.addEventListener('click',()=>{
+//     await 
+//     api.send('copy-to-pasteboard');
+// });
+
+document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
+    //main.js to paste board mainWindow.webContents.send()
+    //    api.recieve('dialog:chooseData', (data))
+    var fieldSelect = document.getElementById("names");
+    console.log(fieldSelect);
+    const optionsSelect = fieldSelect.selectedOptions;
+    const dumpArr = new Array(optionsSelect.length);
+    for (let i = 0; i < optionsSelect.length; i++) {
+      dumpArr[i] = optionsSelect[i].value;
+    }
+    //query to main.js. (ipcMain.on())
+    console.log('query');
+    window.api.mainDumpToPasteboard(dumpArr);
+
+// recieve #define in renderer
+// mainDumpToPasteboard #to main.js
+
+    // api.send('copy-to-pasteboard', (dumpArr,));
+    // window.webContents.send();
+    // now dump to pasteboard
+});
+
+
+
+// function query_with_textbox(keyname,route){
+//     var search = document.getElementById(route).value;
+//     console.log(keyname, search);
+//     var names = functionMapped[keyname](search)
+//     console.log(names);
+//     let divNames = document.getElementById("names");
+//     let nameString = names.map((elem) => {
+//         return elem.name
+//     })
+//     console.log(nameString);
+//     divNames.innerHTML = "<option />" + nameString;
+// };
+
+
+
+
+
+
+
+
