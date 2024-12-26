@@ -1,42 +1,41 @@
 const backButton = document.getElementById('backBtn');
 backButton.addEventListener('click',()=>{
+    api.signalToMain('dialog:callInspectTools', '')
     api.send('back-to-previous');
 });
 
 const viewToQueryButton = document.getElementById('viewToQueryBtn');
 viewToQueryButton.addEventListener('click',()=>{
+    api.signalToMain('dialog:callInspectTools', '')
     api.send('change-view-to-query');
 });
 
 const viewToInspectButton = document.getElementById('viewToInspectBtn');
 viewToInspectButton.addEventListener('click',()=>{
-    api.send('change-view-to-inspect');
+    // api.send('change-view-to-inspect');
+    return
 });
 
 const viewToViewerButton = document.getElementById('viewToViewerBtn');
 viewToViewerButton.addEventListener('click',()=>{
+    api.signalToMain('dialog:callInspectTools', '')
     api.send('change-view-to-viewer');
 });
 
 const viewToPairsButton = document.getElementById('viewToPairsBtn');
 viewToPairsButton.addEventListener('click',()=>{
+    api.signalToMain('dialog:callInspectTools', '')
     api.send('change-view-to-pairs');
 });
 
 
 /* Submit API call to renderer/main*/
-
 window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
 
 
-});
 
-// const viewPopAboutButton = document.getElementById('aboutBtn');
-// viewPopAboutButton.addEventListener('click',()=>{
-//     api.send('change-view-to-about');
-// });
-
+/*-------------Globals---------------*/
 
 var stName;
 var stPUB_ID;
@@ -60,6 +59,9 @@ let inspectedImageArray = {
     "viewing_vmax": stViewing_vmax}
 
 let fromPasteboard = [];
+
+
+/*-------------methods---------------*/
 
 function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
@@ -151,9 +153,6 @@ function normalizeToImageData(reshapedArray, vMax, canvas) {
     ctx.putImageData(imageData, 0, 0);
 }
 
-
-
-
 function kronecker(inputArray, scaleFactor) {
     const rows = inputArray.length;
     const cols = inputArray[0].length;
@@ -178,6 +177,9 @@ function kronecker(inputArray, scaleFactor) {
     return outputArray;
 }
 
+
+
+/*-------------event listeners---------------*/
 
 document.addEventListener('DOMContentLoaded', async () => {
     optionFillViewer("field-select");

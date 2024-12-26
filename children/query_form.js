@@ -5,7 +5,8 @@ backButton.addEventListener('click',()=>{
 
 const viewToQueryButton = document.getElementById('viewToQueryBtn');
 viewToQueryButton.addEventListener('click',()=>{
-    api.send('change-view-to-query');
+    // api.send('change-view-to-query');
+    return
 });
 
 const viewToInspectButton = document.getElementById('viewToInspectBtn');

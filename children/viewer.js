@@ -15,7 +15,8 @@ viewToInspectButton.addEventListener('click',()=>{
 
 const viewToViewerButton = document.getElementById('viewToViewerBtn');
 viewToViewerButton.addEventListener('click',()=>{
-    api.send('change-view-to-viewer');
+    // api.send('change-view-to-viewer');
+    return
 });
 
 const viewToPairsButton = document.getElementById('viewToPairsBtn');

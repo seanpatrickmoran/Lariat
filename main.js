@@ -320,6 +320,7 @@ ipcMain.handle('dialog:callInspectTools', async (event, data) => {
 		if(browserWindowArray['inspectToolsWindow']!=-2){
 			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
 			browserWindowArray['inspectToolsWindow']=-2;
+			return
 		}
 		await createInspectToolsWindow();
 		BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()

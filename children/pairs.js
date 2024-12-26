@@ -20,7 +20,8 @@ viewToViewerButton.addEventListener('click',()=>{
 
 const viewToPairsButton = document.getElementById('viewToPairsBtn');
 viewToPairsButton.addEventListener('click',()=>{
-    api.send('change-view-to-pairs');
+    // api.send('change-view-to-pairs');
+    return
 });
 
 
