@@ -44,15 +44,15 @@ pasteBoardRemove.addEventListener('click', async () => {
 	}
 });
 
-const pasteBoardPasteTo = document.getElementById('pbPasteTo');
-pasteBoardPasteTo.addEventListener('click', async () => {
-	//TODO
-});
+// const pasteBoardPasteTo = document.getElementById('pbPasteTo');
+// pasteBoardPasteTo.addEventListener('click', async () => {
+// 	//TODO
+// });
 
-const pasteBoardDump = document.getElementById('pbDump');
-pasteBoardDump.addEventListener('click', async () => {
-	//TODO
-});
+// const pasteBoardDump = document.getElementById('pbDump');
+// pasteBoardDump.addEventListener('click', async () => {
+// 	//TODO
+// });
 
 const pasteBoardTalk = document.getElementById('pbTalk');
 pasteBoardTalk.addEventListener('click', async () => {
@@ -68,8 +68,15 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 	target.innerHTML = "<option />" + nameString;
 });
 
-window.api.recieve("main-to-pasteboard",(valueArr) => {
-	let nameString = valueArr[0].join("<option />");
-	const target = document.getElementById('pasteboard');
-	target.innerHTML = "<option />" + nameString;
+window.api.recieve("talk-to-main",() => {
+    window.api.talkToPBoard(window.id);
+
+    	// talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
+
+
 });
+// window.api.recieve("main-to-pasteboard",(valueArr) => {
+// 	let nameString = valueArr[0].join("<option />");
+// 	const target = document.getElementById('pasteboard');
+// 	target.innerHTML = "<option />" + nameString;
+// });

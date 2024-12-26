@@ -116,8 +116,8 @@ document.getElementById('field-select').addEventListener('change', async () => {
 // });
 
 document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
-    //main.js to paste board mainWindow.webContents.send()
-    //    api.recieve('dialog:chooseData', (data))
+    window.api.talkToPBoard('true');
+
     var fieldSelect = document.getElementById("names");
     const optionsSelect = fieldSelect.selectedOptions;
     const dumpArr = new Array(optionsSelect.length);

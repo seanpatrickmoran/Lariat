@@ -329,8 +329,26 @@ ipcMain.handle('dialog:callMain', async (event, msg) => {
 })
 
 
+
+
+ipcMain.handle('dialog:callPBoard', async (event, data) => {
+	//need to check if Pboard exists from query 
+	createPopWindow();
+	});
+
+
+// ipcMain.handle('dialog:callPBoard', async (event, data) => {
+// 	const response = await data;
+//     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
+// 	selectWindow.webContents.send("main-to-pasteboard",response);
+// });
+
+
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });
+
+
+
