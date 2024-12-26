@@ -119,22 +119,12 @@ document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
     //main.js to paste board mainWindow.webContents.send()
     //    api.recieve('dialog:chooseData', (data))
     var fieldSelect = document.getElementById("names");
-    console.log(fieldSelect);
     const optionsSelect = fieldSelect.selectedOptions;
     const dumpArr = new Array(optionsSelect.length);
     for (let i = 0; i < optionsSelect.length; i++) {
       dumpArr[i] = optionsSelect[i].value;
     }
-    //query to main.js. (ipcMain.on())
-    console.log('query');
     window.api.mainDumpToPasteboard(dumpArr);
-
-// recieve #define in renderer
-// mainDumpToPasteboard #to main.js
-
-    // api.send('copy-to-pasteboard', (dumpArr,));
-    // window.webContents.send();
-    // now dump to pasteboard
 });
 
 

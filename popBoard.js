@@ -11,23 +11,48 @@
 //     bridge.send('pasteboard-select');
 // });
 
-const pasteBoardtoMainField = document.getElementById('pbSelect');
-pasteBoardtoMainField.addEventListener('click', async () => {
-	var pasteBoardSelectField = document.getElementById('pasteboard');
-	// var names = await window.api.mainDumpToPasteboard()
+// const pasteBoardtoMainField = document.getElementById('pbSelect');
+// pasteBoardtoMainField.addEventListener('click', async () => {
+// 	var pasteBoardSelectField = document.getElementById('pasteboard');
+// 	//TODO
 
-	//this function, on click, will talk to main.js and deposit the data on the active page
-	//need a descriptor to explain where to put data...
+// })
 
-	// return await window.api.mainDumpToPasteboard()
-
-
-    // let nameString = names.map((elem) => {
-    //     return elem[search]
-    // }).join("<option />");    
-    // pasteBoardSelectField.innerHTML = "<option />" + nameString;
-
+const pasteBoardSelectAll = document.getElementById('pbSelect');
+pasteBoardSelectAll.addEventListener('click', async () => {
+	const pasteBoardSelectField = document.getElementById('pasteboard');
+	const length = pasteBoardSelectField.options.length;
+	for(var i = 0;i<length;i++){
+		document.getElementById("pasteboard").options[i].selected = "selected";
+	}
 })
+
+const pasteBoardRemove = document.getElementById('pbRemove');
+pasteBoardRemove.addEventListener('click', async () => {
+	const pasteBoardSelectField = document.getElementById('pasteboard');
+	const length = pasteBoardSelectField.options.length;
+    let delArr = [];
+    for (let i = 0; i < pasteBoardSelectField.options.length; i++) {
+      delArr[i] = pasteBoardSelectField.options[i].selected;
+    }
+
+	let index = pasteBoardSelectField.options.length;
+	while (index--) {
+		if (delArr[index]) {
+		  pasteBoardSelectField.remove(index);
+		}
+	}
+});
+
+const pasteBoardPasteTo = document.getElementById('pbPasteTo');
+pasteBoardPasteTo.addEventListener('click', async () => {
+	//TODO
+});
+
+const pasteBoardDump = document.getElementById('pbDump');
+pasteBoardDump.addEventListener('click', async () => {
+	//TODO
+});
 
 const pasteBoardTalk = document.getElementById('pbTalk');
 pasteBoardTalk.addEventListener('click', async () => {
@@ -35,17 +60,16 @@ pasteBoardTalk.addEventListener('click', async () => {
 })
 
 
+/* --------IPC type calls-------- */
 
 window.api.recieve("main-to-pasteboard",(valueArr) => {
-	console.log('popboard');
-	console.log(valueArr)
 	let nameString = valueArr[0].join("<option />");
-	console.log(nameString)
-	// valueArr.map((elem) => {
-	//     return elem
-	// }).join("<option />");
 	const target = document.getElementById('pasteboard');
 	target.innerHTML = "<option />" + nameString;
-	console.log("<option />" + nameString)
 });
-// })
+
+window.api.recieve("main-to-pasteboard",(valueArr) => {
+	let nameString = valueArr[0].join("<option />");
+	const target = document.getElementById('pasteboard');
+	target.innerHTML = "<option />" + nameString;
+});

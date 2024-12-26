@@ -321,17 +321,6 @@ ipcMain.on('back-to-previous', ()=>{
 	};
 });
 
-// ipcMain.on('main-to-pasteboard', ()=>{
-//     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow'])
-//     const fields_take = 
-//     selectWindow.webContents.send()
-// });
-
-
-// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
-// viewToPairsButton.addEventListener('click',()=>{
-//     api.send('copy-to-pasteboard');
-// });
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
 	const result = await msg;
@@ -343,32 +332,5 @@ ipcMain.handle('dialog:callMain', async (event, msg) => {
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
-    console.log('main');
-    console.log(response);
-    console.log(typeof(response));
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });
-
-
-// ipcMain.on('dialog:callMain', (msg) => {
-// 	// ipcMain.handle()
-// 	ipcMain.handle('dialog:callMain', talkToMain(msg))
-// 	// const pasteboardWindow = browserWindowArray['pasteboardWindow'];
-
-// 	// if (browserWindowArray['pasteboardWindow'] === -2){
-// 	// 	pasteboardWindow.webContents.on('did-finish-load', ()=>{
-// 	//   	pasteboardWindow.webContents.send(var1,var2);
-//     //   });
-// 	// };    
-// 	console.log('here2');
-// 	console.log(msg.data);
-
-// });
-
-//IPC on RENDERER
-
-// 	'pasteboard-select', ()=>{
-// 	console.log('yes');
-// })
-
-
