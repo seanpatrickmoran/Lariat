@@ -104,6 +104,7 @@ const createPopWindow = () => {
 	});
 	browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
 	pasteboardWindow.loadFile("popBoard.html")
+	// pasteboardWindow.setAlwaysOnTop(true)
 	// pasteboardWindow.api.send(browserWindowArray)
 
 	return undefined
@@ -175,7 +176,7 @@ const menu = [
     label: 'File',
     submenu: [      
       { label: 'New Main', accelerator: "CmdOrCtrl+N", click: createMainWindow,},
-      { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},//() => app.emit('openPasteBoard'),}, //HERE **
+      { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
       { label: 'Close Window', accelerator: "CmdOrCtrl+W",},
       // process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
       { role: 'Quit' },
@@ -323,26 +324,20 @@ ipcMain.on('back-to-previous', ()=>{
 
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
-	const result = await msg;
+	await createMainWindow();
 	console.log(msg);
-	return result
-});
-
-
-
-
-ipcMain.handle('dialog:callPBoard', async (event, data) => {
-	//need to check if Pboard exists from query 
-	await createPopWindow();
+	//can we populate it?
 	return 
 });
 
 
-// ipcMain.handle('dialog:callPBoard', async (event, data) => {
-// 	const response = await data;
-//     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
-// 	selectWindow.webContents.send("main-to-pasteboard",response);
-// });
+//need to check if Pboard exists from query 
+ipcMain.handle('dialog:callPBoard', async (event, data) => {
+	await createPopWindow();
+	BrowserWindow.fromId(browserWindowArray['pasteboardWindow']).moveTop()
+	//can we populate it?
+	return 
+});
 
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
