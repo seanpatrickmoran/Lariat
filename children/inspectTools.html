@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!-- <meta http-equiv="X UA-Compatible" content="IE=edge"> -->
+	<meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+	<title>Lariat v0.0.1</title>
+    <nav class="row-container"> 
+    </nav>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+	  // $( function() {
+	  //     $( "#content" ).draggable({ handle: "h1.title" });
+	  // } );
+  	  // $( function() {
+	  //     $( "#main_docs" ).draggable({ handle: "h1.title" });
+	  // } );
+	  // function hide(obj) {
+		//   var el = document.getElementById(obj);
+		//   el.style.display = 'none';
+    //   };
+  </script>
+</head>
+<body>
+
+	<div class="content">
+		<div class="titlebar">
+		    <div class="control-box close-box" onclick="parentNode.remove()"><a class="control-box-inner"></a></div>
+		    <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
+		    <h1 class="title">Pasteboard</h1>
+	    </div>
+
+		<div class="block">
+			<div class="row-container">		
+				<div>
+				</div>
+			</div>
+
+			<div class="row-container">
+				<button id="pbSelect">Select All</button>
+				<button id="pbRemove">Remove</button>
+			</div>
+			<div class="row-container">
+				<button id="pbSelect">Select All</button>
+				<button id="pbRemove">Remove</button>
+			</div>
+			<div class="row-container">
+				<button id="pbSelect">Select All</button>
+				<button id="pbRemove">Remove</button>
+			</div>
+		</div>
+	</div>
+	<script src="inspect.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="inspectTools.css" />
+</body>
+</html>

@@ -24,11 +24,18 @@ viewToPairsButton.addEventListener('click',()=>{
 });
 
 
+/* Submit API call to renderer/main*/
+
+window.api.recieve("talk-to-main",() => {
+    window.api.talkToPBoard(window.id);
+
+
+});
+
 // const viewPopAboutButton = document.getElementById('aboutBtn');
 // viewPopAboutButton.addEventListener('click',()=>{
 //     api.send('change-view-to-about');
 // });
-
 
 
 var stName;
@@ -52,8 +59,7 @@ let inspectedImageArray = {
     "numpyarr": stNumpyArr,
     "viewing_vmax": stViewing_vmax}
 
-
-
+let fromPasteboard = [];
 
 function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
@@ -62,7 +68,7 @@ function optionFillViewer(idName){
         console.log(elem.hic_path)
         return elem.hic_path
     }).join("<option />")
-    divNames.innerHTML =  "<option />" + nameString;
+    divNames.innerHTML =  "<option />" + nameString + "<option /> Pasteboard";
 };
 
 function tailOfSQLClick(){
@@ -179,8 +185,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     var nameString = queryToSelectbox(search);
     var divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
-
-    // var nameString = singlularQuery("viewing_vmax");
     var divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
 
@@ -272,9 +276,6 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     var pixelMaxValue = document.querySelector("input#filter1").value;
     var numpyArr = inspectedImageArray["numpyarr"]
     var dimensions = inspectedImageArray["dimensions"]
-
-    console.log(numpyArr);
-
     const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
     const float32Array = new Float32Array(decodedBytes.buffer);
     const rows = dimensions, cols = dimensions;
@@ -289,3 +290,8 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     let finalarr = kronecker(reshapedArray,Math.ceil(325/dimensions))
     normalizeToImageData(finalarr, pixelMaxValue, canvas);
 });
+
+document.addEventListener('DOMContentLoaded', async () => {
+    window.api.signalToMain('dialog:callInspectTools', '');
+});
+

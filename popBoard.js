@@ -84,8 +84,6 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 
 window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
-
-
 });
 
 

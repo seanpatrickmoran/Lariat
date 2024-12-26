@@ -5,6 +5,18 @@ const { BrowserWindow, app, Menu, ipcMain, } = require('electron');
 
 const isMac = process.platform === 'darwin';
 
+let browserWindowArray = { "" : 0,
+	'mainWindow': -2,
+	'pasteboardWindow': -2,
+	'inspectToolsWindow': -2,
+	}
+
+let mainWindowState = {
+	'mainWindow': "",
+	}
+
+
+
 const createMainWindow = () => {
 	//Only one main window
 	if (browserWindowArray['mainWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['mainWindow']) != null){
@@ -37,44 +49,7 @@ const createMainWindow = () => {
 	mainWindow.loadFile("index.html")
 	return undefined
 	}
-	//
 
-
-// async function talkToMain (msg) {
-//   const strname = await msg;
-//   console.log(strname);
-//   return strname
-// }
-
-async function mainDumpToPasteboard (data) {
-	// well, we don't want to call the selected options from pasteboard, we want to call them from QUERY, INSPECT, etc.
-	// instead, we can read the options from pasteboard into the current open window?
-  const strname = await data;
-  console.log('runs here');
-  return
-}
-
-
-
-// const popWelcomePage = () => {
-
-  // <div id="content" class="content">
-  //   <div class="control-box close-box"><a class="control-box-inner"></a></div>
-  //   <div class="control-box zoom-box"><div class="control-box-inner"><div class="zoom-box-inner"></div></div></div>
-  //   <div class="control-box windowshade-box"><div class="control-box-inner"><div class="windowshade-box-inner"></div></div></div>
-  //   <h1 class="title">Unimplemented!</h1>
-  //     <h3 class="text-xl text-teal-100 text-center">Lariat</h3>
-  //     <p>Version 0.0.1</p>
-  //     <p>Developed by Sean Moran and Dr. Jie Liu</p>
-  //     <p>University of Michigan DCMB</p>
-  //     <p>MIT License, December 2024</p>
-  //     <div class="icon"><img src="img/bomb.png" /></div>
-  //     <ul>
-// 		  <li><class "s">A system error has occurred. Please reboot your Mac.</li>
-  //     </ul>
-  //     <button class="command_button">Reboot</button>
-  //   </div>
-// }
 
 const createAboutWindow = () => {
 	const aboutWindow = new BrowserWindow({
@@ -85,7 +60,6 @@ const createAboutWindow = () => {
 	});
 	aboutWindow.loadFile("about.html")
 }
-
 
 const createPopWindow = () => {
 	if (browserWindowArray['pasteboardWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['pasteboardWindow']) != undefined) {
@@ -106,41 +80,35 @@ const createPopWindow = () => {
 	pasteboardWindow.loadFile("popBoard.html")
 	// pasteboardWindow.setAlwaysOnTop(true)
 	// pasteboardWindow.api.send(browserWindowArray)
+}
 
+const createInspectToolsWindow = () => {
+	if (browserWindowArray['inspectToolsWindow'] != -2) {
+		return undefined
+	}
+
+	const inspectToolsWindow = new BrowserWindow({
+		title: "inspectTools",
+		width: 120,
+		height: 400,
+		transparent: true, 
+		frame: false,
+		webPreferences:{
+		nodeIntegration: true,
+		preload: path.join(__dirname, 'preload.js')
+	}
+	});
+	browserWindowArray['inspectToolsWindow'] = inspectToolsWindow.id
+	inspectToolsWindow.loadFile("children/inspectTools.html")
+	// inspectToolsWindow.setAlwaysOnTop(true)
+	// inspectToolsWindow.setClosable(false)
+	inspectToolsWindow.setMaximizable(false)
+	// inspectToolsWindow.setResizable(false)
+	// inspectToolsWindow.setMenuBarVisibility(false);
+	// pasteboardWindow.api.send(browserWindowArray)
 	return undefined
 }
 
-// const createWelcomeWindow = () => {
-// 	//there's definitely some kind of window that will freeze. check ChildWindowClass?
-// 	const welcomeWindow = new BrowserWindow({
-// 		// parent: mainWindow,
-// 		// modal: true,
-// 		title: "Welcome!",
-// 		width: 250,
-// 		height: 250,
-// 	});
-// 	welcomeWindow.loadFile("children/welcome.html")
-// }
-
-
-// const createHahahaWindow = () => {
-// 	const hahahaWindow = new BrowserWindow({
-// 		title: "WARN",
-// 		width: 150,
-// 		height: 150,
-// 	});
-// 	hahahaWindow.loadFile("hahaha.html")
-// }
-
-
-let browserWindowArray = { "" : 0,
-	'mainWindow': -2,
-	'pasteboardWindow': -2
-	}
-
-let mainWindowState = {
-	'mainWindow': "",
-	}
 
 app.whenReady().then(()=> {
 	createMainWindow();
@@ -149,6 +117,7 @@ app.whenReady().then(()=> {
 	// ipcMain.handle('dialog:callMain', talkToMain)
 	// ipcMain.handle('dialog:chooseData', mainDumpToPasteboard)
 });
+
 
 
 const menu = [
@@ -276,9 +245,6 @@ const menu = [
       	},
 ];
 
-// exports.menu = menu;
-
-
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit()
@@ -288,6 +254,8 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
 	createMainWindow();
 });
+
+
 
 //IPC on MAIN
 ipcMain.on('change-view-to-query', ()=>{
@@ -338,9 +306,23 @@ ipcMain.handle('dialog:callMain', async (event, msg) => {
 //need to check if Pboard exists from query 
 ipcMain.handle('dialog:callPBoard', async (event, data) => {
 	await createPopWindow();
-	BrowserWindow.fromId(browserWindowArray['pasteboardWindow']).moveTop()
-	//can we populate it?
+	BrowserWindow.fromId(browserWindowArray['pasteboardWindow']).isVisible()
 	return 
+});
+
+ipcMain.handle('dialog:callInspectTools', async (event, data) => {
+	var selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow']);
+	if(selectWindow.webContents.getURL() != "file://"+__dirname+"children/inspect.html"){
+		if(browserWindowArray['inspectToolsWindow']!=-2){
+			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
+			browserWindowArray['inspectToolsWindow']=-2;
+		}
+		await createInspectToolsWindow();
+		BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()
+		return 
+	}
+	return null
+
 });
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
