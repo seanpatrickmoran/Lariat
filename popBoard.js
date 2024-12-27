@@ -1,22 +1,7 @@
-// const { ipcRenderer } = require('electron');
-// const ipc = require("electron").ipcRenderer;
 
-// ipcMain.on('pasteboard-select', ()=>{
-// 	console.log('yes');
-// });
 
-// pasteBoardView
-// const pasteBoardtoMainField = document.getElementById('pbSelect');
-// pasteBoardtoMainField.addEventListener('click',()=>{
-//     bridge.send('pasteboard-select');
-// });
 
-// const pasteBoardtoMainField = document.getElementById('pbSelect');
-// pasteBoardtoMainField.addEventListener('click', async () => {
-// 	var pasteBoardSelectField = document.getElementById('pasteboard');
-// 	//TODO
 
-// })
 
 
 var queryMapped = new Map();
@@ -186,22 +171,7 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 	    }
 	}
 
-
     var names = valueArr[0];
-    console.log(names)
-    // let nameString = names.map((elem) => {
-    //     return elem
-    // })
-
-    // for(i=0;i<names.length;i++){
-    //     if (namesMemory.has(names[i])){
-    //         continue
-    //     } else {
-    //     	console.log(names[i])
-    //         namesMemory.set(names[i], 2)
-    //     }
-    // }
-
     for (let i = 0; i < names.length; i++) {
 		var substring = names[i];
 		console.log(substring.name, namesMemory.has(substring.name))
