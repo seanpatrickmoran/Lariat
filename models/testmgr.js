@@ -2,6 +2,7 @@ var dbmgr = require("./dbmgr.js");
 var db = dbmgr.db;
 
 //"CREATE TABLE imag(name, dataset, condition, coordinates, numpyarr, viewing_vmax, dimensions, hic_path, PUB_ID, resolution, meta)"
+// cursor = connection.execute("CREATE TABLE imag(name, dataset, condition, coordinates, numpyarr, viewing_vmax, dimensions, hic_path, PUB_ID, resolution, norm, meta)")
 
 exports.getNames = (name) => {
 	const sql = 'SELECT * FROM imag WHERE name = (?)';
