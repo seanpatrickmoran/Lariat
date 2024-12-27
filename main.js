@@ -349,8 +349,6 @@ ipcMain.handle('dialog:callInspectTools', async (event, data) => {
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
-	console.log('main');
-	console.log(response)
     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });

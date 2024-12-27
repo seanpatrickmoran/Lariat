@@ -168,33 +168,13 @@ function base64ToImage(base64, vMax, size) {
 };
 
 window.api.recieve("main-to-pasteboard",(valueArr) => {
-	console.log(valueArr)
-	console.log(valueArr[0]);
-
 	const target = document.getElementById('pasteboard');
     for (let i = 0; i < valueArr[0].length; i++) {
 		var substring = valueArr[0][i];
 
-		// const decodedBytes = Uint8Array.from(atob(substring.numpyarr), c => c.charCodeAt(0));
-		// const float32Array = new Float32Array(decodedBytes.buffer);
-	    // const rows = substring.dimensions; cols = substring.dimensions;
-	    // const reshapedArray = [];
-	    // for (let i = 0; i < rows; i++) {
-	    //     reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
-	    // }
-		// let finalarr = kronecker(reshapedArray,Math.ceil(28/dimensions))
-		console.log('here')
-		// var imageString = normalizeToImageData(reshapedArray, substring.viewing_vmax, substring.dimensions)
-		console.log(substring);
-
 		resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax,substring.dimensions)
 	    target.innerHTML += `<tr id="selectable"><td class="thumbnail"><img class="thumbnail" src="${resizedImageBase64}"></td><td class="strname">${substring.name}</td></tr>`;
 			  
-
-		// console.log(imageString)
-
-		// target.innerHTML += `<tr id="selectable"><td><img src="${imageString}">${substring.name}</td></tr>`;
-    // toArr += `<tr id="selectable"><td><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==">${substring}</td></tr>`;
     };
 });
 
