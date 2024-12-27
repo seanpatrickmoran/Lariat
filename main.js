@@ -321,7 +321,7 @@ ipcMain.on('back-to-previous', ()=>{
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
 	await createMainWindow();
-	return
+	return BrowserWindow.getFocusedWindow().getTitle();
 });
 
 //need to check if Pboard exists from query 
@@ -368,7 +368,7 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 	selectWindow.webContents.send("paste-board-to-noWindow",(response));
     // const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	// selectWindow.webContents.send("main-to-pasteboard",response);
-
+	return
 });
 
 
