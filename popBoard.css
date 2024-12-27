@@ -40,7 +40,7 @@ body {
     border: 1px solid black;
 /*    margin: 3px;*/
     width: 380px;
-    height: 245px;
+    height: 240px;
     display: inline-block;
     overflow: auto;
     background-color: #fff;
@@ -61,16 +61,35 @@ body {
     width: 380px;
     border: 0px #999;
     margin: 0px;
+/*    vertical-align: middle;*/
 }
 
-#pasteboard td {
-    height: 30px;
-    width: 380px;
+td {
+    width: 388px;
+/*    line-height: 15px;*/
     font-size: 13px;
     font-family: sans-serif;
     border: 0px #999;
     margin: 0px;
 }
+
+td.thumbnail {
+    height: 34px;
+    width: 34px;
+    font-size: 13px;
+    font-family: sans-serif;
+/*    border: 0px #999;*/
+    margin-right: 12px;
+}
+
+td.strname-ui-selectee {
+    height: 34px;
+    width: 400px;
+    font-size: 13px;
+    font-family: sans-serif;
+    margin: 0px;
+}
+
 
 
 #pasteboard-commands{

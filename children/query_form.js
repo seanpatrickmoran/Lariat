@@ -108,33 +108,31 @@ document.getElementById('field-select').addEventListener('change', async () => {
     divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
 });
 
-
-
-// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
-// copyToPasteboardButton.addEventListener('click',()=>{
-//     await 
-//     api.send('copy-to-pasteboard');
-// });
-
 document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
     window.api.talkToPBoard('true');
     var fieldSelect = document.getElementById("names");
+
+    // var valueArr = window.api.getNames(name);
+    // var preloadedValues = JSON.parse(JSON.stringify(valueArr))[0];
+    // let numpyArr = names.map((elem) => { return elem }); 
+    // console.log(nameString);
+
     const optionsSelect = fieldSelect.selectedOptions;
-
+    // const dumpArr = new Array(optionsSelect.length);
     const dumpArr = new Array(optionsSelect.length);
-    // var queryMapped = new Map();
-
-
     for (let i = 0; i < optionsSelect.length; i++) {
-      dumpArr[i] = optionsSelect[i].value;
-      // queryMapped[dumpArr[i]] = 
-    }
-    if (dumpArr.length === 0){
+      // dumpArr[i] = optionsSelect[i].value;
+      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].value)))[0]
+      // console.log(dum[i]);
+
+    }if (dumpArr.length === 0){
         return
     }
+    console.log(dumpArr)
 
     window.api.mainDumpToPasteboard(dumpArr);
 });
+
 
 window.api.recieve("paste-board-to-noWindow",(values) => {
     console.log('received')

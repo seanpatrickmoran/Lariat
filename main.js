@@ -76,7 +76,7 @@ const createPopWindow = () => {
 	});
 	browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
 	var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
-    pasteboardWindow.setPosition(x+400,y-50);
+    pasteboardWindow.setPosition(x+400,y-20);
 	pasteboardWindow.loadFile("popBoard.html")
 	// pasteboardWindow.setAlwaysOnTop(true)
 	// pasteboardWindow.api.send(browserWindowArray)
@@ -349,6 +349,8 @@ ipcMain.handle('dialog:callInspectTools', async (event, data) => {
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
+	console.log('main');
+	console.log(response)
     const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });

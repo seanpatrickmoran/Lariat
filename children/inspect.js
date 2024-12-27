@@ -35,6 +35,20 @@ window.api.recieve("talk-to-main",() => {
     window.api.talkToPBoard(window.id);
 });
 
+/* Recieve Call from main */
+window.api.recieve("paste-board-to-noWindow",(values) => {
+    console.log('received')
+    var names = values[0];
+    let nameString = names.map((elem) => {
+        return elem
+    }).join("<option />");
+    console.log(nameString);
+    var divNames = document.getElementById("names-field");
+    document.getElementById("field-select").value="Pasteboard";
+    divNames.innerHTML = "<option />" + nameString;
+});
+
+
 
 var stName;
 var stPUB_ID;
@@ -214,6 +228,7 @@ document.querySelector('#field-select').addEventListener('change', async () => {
     let divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
 });
+
 
 document.querySelector('#inspectBtn').addEventListener('click', async () => {
     // var search = document.getElementById('field-select');
