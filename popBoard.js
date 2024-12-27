@@ -18,21 +18,11 @@
 
 // })
 
+
 var queryMapped = new Map();
 var lastSelectedRow;
 // var trs = document.getElementById('pasteboard-table').tBodies[0].getElementsByTagName('tr');
-
-$( function() {
-$( "#pasteboard" ).selectable({
-  stop: function() {
-    // var result = $( "#select-result" ).empty();
-    $( ".ui-selected", this ).each(function() {
-      var index = $( "#selectable tr" ).index( this );
-      // result.append( " #" + ( index + 1 ) );
-    });
-  }
-});
-} );
+'use strict';$(function(){$("#pasteboard").selectable({stop:function(){$(".ui-selected",this).each(function(){$("#selectable tr").index(this)})}})});
 
 
 const pasteBoardSelectAll = document.getElementById('pbSelect');
@@ -50,14 +40,12 @@ pasteBoardRemove.addEventListener('click', async () => {
 const pasteBoardPasteTo = document.getElementById('pbPaste');
 pasteBoardPasteTo.addEventListener('click', async () => {
 	const pasteBoardSelectField = document.getElementById('pasteboard');
-
     window.api.talkToMain('true');
-
     var names = $("#pasteboard tr.ui-selected td.strname").map(function(){
     return this.innerHTML
 	}).get();
 
-	console.log(names);
+	// console.log(names);
 	window.api.pasteboardDumpToMain(names)
 });
 
@@ -168,13 +156,64 @@ function base64ToImage(base64, vMax, size) {
 };
 
 window.api.recieve("main-to-pasteboard",(valueArr) => {
-	const target = document.getElementById('pasteboard');
-    for (let i = 0; i < valueArr[0].length; i++) {
-		var substring = valueArr[0][i];
 
-		resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax,substring.dimensions)
+	var namesMemory = new Map();
+	const strnames = document.getElementById('pasteboard').getElementsByClassName("strname");
+	const target = document.getElementById('pasteboard')
+	console.log(strnames)
+	console.log(target)
+	// document.getElementById("main").getElementsByClassName("test");
+	// console.log(target.options)
+
+    if (strnames.length>1) {
+        for (i=0;i<strnames.length;i++){
+	        console.log(strnames[i].innerText)
+            if (namesMemory.has(strnames[i].innerText)){
+                continue
+            } else {
+	            namesMemory.set(strnames[i].innerText, 2)
+        	}
+    	}
+
+	}
+
+	if (strnames.length==1 && !namesMemory.has(strnames.innerText)) {
+		console.log(strnames.innerText)
+		if (namesMemory.has(strnames.innerText)){
+			
+		} else {
+    	namesMemory.set(strnames.innerText, 2)
+	    }
+	}
+
+
+    var names = valueArr[0];
+    console.log(names)
+    // let nameString = names.map((elem) => {
+    //     return elem
+    // })
+
+    // for(i=0;i<names.length;i++){
+    //     if (namesMemory.has(names[i])){
+    //         continue
+    //     } else {
+    //     	console.log(names[i])
+    //         namesMemory.set(names[i], 2)
+    //     }
+    // }
+
+    for (let i = 0; i < names.length; i++) {
+		var substring = names[i];
+		console.log(substring.name, namesMemory.has(substring.name))
+		if (namesMemory.has(substring.name)){
+			console.log(`except`)
+			continue
+		} else {
+		console.log('else')
+		namesMemory.set(substring.name,2)
+		resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
 	    target.innerHTML += `<tr id="selectable"><td class="thumbnail"><img class="thumbnail" src="${resizedImageBase64}"></td><td class="strname">${substring.name}</td></tr>`;
-			  
+		}		  
     };
 });
 

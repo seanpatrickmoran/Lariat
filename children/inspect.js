@@ -37,16 +37,52 @@ window.api.recieve("talk-to-main",() => {
 
 /* Recieve Call from main */
 window.api.recieve("paste-board-to-noWindow",(values) => {
-    console.log('received')
     var names = values[0];
+    var fieldSelect = document.getElementById("field-select")
+    if (fieldSelect.value != "Pasteboard"){
+        let divNames = document.getElementById("names-field");
+        divNames.innerHTML = "";
+        fieldSelect.value="Pasteboard";
+        if (names.length === 0) {
+        return
+        }
+        let nameString = names.map((elem) => {
+            return elem
+        }).join("<option />")
+        divNames.innerHTML = "<option />" + nameString;
+        return}
+
+    var namesMemory = new Map();
+    const selection = document.getElementById('names-field');
+
+    if (selection.options.length>0) {
+        let storedNames = [...selection.options].map(o => o.text);
+        for (i=0;i<storedNames.length;i++){
+            if (namesMemory.has(storedNames[i])){
+                continue
+            } else {
+                namesMemory.set(storedNames[i], 2)
+            }
+        }
+    }
+
     let nameString = names.map((elem) => {
         return elem
-    }).join("<option />");
-    console.log(nameString);
-    var divNames = document.getElementById("names-field");
-    document.getElementById("field-select").value="Pasteboard";
-    divNames.innerHTML = "<option />" + nameString;
+    })
+
+    for(i=0;i<nameString.length;i++){
+        if (namesMemory.has(nameString[i])){
+            continue
+        } else {
+            namesMemory.set(nameString[i], 2)
+        }
+    }
+
+    let payload = [...namesMemory.keys()]
+    let divNames = document.getElementById("names-field");
+    divNames.innerHTML = "<option />" + payload.join("<option />")
 });
+
 
 
 
@@ -70,8 +106,6 @@ let inspectedImageArray = {
     "hic_path": stHic_path,
     "numpyarr": stNumpyArr,
     "viewing_vmax": stViewing_vmax}
-
-let fromPasteboard = [];
 
 function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
