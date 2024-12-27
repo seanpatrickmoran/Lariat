@@ -132,20 +132,23 @@ pasteBoardSelectAll.addEventListener('click', async () => {
 
 const pasteBoardRemove = document.getElementById('pbRemove');
 pasteBoardRemove.addEventListener('click', async () => {
-	const pasteBoardSelectField = document.getElementById('pasteboard');
-	const length = pasteBoardSelectField.options.length;
-    let delArr = [];
-    for (let i = 0; i < pasteBoardSelectField.options.length; i++) {
-      delArr[i] = pasteBoardSelectField.options[i].selected;
-    }
-
-	let index = pasteBoardSelectField.options.length;
-	while (index--) {
-		if (delArr[index]) {
-		  pasteBoardSelectField.remove(index);
-		}
-	}
+   $("table tr.ui-selected").remove();
 });
+
+	// const pasteBoardSelectField = document.getElementById('pasteboard');
+	// const length = pasteBoardSelectField.options.length;
+    // let delArr = [];
+    // for (let i = 0; i < pasteBoardSelectField.options.length; i++) {
+    //   delArr[i] = pasteBoardSelectField.options[i].selected;
+    // }
+
+	// let index = pasteBoardSelectField.options.length;
+	// while (index--) {
+	// 	if (delArr[index]) {
+	// 	  pasteBoardSelectField.remove(index);
+	// 	}
+	// }
+// });
 
 const pasteBoardPasteTo = document.getElementById('pbPaste');
 pasteBoardPasteTo.addEventListener('click', async () => {
