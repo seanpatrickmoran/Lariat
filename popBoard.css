@@ -36,13 +36,42 @@ body {
   inset -1px -1px 0px 0px #999;
 }
 
-select#pasteboard {
+#pasteboard {
     border: 1px solid black;
 /*    margin: 3px;*/
     width: 380px;
     height: 245px;
+    display: inline-block;
     overflow: auto;
+    background-color: #fff;
 }
+
+#pasteboard .ui-selecting { 
+    background: #B4D5FF; 
+    color: white; 
+}
+
+#pasteboard .ui-selected { 
+    background: #B4D5FF; 
+    color: black; 
+}
+
+#pasteboard tr{
+    cursor: default;
+    width: 380px;
+    border: 0px #999;
+    margin: 0px;
+}
+
+#pasteboard td {
+    height: 30px;
+    width: 380px;
+    font-size: 13px;
+    font-family: sans-serif;
+    border: 0px #999;
+    margin: 0px;
+}
+
 
 #pasteboard-commands{
 

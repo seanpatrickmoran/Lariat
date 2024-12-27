@@ -120,13 +120,19 @@ document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
     window.api.talkToPBoard('true');
     var fieldSelect = document.getElementById("names");
     const optionsSelect = fieldSelect.selectedOptions;
+
     const dumpArr = new Array(optionsSelect.length);
+    // var queryMapped = new Map();
+
+
     for (let i = 0; i < optionsSelect.length; i++) {
       dumpArr[i] = optionsSelect[i].value;
+      // queryMapped[dumpArr[i]] = 
     }
     if (dumpArr.length === 0){
         return
     }
+
     window.api.mainDumpToPasteboard(dumpArr);
 });
 
