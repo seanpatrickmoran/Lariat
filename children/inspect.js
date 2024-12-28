@@ -1,31 +1,37 @@
-const backButton = document.getElementById('backBtn');
-backButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', false)
-    api.send('back-to-previous');
+const toggleViewPortVisibility = () => {
+  const viewPortWindow = document.querySelector('#viewPortWindow.content')
+  if (viewPortWindow.classList.contains('hidden')){ 
+    viewPortWindow.classList.toggle('hidden');
+    };
+};
+
+document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
+  const viewPortWindow = document.querySelector('#viewPortWindow.content')
+  viewPortWindow.classList.toggle('hidden');
 });
 
-const viewToQueryButton = document.getElementById('viewToQueryBtn');
-viewToQueryButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', false)
-    api.send('change-view-to-query');
-});
 
-const viewToInspectButton = document.getElementById('viewToInspectBtn');
-viewToInspectButton.addEventListener('click',()=>{
-    // api.send('change-view-to-inspect');
-    return
-});
+const clickMap = new Map();
+// clickMap.set("backBtn", ['dialog:callInspectTools', false, "back-to-previous"])
+clickMap.set("backBtn", "back-to-previous")
+clickMap.set("viewToQueryBtn", "change-view-to-query")
+clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+clickMap.set("viewToPairsBtn", "change-view-to-pairs")
+clickMap.set("popViewBtn", toggleViewPortVisibility)
 
-const viewToViewerButton = document.getElementById('viewToViewerBtn');
-viewToViewerButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', false)
-    api.send('change-view-to-viewer');
-});
 
-const viewToPairsButton = document.getElementById('viewToPairsBtn');
-viewToPairsButton.addEventListener('click',()=>{
+document.body.addEventListener('click', function (event) {
+    passive: true
+    const namedId = event.target.id;
+    if (!(clickMap.has(namedId))){
+        return
+    }
+    if (["popViewBtn"].includes(namedId)){
+        clickMap.get(namedId)();
+        return
+    }
     api.signalToMain('dialog:callInspectTools', false)
-    api.send('change-view-to-pairs');
+    api.send(`${clickMap.get(event.target.id)}`);
 });
 
 
@@ -342,12 +348,12 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 });
 
 
-document.querySelector('#popViewBtn').addEventListener('click', () => {
-  const viewPortWindow = document.querySelector('#viewPortWindow.content')
-  if (viewPortWindow.classList.contains('hidden')){ 
-    viewPortWindow.classList.toggle('hidden');
-    };
-});
+// document.querySelector('#popViewBtn').addEventListener('click', () => {
+//   const viewPortWindow = document.querySelector('#viewPortWindow.content')
+//   if (viewPortWindow.classList.contains('hidden')){ 
+//     viewPortWindow.classList.toggle('hidden');
+//     };
+// });
 
 
 window.api.recieve("closePopView", (message) =>{
@@ -360,10 +366,5 @@ window.api.recieve("closePopView", (message) =>{
     };
     console.log(reply)
     window.api.signalToMain("closeWindowConfirm",reply)
-});
-
-document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
-  const viewPortWindow = document.querySelector('#viewPortWindow.content')
-  viewPortWindow.classList.toggle('hidden');
 });
 

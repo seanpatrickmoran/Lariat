@@ -1,27 +1,16 @@
-const backButton = document.getElementById('backBtn');
-backButton.addEventListener('click',()=>{
-    api.send('back-to-previous');
-});
+const clickMap = new Map();
+clickMap.set("backBtn", "back-to-previous")
+clickMap.set("viewToQueryBtn", "change-view-to-query")
+clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+clickMap.set("viewToInspectBtn", "change-view-to-inspect")
 
-const viewToQueryButton = document.getElementById('viewToQueryBtn');
-viewToQueryButton.addEventListener('click',()=>{
-    api.send('change-view-to-query');
-});
 
-const viewToInspectButton = document.getElementById('viewToInspectBtn');
-viewToInspectButton.addEventListener('click',()=>{
-    api.send('change-view-to-inspect');
-});
-
-const viewToViewerButton = document.getElementById('viewToViewerBtn');
-viewToViewerButton.addEventListener('click',()=>{
-    api.send('change-view-to-viewer');
-});
-
-const viewToPairsButton = document.getElementById('viewToPairsBtn');
-viewToPairsButton.addEventListener('click',()=>{
-    // api.send('change-view-to-pairs');
-    return
+document.body.addEventListener('click', function (event) {
+    const namedId = event.target.id;
+    if (!(clickMap.has(namedId))){
+        return
+    }
+    api.send(`${clickMap.get(event.target.id)}`);
 });
 
 

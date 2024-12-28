@@ -1,38 +1,53 @@
-const backButton = document.getElementById('backBtn');
-backButton.addEventListener('click',()=>{
-    api.send('back-to-previous');
+const executeQueryButton = () =>{
+    var fieldSelect = document.getElementById("field-select");
+    var value = fieldSelect.value;
+    var text = fieldSelect.options[fieldSelect.selectedIndex].text;
+    if (document.getElementById("avail-field-select").value === "---Scroll for all results---") {
+        query_with_textbox(text,'sqlite3-query');
+    } else {
+        query_with_textbox(text,"avail-field-select");
+    };
+};
+
+const executeCopyToPasteboard = () => {
+    console.log('hello');
+    window.api.talkToPBoard('true');
+    var fieldSelect = document.getElementById("names");
+    const optionsSelect = fieldSelect.selectedOptions;
+    const dumpArr = new Array(optionsSelect.length);
+    for (let i = 0; i < optionsSelect.length; i++) {
+      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].value)))[0]
+    }if (dumpArr.length === 0){
+        return
+    }
+    window.api.mainDumpToPasteboard(dumpArr);
+};
+
+
+const clickMap = new Map();
+clickMap.set("backBtn", "back-to-previous")
+clickMap.set("viewToInspectBtn", "change-view-to-inspect")
+clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+clickMap.set("viewToPairsBtn", "change-view-to-pairs")
+clickMap.set("queryBtn", executeQueryButton)
+clickMap.set("copyToPbBtn", executeCopyToPasteboard)
+
+
+document.body.addEventListener('click', function (event) {
+    const namedId = event.target.id;
+    if (!(clickMap.has(namedId))){
+        return
+        }
+    console.log('click')
+    console.log(event.target.id)
+    if (["queryBtn","copyToPbBtn"].includes(namedId)){
+        // executeQueryButton();
+        clickMap.get(namedId)();
+        return
+    }
+    api.send(`${clickMap.get(event.target.id)}`);
 });
 
-const viewToQueryButton = document.getElementById('viewToQueryBtn');
-viewToQueryButton.addEventListener('click',()=>{
-    // api.send('change-view-to-query');
-    return
-});
-
-const viewToInspectButton = document.getElementById('viewToInspectBtn');
-viewToInspectButton.addEventListener('click',()=>{
-    api.send('change-view-to-inspect');
-});
-
-const viewToViewerButton = document.getElementById('viewToViewerBtn');
-viewToViewerButton.addEventListener('click',()=>{
-    api.send('change-view-to-viewer');
-});
-
-const viewToPairsButton = document.getElementById('viewToPairsBtn');
-viewToPairsButton.addEventListener('click',()=>{
-    api.send('change-view-to-pairs');
-});
-
-// const copyToPasteboardButton = document.getElementById('copyToPbBtn');
-// copyToPasteboardButton.addEventListener('click',()=>{
-//     await 
-//     api.send('copy-to-pasteboard');
-// });
-// const viewPopAboutButton = document.getElementById('aboutBtn');
-// viewPopAboutButton.addEventListener('click',()=>{
-//     api.send('change-view-to-about');
-// });
 
 
 
@@ -75,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     var nameString = queryToSelectbox(search);
     var divNames = document.getElementById("avail-field-select");
     divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
-
 });
 
 
@@ -83,18 +97,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 //     tailOfSQLClick()
 // });
 
-
-document.querySelector('#queryBtn').addEventListener('click', async () => {
-    var fieldSelect = document.getElementById("field-select");
-    var value = fieldSelect.value;
-    var text = fieldSelect.options[fieldSelect.selectedIndex].text;
-    if (document.getElementById("avail-field-select").value === "---Scroll for all results---") {
-        query_with_textbox(text,'sqlite3-query');
-    } else {
-        query_with_textbox(text,"avail-field-select");
-    };
-
-});
 
 document.getElementById('field-select').addEventListener('change', async () => {
     var search = document.getElementById('field-select').value;
@@ -104,20 +106,6 @@ document.getElementById('field-select').addEventListener('change', async () => {
     }).join("<option />");
     let divNames = document.getElementById("avail-field-select");
     divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
-});
-
-document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
-    window.api.talkToPBoard('true');
-    var fieldSelect = document.getElementById("names");
-
-    const optionsSelect = fieldSelect.selectedOptions;
-    const dumpArr = new Array(optionsSelect.length);
-    for (let i = 0; i < optionsSelect.length; i++) {
-      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].value)))[0]
-    }if (dumpArr.length === 0){
-        return
-    }
-    window.api.mainDumpToPasteboard(dumpArr);
 });
 
 

@@ -397,7 +397,14 @@ ipcMain.handle('dialog:callInspectTools', async (event, data) => {
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
-    const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
+	const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
+
+  selectWindow.on('did-finish-load', () => {
+    // Execute your function here
+    console.log('Window is ready to show!');
+    // Do something with the window, e.g., win.show()
+  });
+
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });
 
@@ -413,6 +420,14 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 	  // selectWindow.webContents.send("show-start-mosaic","hidden");
 		selectWindow.loadFile('children/query.html')});
 	}
+
+  selectWindow.once('did it load', () => {
+    // Execute your function here
+    console.log('PBoardToMain is ready to show!');
+    // Do something with the window, e.g., win.show()
+  });
+
+
 	selectWindow.webContents.send("paste-board-to-noWindow",(response));
     // const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	// selectWindow.webContents.send("main-to-pasteboard",response);

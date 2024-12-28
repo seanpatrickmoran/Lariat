@@ -1,3 +1,25 @@
+// const clickMap = new Map();
+
+// // set a map for all buttons
+
+
+
+// clickMap.set("backBtn", "back-to-previous")
+// clickMap.set("viewToInspectBtn", "change-view-to-inspect")
+// clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+// clickMap.set("viewToPairsBtn", "change-view-to-pairs")
+
+
+// document.body.addEventListener('click', function (event) {
+//     const namedId = event.target.id;
+//     if (!(clickMap.has(namedId))){
+//         return
+//     }
+//     api.send(`${clickMap.get(event.target.id)}`);
+// });
+
+
+
 // // const backButton = document.getElementById('backBtn');
 // // backButton.addEventListener('click',()=>{
 // //     api.signalToMain('dialog:callInspectTools', '')
