@@ -22,21 +22,86 @@ button{
   margin: 0px;
 }
 
+button:active{
+  transform: translateY(1px);
+/*  transition: opacity 0.2s ease-in-out;*/
+  border: 1px solid #888;
+  background-color: #efefef;
+}
+
 button:hover{
   transition: opacity 0.2s ease-in-out;
   border: 1px solid #888;
   background-color: #ddd;
 }
 
-button.big-button{
+
+
+button.big-button {
   height: 56px;
   width: 56px;
+  background-image: url(../img/button_icons/big-default.png); /* 16px x 16px */
+  background-color: transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  border: 0px;           /* assuming we don't want any borders */
 }
 
-button.wide-button{
+button.big-button:active {
+  transform: translateY(1px);
+  height: 56px;
+  width: 56px;
+  background-image: url(../img/button_icons/big-default.png);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: 0px;  
+}
+
+button.big-button:hover {
+    height: 56px;
+    width: 56px;
+    background-image: url(../img/button_icons/big-highlighted.png);
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    border: 0px;           /* assuming we don't want any borders */
+}
+
+
+button.wide-button1{
   height: 28px;
   width: 56px;
+  background-image: url(../img/button_icons/widebutton1-default.png);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: 0px;  
 }
+
+button.wide-button1:active {
+  transform: translateY(1px);
+  height: 28px;
+  width: 56px;
+  background-image: url(../img/button_icons/widebutton1-default.png);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: 0px;  
+}
+
+button.wide-button1:hover {
+    height: 28px;
+    width: 56px;
+    background-image: url(../img/button_icons/widebutton1-highlighted.png);
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    border: 0px;           /* assuming we don't want any borders */
+}
+
+
+button.wide-button2{
+  height: 28px;
+  width: 56px;
+/*  background-image: url(../img/button_icons/widebutton1-default.png);*/
+/*  background-color: transparent;*/
+/*  background-repeat: no-repeat;*/
+/*  border: 0px;  */
+}
+
 
 .row-container {
   margin: 1px;
@@ -128,7 +193,7 @@ button.wide-button{
 /*    z-index: 2;
     font-size: 12px;
     font-weight: normal;*/
-    width: 58px;
+    width: 60px;
     height: 431px;
 /*    margin: 100px auto 0;
     border: 1px solid #111;
