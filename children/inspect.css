@@ -70,6 +70,42 @@ ul {
 .title:after{
   width: 45%;
 }
+/*
+#viewPortWindow.hidden{
+    height: 18.5px;
+}*/
+
+#viewPortWindow {
+    width: 360px;
+    height: 450px;
+    left: 279px;
+    top: -10px;
+}
+
+#viewPortWindow .title:before{
+  width: 49%;
+  margin-right: 0px;
+}
+
+#viewPortWindow .title:after{
+  width: 49%;
+  margin-left: 0px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#canvas-pop {    
+    margin-left: 13px;
+    display: block;
+}
+
+#canvas-pop {    
+    margin-left: 13px;
+    display: block;
+}
+
 
 .content {
     position: fixed;

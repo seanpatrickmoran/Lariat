@@ -1,5 +1,6 @@
 const path = require('path');
 const { BrowserWindow, app, Menu, ipcMain, } = require('electron');
+const { globalShortcut } = require('electron');
 // const { dialog } = require('electron')
 
 
@@ -371,5 +372,15 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 	return
 });
 
-
-
+ipcMain.handle('toggleShortcut', async (event, data) => {
+	const response = await data;
+	console.log('here2');
+	// console.log(globalShortcut.isRegistered('CmdOrCtrl+W'));
+	// if (globalShortcut.isRegistered('CmdOrCtrl+W')){
+	// 	console.log('here3')
+	//    globalShortcut.unregister('CmdOrCtrl+W');
+	//    return
+	// }
+ 	// globalShortcut.register('CmdOrCtrl+W', closeFocusWindow);
+ 	return
+});

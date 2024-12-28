@@ -253,6 +253,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    const popcanvas = document.querySelector('canvas#canvas-pop');
+    const popctx = popcanvas.getContext('2d');
+    popcanvas.width = 325;
+    popcanvas.height = 325;
+
+    for (let row = 0; row < numTiles; row++) {
+        for (let col = 0; col < numTiles; col++) {
+            // Alternate between black and white
+            const isBlack = (row + col) % 2 === 0;
+            popctx.fillStyle = isBlack ? 'black' : 'white';
+            popctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+        }
+    }
+
 });
 
 document.querySelector('#field-select').addEventListener('change', async () => {
@@ -340,5 +354,58 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     window.api.signalToMain('dialog:callInspectTools', '');
+
+});
+
+// document.querySelector().addEventListener('click', () => {
+
+
+// }
+
+// console.log(document.querySelector('content#viewPortWindow').text)
+// console.log(document.querySelector('#viewPortWindow .windowshade-box'));
+// document.querySelector('#viewPortWindow .windowshade-box').addEventListener('click', () => {
+  // document.querySelector('#viewPortWindow.content').classList.toggle('hidden');
+    // console.log('clicl')
+    // document.querySelector('#viewPortRows').classList.toggle('hidden');
+    // console.log(parentElement)
+    // let allChildren = parentElement.querySelectorAll(":scope > span");
+    // console.log(allChildren)
+    // allChildren.forEach((item) => item.classList.toggle("hidden"));
+// });
+
+
+// addEventListener("keydown", (event) => {
+//     console.log(event.code, (event.ctrlKey || event.metaKey), event)
+//     if (viewPortWindow.classList.contains('hidden')){
+//       if(event.code === "KeyW" && (event.ctrlKey || event.metaKey)) {
+//         event.stopPropagation();
+//         event.preventDefault();
+//         event.stopImmediatePropagation();
+//         viewPortWindow.classList.toggle('hidden');
+//         }
+//     }
+// });
+
+
+document.querySelector('#popViewBtn').addEventListener('click', () => {
+  const viewPortWindow = document.querySelector('#viewPortWindow.content')
+  // console.log(viewPortWindow.classList.contains('hidden'));
+  if (viewPortWindow.classList.contains('hidden')){ 
+    viewPortWindow.classList.toggle('hidden');
+    // console.log('here1')
+
+
+ // toggle beforeunload
+    api.signalToMain("toggleShortcut", 'ok');
+    // window.api.signalToMain('dialog:callInspectTools', '');
+  } 
+});
+
+document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
+  const viewPortWindow = document.querySelector('#viewPortWindow.content')
+  // console.log('goodbye!');
+  viewPortWindow.classList.toggle('hidden');
+  // api.signalToMain("toggleShortcut", 'ok');
 });
 
