@@ -1,9 +1,13 @@
-#names-field {
+/*#names-field {
     border: 1px solid black;
     margin: 3px;
     width: 256px;
     height: 442px;
     overflow: auto;
+}*/
+
+#names-field{
+  width: 201px;
 }
 
 #field-select{

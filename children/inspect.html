@@ -36,34 +36,39 @@
       </div>
       <h1 class="title">Inspect</h1>
       <section class="container">
-         <div class="block">
-            <div class="row-container">
+        <div class="block">
+
+          <div class="row-container">
+             <button type="button" id="inspectBtn">Inspect</button>
+             <button type="button" id="popViewBtn">PopView</button> 
+             <button type="button" id='tail-sql'>Filter</button>
+             <button type="button" id="resetBtn">Export</button> 
+          </div>
+
+
+          <div class="row-container">
+            <div class="column-container">
+              <div class="row-container">
                <label for="field-select">Dataset:</label>
+              </div>
+              <div class="row-container">
+                <label for="field-select">Choose:</label>
+              </div>
+            </div>
+
+
+            <div class="column-container">
+              <div class="row-container">
                <select name="fields" id="field-select"></select>
+              </div>
+              <div class="row-container">
+               <select id="names-field"></select>
+              </div>  
             </div>
-            <div class="row-container">
-               <button type="button" id="inspectBtn">Inspect</button>
-               <button type="button" id="popViewBtn">PopView</button> 
-               <button type="button" id='tail-sql'>Filter</button>
-               <button type="button" id="resetBtn">Export</button> 
-            </div>
-            <div>
-               <select id="names-field" multiple size="10"></select>
-            </div>
-         </div>
+          </div>
 
-
-         <div class="block">
-            <div class="row-container">
-               <input type="text" name="filter" placeholder="PH1" id="filter2" style="width: 65px"/><input type="text" name="filter" placeholder="PH2" style="width: 65px"/><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
-            </div>
-            <div class="row-container">
-               <select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
-            </div>
-            <div class="row-container">
-               <canvas id="canvas-inspect" width="325" height="325"></canvas>
-            </div>
-            <div class="row-container">
+          <div class="row-container">
+                      <div class="column-container">
                <div id="query-left-legend" class="column-container">
                   <!-- <p align="right"> -->
                   <p style="-webkit-user-select: text; margin-bottom: 1px; align="right">
@@ -88,6 +93,24 @@
                   <!-- <p id="sql-query-payload"><class "s"></p> -->
                   <!-- <p id="coordinates"><class "s">testing</p> -->
                </div>
+             </div>
+          </div>
+
+      </div>
+
+
+         <div class="block">
+<!--             <div class="row-container">
+               <input type="text" name="filter" placeholder="PH1" id="filter2" style="width: 65px"/><input type="text" name="filter" placeholder="PH2" style="width: 65px"/><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
+            </div>
+            <div class="row-container">
+               <select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
+            </div> -->
+            <div class="row-container">
+               <canvas id="canvas-inspect" width="750" height="750"></canvas>
+            </div>
+
+            <div class="row-container">
                <div id="query-right-legend" class="column-container">
                   <p align="right">pixelMax</p>
                </div>

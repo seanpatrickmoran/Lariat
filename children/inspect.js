@@ -161,17 +161,13 @@ function query_with_textbox(keyname){
     divNames.innerHTML = "<option />" + nameString;
 }
 
-function normalizeToImageData(reshapedArray, vMax, canvas) {
+function normalizeToImageData(reshapedArray, vMin, vMax, canvas) {
     const rows = reshapedArray.length;
     const cols = reshapedArray[0].length;
 
     // Step 1: Find the min and max values in the array
     const flatArray = reshapedArray.flat();
-    const min = Math.min(...flatArray);
-    const max = Math.max(...flatArray);
-
-    // Step 2: Normalize values to the 0-255 range
-    const normalized = flatArray.map(value => Math.round(((value - min) / (vMax - min)) * 255));
+    const normalized = flatArray.map(value => Math.round(((value - vMin) / (vMax - vMin)) * 255));
 
     // Step 3: Convert to RGBA format
     const imageDataArray = new Uint8ClampedArray(rows * cols * 4);
@@ -229,10 +225,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const canvas = document.getElementById('canvas-inspect');
     const ctx = canvas.getContext('2d');
-    canvas.width = 325;
-    canvas.height = 325;
+    canvas.width = 450;
+    canvas.height = 450;
 
-    const size = 325; // Canvas size
+    const size = 450; // Canvas size
     const tileSize = 4; // Tile size
     const numTiles = size / tileSize;
 
@@ -272,7 +268,7 @@ document.querySelector('#field-select').addEventListener('change', async () => {
 });
 
 
-document.querySelector('#inspectBtn').addEventListener('click', async () => {
+document.querySelector('#names-field').addEventListener('change', async () => {
     // var search = document.getElementById('field-select');
     // let nameString = queryToSelectbox(search);
     let selection = document.getElementById("names-field");
@@ -315,10 +311,10 @@ document.querySelector('#inspectBtn').addEventListener('click', async () => {
     }
 
     const canvas = document.getElementById('canvas-inspect');
-    canvas.width = 325;
-    canvas.height = 325;
-    let finalarr = kronecker(reshapedArray,Math.ceil(325/dimensions))
-    normalizeToImageData(finalarr, viewing_vmax, canvas);
+    canvas.width = 450;
+    canvas.height = 450;
+    let finalarr = kronecker(reshapedArray,Math.floor(448/dimensions))
+    normalizeToImageData(finalarr, 0, viewing_vmax, canvas);
     let divNames = document.getElementById("sql-query-payload");
     let splitCoords = inspectedImageArray["coordinates"].split(',');
     inspectedImageArray["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
@@ -339,10 +335,10 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     }
 
     const canvas = document.getElementById('canvas-inspect');
-    canvas.width = 325;
-    canvas.height = 325;
-    let finalarr = kronecker(reshapedArray,Math.ceil(325/dimensions))
-    normalizeToImageData(finalarr, pixelMaxValue, canvas);
+    canvas.width = 450;
+    canvas.height = 450;
+    let finalarr = kronecker(reshapedArray,Math.floor(448/dimensions))
+    normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
 });
 
 
