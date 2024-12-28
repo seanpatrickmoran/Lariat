@@ -168,14 +168,14 @@ ipcMain.handle('closeWindowConfirm', async (event, data) => {
 	    console.log(`Bounds:`, win.getBounds());
 	    console.log('---');
 	});
-	
+
 			// (:
 	if (data===true){
 			const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-			browserWindowArray['mainWindow'] = -2;
 			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
+			browserWindowArray['mainWindow'] = -2;
 			browserWindowArray['inspectToolsWindow'] = -2;
-			BrowserWindow.fromId(browserWindowArray['mainWindow']).close()
+			selectWindow.close()
 			}
 });
 
