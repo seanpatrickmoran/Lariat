@@ -218,7 +218,7 @@ function kronecker(inputArray, scaleFactor) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    window.api.signalToMain('dialog:callInspectTools', '');
+    window.api.signalToMain('dialog:callInspectTools', true);
     optionFillViewer("field-select");
     var search = document.getElementById('field-select').value;
     var nameString = queryToSelectbox(search);
@@ -259,6 +259,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             popctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
         }
     }
+
+
 
 });
 
@@ -352,11 +354,15 @@ document.querySelector('#popViewBtn').addEventListener('click', () => {
 });
 
 
- // toggle answer do i close inspect? 
 window.api.recieve("closePopView", (message) =>{
-    const reply = !viewPortWindow.classList.contains('hidden');
-    console.log(reply, !reply)
-    if (reply){viewPortWindow.classList.toggle('hidden')};
+    //is the element hidden? (TRUE)
+    const reply = viewPortWindow.classList.contains('hidden');
+    console.log(reply)
+    if (!reply){
+        //true means visible
+        viewPortWindow.classList.toggle('hidden')
+    };
+    console.log(reply)
     window.api.signalToMain("closeWindowConfirm",reply)
 });
 

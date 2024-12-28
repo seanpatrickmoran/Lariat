@@ -79,8 +79,6 @@ const createPopWindow = () => {
 	var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
     pasteboardWindow.setPosition(x+400,y-20);
 	pasteboardWindow.loadFile("popBoard.html")
-	// pasteboardWindow.setAlwaysOnTop(true)
-	// pasteboardWindow.api.send(browserWindowArray)
 }
 
 const createInspectToolsWindow = () => {
@@ -107,7 +105,7 @@ const createInspectToolsWindow = () => {
 	browserWindowArray['inspectToolsWindow'] = inspectToolsWindow.id
 	inspectToolsWindow.loadFile("children/inspectTools.html")
 	// inspectToolsWindow.setAlwaysOnTop(true)
-	inspectToolsWindow.setClosable(false)
+	// inspectToolsWindow.setClosable(false)
 	inspectToolsWindow.setMaximizable(false)
 	inspectToolsWindow.setHasShadow(false)
 	inspectToolsWindow.invalidateShadow()
@@ -115,6 +113,27 @@ const createInspectToolsWindow = () => {
 	// inspectToolsWindow.setMenuBarVisibility(false);
 	// pasteboardWindow.api.send(browserWindowArray)
 	return undefined
+
+
+
+
+
+
+
+	console.log(browserWindowArray)
+	console.log('createInspectToolsWindow');
+	const allWindows = BrowserWindow.getAllWindows();
+	// Print each window's details
+	allWindows.forEach((win, index) => {
+	    console.log(`Window ${index + 1}:`);
+	    console.log(`ID: ${win.id}`);
+	    console.log(`Title: ${win.getTitle()}`);
+	    console.log(`Bounds:`, win.getBounds());
+	    console.log('---');
+	});
+
+
+
 }
 
 
@@ -122,27 +141,41 @@ const closeFocusWindow = () => {
 	const selectWindow = BrowserWindow.getFocusedWindow()
 	if (selectWindow != null) {
 		if (selectWindow.getURL()==="file://"+__dirname+"/children/inspect.html"){
+			//if inspect, handle specially
+			console.log('gone to inspect.')
 			selectWindow.webContents.send("closePopView",(''));
+		} else {
+			console.log(selectWindow.getTitle())
+			browserWindowArray[selectWindow.getTitle()] = -2;
+			selectWindow.close()
 		}
-		var name = selectWindow.getTitle();
-
-		browserWindowArray[name] = -2;
-		selectWindow.close()
 	}
+
 	return
-}
+};
 
 
 ipcMain.handle('closeWindowConfirm', async (event, data) => {
-	// if data true, popView was visible. Don't close inspect.
-	// if data false, close inspect and tools.
-	if (data===false){
-			const selectWindow = BrowserWindow.getFocusedWindow()
-			selectWindow.close()
-			browserWindowArray["mainWindow"] = -2;
-			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).setClosable(true)
+	console.log(data)
+	console.log(browserWindowArray)
+	console.log('closeWindowConfirm');
+	const allWindows = BrowserWindow.getAllWindows();
+	// Print each window's details
+	allWindows.forEach((win, index) => {
+	    console.log(`Window ${index + 1}:`);
+	    console.log(`ID: ${win.id}`);
+	    console.log(`Title: ${win.getTitle()}`);
+	    console.log(`Bounds:`, win.getBounds());
+	    console.log('---');
+	});
+	
+			// (:
+	if (data===true){
+			const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+			browserWindowArray['mainWindow'] = -2;
 			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
-			browserWindowArray['inspectToolsWindow']=-2;
+			browserWindowArray['inspectToolsWindow'] = -2;
+			BrowserWindow.fromId(browserWindowArray['mainWindow']).close()
 			}
 });
 
@@ -172,7 +205,7 @@ const menu = [
 				{ role: 'hideOthers' },
 				{ role: 'unhide' },
   		        { type: 'separator' },
-		        { role: 'quit' }
+		        // { role: 'quit' }
           	],
       	},
         
@@ -186,7 +219,8 @@ const menu = [
       { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
       { label: 'Close Window', accelerator: "CmdOrCtrl+W", click: closeFocusWindow, },
       // process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
-      { role: 'Quit' },
+      // { role: 'Quit' },
+      {label: 'Quit', accelerator: "CmdOrCtrl+Q", click: app.exit, }
     ]
   },
 
@@ -331,12 +365,6 @@ ipcMain.on('back-to-previous', ()=>{
 	};
 });
 
-// 	if (browserWindowArray['mainWindow'] != -2){
-// 	selectWindow.webContents.on('did-finish-load', ()=>{
-// 	  selectWindow.webContents.send("show-start-mosaic","hidden");
-//       });
-// 	};
-// });
 
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
@@ -354,16 +382,16 @@ ipcMain.handle('dialog:callPBoard', async (event, data) => {
 ipcMain.handle('dialog:callInspectTools', async (event, data) => {
 	if (data===false){
 			const inspectWindow = BrowserWindow.fromId(browserWindowArray['inspectToolsWindow'])
-			inspectWindow.setClosable(true)
-
+			// inspectWindow.setClosable(true)
+			browserWindowArray['inspectToolsWindow'] = -2;
 			inspectWindow.close()
-			browserWindowArray['inspectToolsWindow']=-2;
 			return
-	}
+	} else if (data === true) {
 	//but 
 	var selectWindow = BrowserWindow.getFocusedWindow()	
 	await createInspectToolsWindow();
 	BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()
+	}
 	return
 });
 
