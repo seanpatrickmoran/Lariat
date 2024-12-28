@@ -1,12 +1,12 @@
 const backButton = document.getElementById('backBtn');
 backButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', '')
+    api.signalToMain('dialog:callInspectTools', false)
     api.send('back-to-previous');
 });
 
 const viewToQueryButton = document.getElementById('viewToQueryBtn');
 viewToQueryButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', '')
+    api.signalToMain('dialog:callInspectTools', false)
     api.send('change-view-to-query');
 });
 
@@ -18,13 +18,13 @@ viewToInspectButton.addEventListener('click',()=>{
 
 const viewToViewerButton = document.getElementById('viewToViewerBtn');
 viewToViewerButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', '')
+    api.signalToMain('dialog:callInspectTools', false)
     api.send('change-view-to-viewer');
 });
 
 const viewToPairsButton = document.getElementById('viewToPairsBtn');
 viewToPairsButton.addEventListener('click',()=>{
-    api.signalToMain('dialog:callInspectTools', '')
+    api.signalToMain('dialog:callInspectTools', false)
     api.send('change-view-to-pairs');
 });
 
@@ -111,7 +111,6 @@ function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
     let divNames = document.getElementById(idName);
     let nameString = names.map((elem) => {
-        console.log(elem.hic_path)
         return elem.hic_path
     }).join("<option />")
     divNames.innerHTML =  "<option />" + nameString + "<option /> Pasteboard";
@@ -141,20 +140,14 @@ function singlularQuery(name){
         return elem
     });
     return nameString;
-    console.log(nameString);
 }
 
 function queryToSelectbox(search){
-    console.log(search);
-    // var search = document.getElementById('left-select').value;
-    // var names = functionMapped[keyname](search);
     var names = window.api.getHiCPath(search);
-    // let divNames = document.getElementById("populate-left");
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
     return nameString;
-    // divNames.innerHTML = "<option />" + nameString;
 }
 
 
@@ -165,7 +158,6 @@ function query_with_textbox(keyname){
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
-    console.log(nameString);
     divNames.innerHTML = "<option />" + nameString;
 }
 
@@ -226,6 +218,7 @@ function kronecker(inputArray, scaleFactor) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    window.api.signalToMain('dialog:callInspectTools', '');
     optionFillViewer("field-select");
     var search = document.getElementById('field-select').value;
     var nameString = queryToSelectbox(search);
@@ -271,7 +264,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.querySelector('#field-select').addEventListener('change', async () => {
     var search = document.getElementById('field-select').value;
-    console.log(search);
     let nameString = queryToSelectbox(search);
     let divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
@@ -285,7 +277,6 @@ document.querySelector('#inspectBtn').addEventListener('click', async () => {
     var value = selection.value;
     var queryName = selection.options[selection.selectedIndex].text;
     var valueArr = singlularQuery(queryName);
-    console.log(valueArr);
 
     var preloadedValues = JSON.parse(JSON.stringify(valueArr))[0];
     const name         = preloadedValues.name;
@@ -352,60 +343,25 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     normalizeToImageData(finalarr, pixelMaxValue, canvas);
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
-    window.api.signalToMain('dialog:callInspectTools', '');
-
-});
-
-// document.querySelector().addEventListener('click', () => {
-
-
-// }
-
-// console.log(document.querySelector('content#viewPortWindow').text)
-// console.log(document.querySelector('#viewPortWindow .windowshade-box'));
-// document.querySelector('#viewPortWindow .windowshade-box').addEventListener('click', () => {
-  // document.querySelector('#viewPortWindow.content').classList.toggle('hidden');
-    // console.log('clicl')
-    // document.querySelector('#viewPortRows').classList.toggle('hidden');
-    // console.log(parentElement)
-    // let allChildren = parentElement.querySelectorAll(":scope > span");
-    // console.log(allChildren)
-    // allChildren.forEach((item) => item.classList.toggle("hidden"));
-// });
-
-
-// addEventListener("keydown", (event) => {
-//     console.log(event.code, (event.ctrlKey || event.metaKey), event)
-//     if (viewPortWindow.classList.contains('hidden')){
-//       if(event.code === "KeyW" && (event.ctrlKey || event.metaKey)) {
-//         event.stopPropagation();
-//         event.preventDefault();
-//         event.stopImmediatePropagation();
-//         viewPortWindow.classList.toggle('hidden');
-//         }
-//     }
-// });
-
 
 document.querySelector('#popViewBtn').addEventListener('click', () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
-  // console.log(viewPortWindow.classList.contains('hidden'));
   if (viewPortWindow.classList.contains('hidden')){ 
     viewPortWindow.classList.toggle('hidden');
-    // console.log('here1')
+    };
+});
 
 
- // toggle beforeunload
-    api.signalToMain("toggleShortcut", 'ok');
-    // window.api.signalToMain('dialog:callInspectTools', '');
-  } 
+ // toggle answer do i close inspect? 
+window.api.recieve("closePopView", (message) =>{
+    const reply = !viewPortWindow.classList.contains('hidden');
+    console.log(reply, !reply)
+    if (reply){viewPortWindow.classList.toggle('hidden')};
+    window.api.signalToMain("closeWindowConfirm",reply)
 });
 
 document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
-  // console.log('goodbye!');
   viewPortWindow.classList.toggle('hidden');
-  // api.signalToMain("toggleShortcut", 'ok');
 });
 

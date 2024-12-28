@@ -62,7 +62,6 @@ function query_with_textbox(keyname,route){
 
 function queryToSelectbox(search){
     var names = window.api.getDistinctItems(search);
-    // console.log(names)
     let nameString = names.map((elem) => {
         return elem[search]
     }).join("<option />");
@@ -89,7 +88,6 @@ document.querySelector('#queryBtn').addEventListener('click', async () => {
     var fieldSelect = document.getElementById("field-select");
     var value = fieldSelect.value;
     var text = fieldSelect.options[fieldSelect.selectedIndex].text;
-    // console.log(document.getElementById("avail-field-select").value);
     if (document.getElementById("avail-field-select").value === "---Scroll for all results---") {
         query_with_textbox(text,'sqlite3-query');
     } else {
@@ -124,13 +122,11 @@ document.querySelector('#copyToPbBtn').addEventListener('click', async () => {
 
 
 window.api.recieve("paste-board-to-noWindow",(values) => {
-    console.log('received')
     var names = values[0];
     let divNames = document.getElementById("names");
     let nameString = names.map((elem) => {
         return elem
     }).join("<option />");
-    console.log(nameString);
     divNames.innerHTML = "<option />" + nameString;
 });
 

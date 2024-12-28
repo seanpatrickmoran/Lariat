@@ -30,7 +30,6 @@ pasteBoardPasteTo.addEventListener('click', async () => {
     return this.innerHTML
 	}).get();
 
-	// console.log(names);
 	window.api.pasteboardDumpToMain(names)
 });
 
@@ -77,12 +76,10 @@ pasteBoardTalk.addEventListener('click', async () => {
 //         imageDataArray[i * 4 + 3] = 255;   // Alpha (fully opaque)
 //     }
 //     const imageData = new ImageData(imageDataArray, cols, rows);
-//     console.log(imageData)
 //     var canvas = document.createElement('canvas'),
 //     ctx = canvas.getContext('2d');
 //     canvas.width = 28;
 //     canvas.height = 28;
-//     console.log(imageDataArray);
 //     ctx.drawImage(imageData, 0, 0, 28, 28);
 //     return canvas.toDataURL();
 // }
@@ -145,14 +142,11 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 	var namesMemory = new Map();
 	const strnames = document.getElementById('pasteboard').getElementsByClassName("strname");
 	const target = document.getElementById('pasteboard')
-	console.log(strnames)
-	console.log(target)
 	// document.getElementById("main").getElementsByClassName("test");
 	// console.log(target.options)
 
     if (strnames.length>1) {
         for (i=0;i<strnames.length;i++){
-	        console.log(strnames[i].innerText)
             if (namesMemory.has(strnames[i].innerText)){
                 continue
             } else {
@@ -163,7 +157,6 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 	}
 
 	if (strnames.length==1 && !namesMemory.has(strnames.innerText)) {
-		console.log(strnames.innerText)
 		if (namesMemory.has(strnames.innerText)){
 			
 		} else {
@@ -174,12 +167,9 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
     var names = valueArr[0];
     for (let i = 0; i < names.length; i++) {
 		var substring = names[i];
-		console.log(substring.name, namesMemory.has(substring.name))
 		if (namesMemory.has(substring.name)){
-			console.log(`except`)
 			continue
 		} else {
-		console.log('else')
 		namesMemory.set(substring.name,2)
 		resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
 	    target.innerHTML += `<tr id="selectable"><td class="thumbnail"><img class="thumbnail" src="${resizedImageBase64}"></td><td class="strname">${substring.name}</td></tr>`;

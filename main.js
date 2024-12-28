@@ -107,7 +107,7 @@ const createInspectToolsWindow = () => {
 	browserWindowArray['inspectToolsWindow'] = inspectToolsWindow.id
 	inspectToolsWindow.loadFile("children/inspectTools.html")
 	// inspectToolsWindow.setAlwaysOnTop(true)
-	// inspectToolsWindow.setClosable(false)
+	inspectToolsWindow.setClosable(false)
 	inspectToolsWindow.setMaximizable(false)
 	inspectToolsWindow.setHasShadow(false)
 	inspectToolsWindow.invalidateShadow()
@@ -121,12 +121,31 @@ const createInspectToolsWindow = () => {
 const closeFocusWindow = () => {
 	const selectWindow = BrowserWindow.getFocusedWindow()
 	if (selectWindow != null) {
+		if (selectWindow.getURL()==="file://"+__dirname+"/children/inspect.html"){
+			selectWindow.webContents.send("closePopView",(''));
+		}
 		var name = selectWindow.getTitle();
-		browserWindowArray[name] = -1;
+
+		browserWindowArray[name] = -2;
 		selectWindow.close()
 	}
 	return
 }
+
+
+ipcMain.handle('closeWindowConfirm', async (event, data) => {
+	// if data true, popView was visible. Don't close inspect.
+	// if data false, close inspect and tools.
+	if (data===false){
+			const selectWindow = BrowserWindow.getFocusedWindow()
+			selectWindow.close()
+			browserWindowArray["mainWindow"] = -2;
+			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).setClosable(true)
+			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
+			browserWindowArray['inspectToolsWindow']=-2;
+			}
+});
+
 
 
 app.whenReady().then(()=> {
@@ -278,7 +297,7 @@ app.on('activate', () => {
 
 //IPC on MAIN
 ipcMain.on('change-view-to-query', ()=>{
-    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+  const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
 	mainWindowState["mainWindow"]='children/query.html';
     selectWindow.loadFile('children/query.html');
 });
@@ -300,7 +319,7 @@ ipcMain.on('change-view-to-pairs', ()=>{
 
 ipcMain.on('back-to-previous', ()=>{
     const selectWindow = BrowserWindow.getFocusedWindow();//fromId(browserWindowArray['mainWindow'])
-    if (selectWindow.getURL()==="file://"+__dirname+"index.html"){
+    if (selectWindow.getURL()==="file://"+__dirname+"/index.html"){
     	return
     }
     selectWindow.loadFile('index.html')
@@ -333,19 +352,19 @@ ipcMain.handle('dialog:callPBoard', async (event, data) => {
 });
 
 ipcMain.handle('dialog:callInspectTools', async (event, data) => {
-	var selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow']);
-	if(selectWindow.webContents.getURL() != "file://"+__dirname+"children/inspect.html"){
-		if(browserWindowArray['inspectToolsWindow']!=-2){
-			BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).close()
+	if (data===false){
+			const inspectWindow = BrowserWindow.fromId(browserWindowArray['inspectToolsWindow'])
+			inspectWindow.setClosable(true)
+
+			inspectWindow.close()
 			browserWindowArray['inspectToolsWindow']=-2;
 			return
-		}
-		await createInspectToolsWindow();
-		BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()
-		return 
 	}
-	return null
-
+	//but 
+	var selectWindow = BrowserWindow.getFocusedWindow()	
+	await createInspectToolsWindow();
+	BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()
+	return
 });
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
@@ -370,17 +389,4 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
     // const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 	// selectWindow.webContents.send("main-to-pasteboard",response);
 	return
-});
-
-ipcMain.handle('toggleShortcut', async (event, data) => {
-	const response = await data;
-	console.log('here2');
-	// console.log(globalShortcut.isRegistered('CmdOrCtrl+W'));
-	// if (globalShortcut.isRegistered('CmdOrCtrl+W')){
-	// 	console.log('here3')
-	//    globalShortcut.unregister('CmdOrCtrl+W');
-	//    return
-	// }
- 	// globalShortcut.register('CmdOrCtrl+W', closeFocusWindow);
- 	return
 });
