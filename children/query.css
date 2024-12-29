@@ -1,8 +1,8 @@
 #names {
     border: 1px solid black;
     margin: 3px;
-    width: 300px;
-    height: 315px;
+    width: 762px;
+    height: 370px;
     overflow: auto;
 }
 
@@ -12,23 +12,35 @@
   flex-direction: row;
 }
 
-select#field-select{
-  margin-bottom: 10px; 
+.offsets {
+  height: 21.5px;
+  align-items: center;
+}
+
+#offsetPage {
+  margin-left: 4px;
+}
+
+select {
 /*  padding: 5px;*/
-/*  font-size: 14px;*/
-  width: 95px;
-/*  height: 100px;*/
+  width: 200px;
   overflow: auto;
 }
 
-select#avail-field-select{
-  margin-bottom: 10px; 
+/*
+select#field-select{
+  width: 95px;
+  overflow: auto;
+}*/
+
+/*select#avail-field-select{*/
+/*  margin-bottom: 10px; */
 /*  padding: 5px;*/
 /*  font-size: 14px;*/
-  width: 250px;
+/*  width: 200px;*/
 /*  height: 100px;*/
-  overflow: auto;
-}
+/*  overflow: auto;*/
+/*}*/
 
 input#sqlite3-query{
   height: 19px;
@@ -40,8 +52,8 @@ input#sqlite3-query{
 /*    z-index: 2;
     font-size: 12px;
     font-weight: normal;*/
-    width: 600px;
-    height: 400px;
+    width: 770px;
+    height: 520px;
 /*    margin: 100px auto 0;
     border: 1px solid #111;
     background: #ccc;

@@ -33,19 +33,22 @@
 
     <h1 class="title">SQL Query</h1>
     <div class="row-container">
-      <label for="field-select">Field:</label>
-      <select name="fields" id="field-select">
-        <option value="name">name</option>
-        <option value="dataset">dataset</option>
-        <option value="condition">condition</option>
-        <option value="dimensions">dimensions</option>
-        <option value="hic_path">hic_path</option>
-        <option value="PUB_ID">PUB_ID</option>
-        <option value="resolution">resolution</option>
+      <select name="fields" id="dataset-field-select" selected="dataset">
+        <option value="dataset">Dataset</option>
       </select>
-      <label for="avail-field-select">Avail:</label>
-      <select name="available" id="avail-field-select"></select>
-      <input type="text" id="sqlite3-query" placeholder="SQL Query"/>
+    </div>
+
+    <div class="row-container">
+      <select name="fields" id="resolution-field-select" selected="resolution">
+        <option value="resolution">Resolution</option>
+      </select>
+    </div>
+
+    <div class="row-container">
+      <select name="available" id="names-field-select" selected="all">
+        <option value="all">All</option>
+      </select>
+      <!-- <input type="text" id="sqlite3-query" placeholder="SQL Query"/> -->
     </div>
 
     <div class="row-container">
@@ -57,8 +60,18 @@
     <div>
       <select id="names" multiple size="10"></select>
     </div>
-    </section>
+
+
+
+
+    <div class="row-container offset-navigation" >
+      <button type="button" id="offSetLeftButton">&#8592;</button>
+      <button type="button" id="offSetRightButton">&#8594;</button>
+    <div class="row-container offset-navigation">
+      <span id="offsetPage"></span>
+    </div>
   </div>
+  </section>
 
 <!--   <div id="hide-popboard" style="display: none" class="pbcontent">
     <div class="control-box close-box"><a class="control-box-inner"></a></div>

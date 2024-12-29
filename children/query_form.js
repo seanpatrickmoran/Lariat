@@ -1,16 +1,72 @@
-const executeQueryButton = () =>{
-    var fieldSelect = document.getElementById("field-select");
-    var value = fieldSelect.value;
-    var text = fieldSelect.options[fieldSelect.selectedIndex].text;
-    if (document.getElementById("avail-field-select").value === "---Scroll for all results---") {
-        query_with_textbox(text,'sqlite3-query');
+var searchPageOffset = 0;
+var offsetPage = Math.ceil(searchPageOffset/200);
+
+
+
+
+const incrementAndQuery = () => {
+    searchPageOffset += 200;
+    console.log(searchPageOffset)
+    let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
+    let dataset = document.getElementById("dataset-field-select").value
+    query_with_textbox(dataset,resolution,searchPageOffset);
+};
+
+const decrementAndQuery = () => {
+    if (searchPageOffset === 0){
+        return
+    };
+    searchPageOffset -= 200;
+    console.log(searchPageOffset)
+    let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
+    let dataset = document.getElementById("dataset-field-select").value
+    query_with_textbox(dataset,resolution,searchPageOffset);
+};
+
+
+const executeQueryButton = () => {
+    searchPageOffset = 0;
+    if (document.getElementById("names-field-select").value === "all") {
+        console.log('print')
+        query_with_textbox('','names');
     } else {
-        query_with_textbox(text,"avail-field-select");
+        console.log('else');
+        query_with_textbox('', document.getElementById("dataset-field-select").value); //will this return more than one value?
     };
 };
 
+function query_with_textbox(keyname,route,searchPageOffset){
+    let resolution = document.getElementById("resolution-field-select").value
+    let dataset = document.getElementById("dataset-field-select").value
+    console.log(dataset)
+    var names;
+    console.log(searchPageOffset)
+    if (resolution!=''){
+        names = window.api.getDatasetatRes(dataset, parseInt(resolution), searchPageOffset)
+        console.log('accessed')
+    } else {
+        console.log('else')
+        names = window.api.getDataset(dataset, searchPageOffset)
+    }
+    // if (names!=undefined){
+    let divNames = document.getElementById("names");
+    let nameString = names.map((elem) => {
+        return elem.name
+    }).join("<option />");
+
+    console.log(nameString)
+    divNames.innerHTML = "<option />" + nameString
+    // };
+};
+
+
+
+// # dataset-field-select change this
+
+
+
+
 const executeCopyToPasteboard = () => {
-    console.log('hello');
     window.api.talkToPBoard('true');
     var fieldSelect = document.getElementById("names");
     const optionsSelect = fieldSelect.selectedOptions;
@@ -31,6 +87,9 @@ clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("queryBtn", executeQueryButton)
 clickMap.set("copyToPbBtn", executeCopyToPasteboard)
+clickMap.set("offSetLeftButton", decrementAndQuery)
+clickMap.set("offSetRightButton", incrementAndQuery)
+
 
 
 document.body.addEventListener('click', function (event) {
@@ -38,10 +97,11 @@ document.body.addEventListener('click', function (event) {
     if (!(clickMap.has(namedId))){
         return
         }
-    console.log('click')
-    console.log(event.target.id)
-    if (["queryBtn","copyToPbBtn"].includes(namedId)){
-        // executeQueryButton();
+    // console.log('click')
+    // console.log(event.target.id)
+    if (["queryBtn","copyToPbBtn","offSetLeftButton","offSetRightButton"].includes(namedId)){
+        console.log('hello!')
+        console.log(namedId)
         clickMap.get(namedId)();
         return
     }
@@ -62,44 +122,135 @@ function tailOfSQLClick(){
 };
 
 
-function query_with_textbox(keyname,route){
-    var search = document.getElementById(route).value;
-    var names = functionMapped[keyname](search)
-    let divNames = document.getElementById("names");
+
+
+
+// function query_with_textbox(keyname,route){
+//     console.log(keyname);
+//     // console.log(counts)
+//     // console.log(counts.get())
+//     var search = document.getElementById(route).value;
+//     var counts = window.api.countDistinctItems(keyname, search);
+//     console.log(counts.name)
+//     console.log(counts.value)
+//     console.log(counts.text)
+//     // var names = functionMapped[keyname](search)
+//     // let divNames = document.getElementById("names");
+//     // let nameString = names.map((elem) => {
+//     //     return elem.name
+//     // }).join("<option />");
+//     // divNames.innerHTML = "<option />" + nameString;
+// };
+
+// function queryToSelectbox(key,route){
+//     // var counts = window.api.countDistinctItems(search, route);
+//     // console.log(counts)
+//     // console.log(counts.get())
+//     // console.log(counts)
+//     // console.log(counts.value)
+//     // console.log(counts.text)
+//     console.log(key)
+//     var names = window.api.getDistinctItems(key);
+//     console.log(names)
+//     let nameString = names.map((elem) => {
+//         return elem[key]
+//     }).join("<option />");
+//     let divNames = document.getElementById("route");
+//     divNames.innerHTML = "<option />" + nameString;
+//     // return null;
+// };
+
+
+function fetchDistinctQuery(key){
+    var names = window.api.getDistinctItems(key);
     let nameString = names.map((elem) => {
-        return elem.name
+        return elem[key]
     }).join("<option />");
-    divNames.innerHTML = "<option />" + nameString;
+    return nameString
 };
 
-function queryToSelectbox(search){
-    var names = window.api.getDistinctItems(search);
-    let nameString = names.map((elem) => {
-        return elem[search]
-    }).join("<option />");
-    return nameString;
-};
+
+
+// function query_with_textbox(keyname,route){
+//     var search = document.getElementById(route).value;
+//     var names = functionMapped[keyname](search)
+//     let divNames = document.getElementById("names");
+//     let nameString = names.map((elem) => {
+//         return elem.name
+//     }).join("<option />");
+//     divNames.innerHTML = "<option />" + nameString;
+// };
+
+// function queryToSelectbox(search){
+//     var names = window.api.getDistinctItems(search);
+//     let nameString = names.map((elem) => {
+//         return elem[search]
+//     }).join("<option />");
+//     return nameString;
+// };
+
 
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    var search = document.getElementById('field-select').value;
-    var nameString = queryToSelectbox(search);
-    var divNames = document.getElementById("avail-field-select");
-    divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
+    var search = document.getElementById('dataset-field-select')
+    var nameString = fetchDistinctQuery('dataset'); //store these. Otherwise, use a loading screen. 
+    console.log(nameString)
+    search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+
+    // search = document.getElementById('resolution-field-select')
+    // nameString = fetchDistinctQuery('resolution');
+    // console.log(nameString)
+    // search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+
+    // search = document.getElementById('names-field-select')
+    // var nameString = fetchDistinctQuery('names');
+    // console.log(nameString)
+    // search.innerHTML = "<option />All</option><option />" + nameString;
+
+
 });
 
-
-
-document.getElementById('field-select').addEventListener('change', async () => {
-    var search = document.getElementById('field-select').value;
-    var names = window.api.getDistinctItems(search);
-    let nameString = names.map((elem) => {
-        return elem[search]
-    }).join("<option />");
-    let divNames = document.getElementById("avail-field-select");
-    divNames.innerHTML = "<option /> ---Scroll for all results--- </option><option />" + nameString;
+document.getElementById('dataset-field-select').addEventListener('change', async () => {
+    var searchValue = document.getElementById('dataset-field-select').value;
+    let nameString = fetchDistinctQuery('resolution');
+    let divNames = document.getElementById("resolution-field-select");
+    divNames.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
 });
+
+// document.getElementById('resolution-field-select').addEventListener('change', async () => {
+//     var searchValue = document.getElementById('resolution-field-select').value;
+//     // let nameString = fetchDistinctQuery('name');
+//     let divNames = document.getElementById("names-field-select");
+//     if (searchValue!="Resolution"){
+//         divNames.innerHTML = "<option value=\"condition\"/>Condition</option><option value=\"hic_path\"/>HiC FilePath</option><option value=\"PUB_ID\"/>Publication id#</option>"
+//     }
+// });
+
+
+
+// document.getElementById('dataset-field-select').addEventListener('change', async () => {
+//     var search = document.getElementById('resolution-field-select').value;
+//     var names = window.api.getDistinctItems(search);
+//     let nameString = names.map((elem) => {
+//         return elem[search]
+//     }).join("<option />");
+//     let divNames = document.getElementById("names-field-select");
+//     divNames.innerHTML = "<option />All</option><option />" + nameString;
+// });
+
+
+
+// document.getElementById('field-select').addEventListener('change', async () => {
+//     var search = document.getElementById('field-select').value;
+//     var names = window.api.getDistinctItems(search);
+//     let nameString = names.map((elem) => {
+//         return elem[search]
+//     }).join("<option />");
+//     let divNames = document.getElementById("dataset-field-select");
+//     divNames.innerHTML = "<option />All</option><option />" + nameString;
+// });
+
 
 
 window.api.recieve("paste-board-to-noWindow",(values) => {

@@ -11,8 +11,8 @@ const getNames = (name) => {
 	return testmgr.getNames(name);
 }
 
-const getDataset = (name) => {
-	return testmgr.getDataset(name);
+const getDataset = (name,offset) => {
+	return testmgr.getDataset(name,offset);
 }
 
 const getCondition = (name) => {
@@ -55,6 +55,14 @@ const getDistinctItems = (name) => {
 	return testmgr.getDistinctItems(name);
 }
 
+const countDistinctItems = (name,key) =>{
+	return testmgr.countDistinctItems(name,key);
+}
+
+const getDatasetatRes = (name,resolution,offset) => {
+	return testmgr.getDatasetatRes(name,resolution,offset)
+}
+
 // contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer)
 contextBridge.exposeInMainWorld("api", {
 	getNames: getNames,
@@ -68,6 +76,8 @@ contextBridge.exposeInMainWorld("api", {
 	getDimensions: getDimensions,
 	getDistinctItems: getDistinctItems,
 	getDistinctDatasets: getDistinctDatasets,
+	countDistinctItems: countDistinctItems,
+	getDatasetatRes: getDatasetatRes,
 	pragma: pragma,
     send: (channel, data) => ipcRenderer.send(channel, data),
     recieve: (channel, func) => ipcRenderer.on(
