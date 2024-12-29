@@ -335,9 +335,7 @@ ipcMain.on('back-to-previous', ()=>{
 
 ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
 // ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
-  console.log('at main, going to inspect')
 	const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-	console.log(selectWindow)
 	selectWindow.webContents.send("transmitSwapInspect",'');
 	return
 });
@@ -375,12 +373,6 @@ ipcMain.handle('dialog:chooseMain', async (event, data) => {
 	const response = await data;
 	const selectWindow = BrowserWindow.fromId(browserWindowArray['pasteboardWindow']);
 
-  selectWindow.on('did-finish-load', () => {
-    // Execute your function here
-    console.log('Window is ready to show!');
-    // Do something with the window, e.g., win.show()
-  });
-
 	selectWindow.webContents.send("main-to-pasteboard",response);
 });
 
@@ -398,9 +390,7 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 	}
 
   selectWindow.once('did it load', () => {
-    // Execute your function here
-    console.log('PBoardToMain is ready to show!');
-    // Do something with the window, e.g., win.show()
+
   });
 
 

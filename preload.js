@@ -81,18 +81,3 @@ contextBridge.exposeInMainWorld("api", {
 	talkToPBoard: (msg) => ipcRenderer.invoke('dialog:callPBoard', msg),
 	pasteboardDumpToMain: (data) => ipcRenderer.invoke('dialog:PBoardToMain', data),
 })
-
-
-// contextBridge.exposeInIsolatedWorld('bridge', {
-//     send: (channel, data) => ipcRenderer.send(channel, data),
-//     recieve: (channel, func) => ipcRenderer.on(
-//         channel,
-//         (event, ...args) => func(args),
-//         ),
-//   }
-// )
-
-
-
-
-//frontend

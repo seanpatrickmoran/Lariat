@@ -1,5 +1,3 @@
-
-
 var stName0="";
 var stPUB_ID0="";
 var stCondition0="";
@@ -21,6 +19,7 @@ var stNumpyArr1="";
 var stViewing_vmax1="";
 
 var persistent_state = 0;
+
 /*
 current state is persistent_state, last 
 invocation to inspect image is persistent_state^=1
@@ -48,7 +47,13 @@ var state1 = {
     "numpyarr": stNumpyArr1,
     "viewing_vmax": stViewing_vmax1}
 
+
 let inspectedImageArray = Array(state0, state1)
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 
 const toggleViewPortVisibility = () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
@@ -116,14 +121,11 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
 
 };
 
+
 document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
   viewPortWindow.classList.toggle('hidden');
 });
-
-
-
-
 
 
 
@@ -134,6 +136,13 @@ clickMap.set("viewToQueryBtn", "change-view-to-query")
 clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("popViewBtn", toggleViewPortVisibility)
+
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+
 
 
 document.body.addEventListener('click', function (event) {
@@ -207,24 +216,8 @@ window.api.recieve("paste-board-to-noWindow",(values) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -287,27 +280,22 @@ function normalizeToImageData(reshapedArray, vMin, vMax, canvas) {
     const rows = reshapedArray.length;
     const cols = reshapedArray[0].length;
 
-    // Step 1: Find the min and max values in the array
     const flatArray = reshapedArray.flat();
     const normalized = flatArray.map(value => Math.round(((value - vMin) / (vMax - vMin)) * 255));
 
-    // Step 3: Convert to RGBA format
     const imageDataArray = new Uint8ClampedArray(rows * cols * 4);
     for (let i = 0; i < normalized.length; i++) {
         const value = normalized[i];
         imageDataArray[i * 4] = value;     // Red
         imageDataArray[i * 4 + 1] = value; // Green
         imageDataArray[i * 4 + 2] = value; // Blue
-        imageDataArray[i * 4 + 3] = 255;   // Alpha (fully opaque)
+        imageDataArray[i * 4 + 3] = 255;   // Alpha
     }
 
-    // Step 4: Draw on the canvas
     const ctx = canvas.getContext("2d");
     const imageData = new ImageData(imageDataArray, cols, rows);
     ctx.putImageData(imageData, 0, 0);
 }
-
-
 
 
 function kronecker(inputArray, scaleFactor) {
@@ -333,6 +321,11 @@ function kronecker(inputArray, scaleFactor) {
 
     return outputArray;
 }
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -431,19 +424,12 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 });
 
 
-// document.querySelector('#popViewBtn').addEventListener('click', () => {
-//   const viewPortWindow = document.querySelector('#viewPortWindow.content')
-//   if (viewPortWindow.classList.contains('hidden')){ 
-//     viewPortWindow.classList.toggle('hidden');
-//     };
-// });
 
-// var _myreq = {
-//   state: 0, //0 is no error, 4 is error with message, etc.
-//   message: "", //can include error message (if any)
-//   data: [0,4,6] //application data for request (String, Array, Object)
-// };
-// ipc.send('mychannel-functiona', _myreq);
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+
+
 
 window.api.recieve("transmitSwapInspect", (message) =>{
     console.log(persistent_state)
@@ -469,32 +455,14 @@ window.api.recieve("transmitSwapInspect", (message) =>{
     }
 
 
-    console.log(persistent_state)
-    console.log(inspectedImageArray[persistent_state])
-
-
-    console.log('at inspect, transmission here')
     if (viewPortWindow.classList.contains('hidden')){
         viewPortWindow.classList.toggle('hidden');
     }
 
     const sourceCanvas = document.getElementById("canvas-inspect")
-    // console.log(sourceCanvas);
-    // const sourceImage = sourceCanvas.toDataURL()
-    // console.log(sourceImage);
-    var sourcePixelMaxValue = document.querySelector("input#filter1").value;
-
+    // var sourcePixelMaxValue = document.querySelector("input#filter1").value;
     const targetCanvas = document.getElementById("canvas-pop")
-    // const targetImage = targetCanvas.toDataURL()
-    // console.log(targetImage);
-    var targetPixelMaxValue = document.querySelector("input#filter1").value;
-
-    // const dcanvas = document.createElement("canvas");
-    // dcanvas.width = 450;
-    // dcanvas.height = 450;
-    // const dctx = dcanvas.getContext("2d");
-    // dctx.drawImage(targetCanvas, 0, 0);
-
+    // var targetPixelMaxValue = document.querySelector("input#filter1").value;
     const hideCanvas = document.getElementById("canvas-hidden")
     const hideCanvas2 = document.getElementById("canvas-hidden-2")
 
@@ -502,22 +470,17 @@ window.api.recieve("transmitSwapInspect", (message) =>{
     const sctx = sourceCanvas.getContext("2d");
     const hctx = hideCanvas.getContext("2d");
     const hctx2 = hideCanvas2.getContext("2d");
-
-
     hctx.drawImage(sourceCanvas, 0, 0, 450, 450)
     tctx.drawImage(sourceCanvas, 0, 0, 350, 350);
     sctx.drawImage(hideCanvas2, 0, 0, 450, 450);
     hctx2.drawImage(hideCanvas, 0, 0, 450, 450);
-    // loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
 });
 
 
 window.api.recieve("closePopView", (message) =>{
-    //is the element hidden? (TRUE)
     const reply = viewPortWindow.classList.contains('hidden');
     console.log(reply)
     if (!reply){
-        //true means visible
         viewPortWindow.classList.toggle('hidden')
     };
     console.log(reply)
