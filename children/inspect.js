@@ -1,3 +1,55 @@
+
+
+var stName0;
+var stPUB_ID0;
+var stCondition0;
+var stCoordinates0;
+var stDataset0;
+var stDimensions0;
+var stHic_path0;
+var stNumpyArr0;
+var stViewing_vmax0;
+
+var stName1;
+var stPUB_ID1;
+var stCondition1;
+var stCoordinates1;
+var stDataset1;
+var stDimensions1;
+var stHic_path1;
+var stNumpyArr1;
+var stViewing_vmax1;
+
+var persistent_state = 0;
+/*
+current state is persistent_state, last 
+invocation to inspect image is persistent_state^=1
+*/
+
+var state0 ={
+    "name": stName0,
+    "PUB_ID": stPUB_ID0,
+    "condition": stCondition0,
+    "coordinates": stCoordinates0,
+    "dataset": stDataset0,
+    "dimensions": stDimensions0,
+    "hic_path": stHic_path0,
+    "numpyarr": stNumpyArr0,
+    "viewing_vmax": stViewing_vmax0}
+
+var state1 = {
+    "name": stName1,
+    "PUB_ID": stPUB_ID1,
+    "condition": stCondition1,
+    "coordinates": stCoordinates1,
+    "dataset": stDataset1,
+    "dimensions": stDimensions1,
+    "hic_path": stHic_path1,
+    "numpyarr": stNumpyArr1,
+    "viewing_vmax": stViewing_vmax1}
+
+let inspectedImageArray = Array(state0, state1)
+
 const toggleViewPortVisibility = () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
   if (viewPortWindow.classList.contains('hidden')){ 
@@ -5,10 +57,88 @@ const toggleViewPortVisibility = () => {
     };
 };
 
+const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
+
+    let selection = document.getElementById(selectionId);
+    var value = selection.value;
+    var queryName = selection.options[selection.selectedIndex].text;
+    var valueArr = singlularQuery(queryName);
+
+    var preloadedValues = JSON.parse(JSON.stringify(valueArr))[0];
+    const name         = preloadedValues.name;
+    const PUB_ID       = preloadedValues.PUB_ID;
+    const condition    = preloadedValues.condition;
+    const coordinates  = preloadedValues.coordinates;
+    const dataset      = preloadedValues.dataset;
+    const dimensions   = preloadedValues.dimensions;
+    const hic_path     = preloadedValues.hic_path;
+    const numpyArr     = preloadedValues.numpyarr;
+    const viewing_vmax = preloadedValues.viewing_vmax;
+
+    inspectedImageArray[persistent_state]["name"]=name
+    inspectedImageArray[persistent_state]["PUB_ID"]=PUB_ID
+    inspectedImageArray[persistent_state]["condition"]=condition
+    inspectedImageArray[persistent_state]["coordinates"]=coordinates
+    inspectedImageArray[persistent_state]["dataset"]=dataset
+    inspectedImageArray[persistent_state]["dimensions"]=dimensions
+    inspectedImageArray[persistent_state]["hic_path"]=hic_path
+    inspectedImageArray[persistent_state]["numpyarr"]=numpyArr
+    inspectedImageArray[persistent_state]["viewing_vmax"]=viewing_vmax
+
+    //set input#filter1.value
+    var pixelMax = document.querySelector(inputId)
+    pixelMax.value = viewing_vmax;
+
+    //set canvas
+    const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
+    const float32Array = new Float32Array(decodedBytes.buffer);
+    const rows = dimensions, cols = dimensions;
+    const reshapedArray = [];
+    for (let i = 0; i < rows; i++) {
+        reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
+    }
+
+    const canvas = document.getElementById(canvasId);
+    canvas.width = 450;
+    canvas.height = 450;
+    let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
+    normalizeToImageData(finalarr, 0, viewing_vmax, canvas);
+    let splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
+    inspectedImageArray[persistent_state]["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
+
+
+    let divNames = document.getElementById(divNamesId);
+    divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["coordinates"]}</p>`
+
+    persistent_state^=1;
+
+};
+
 document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
   viewPortWindow.classList.toggle('hidden');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const clickMap = new Map();
@@ -92,26 +222,26 @@ window.api.recieve("paste-board-to-noWindow",(values) => {
 
 
 
-var stName;
-var stPUB_ID;
-var stCondition;
-var stCoordinates;
-var stDataset;
-var stDimensions;
-var stHic_path;
-var stNumpyArr;
-var stViewing_vmax;
 
-let inspectedImageArray = {
-    "name": stName,
-    "PUB_ID": stPUB_ID,
-    "condition": stCondition,
-    "coordinates": stCoordinates,
-    "dataset": stDataset,
-    "dimensions": stDimensions,
-    "hic_path": stHic_path,
-    "numpyarr": stNumpyArr,
-    "viewing_vmax": stViewing_vmax}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function optionFillViewer(idName){
     var names = window.api.getDistinctDatasets();
@@ -228,8 +358,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     divNames.innerHTML = "<option />" + nameString;
     var divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
 
-    const canvas = document.getElementById('canvas-inspect');
+    const canvas = document.getElementById('canvas-hidden');
     const ctx = canvas.getContext('2d');
     canvas.width = 450;
     canvas.height = 450;
@@ -262,7 +393,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    const canvas2 = document.getElementById('canvas-hidden-2');
+    const ctx2 = canvas2.getContext('2d');
+    canvas2.width = 450;
+    canvas2.height = 450;
 
+    // Draw the checkerboard pattern
+    for (let row = 0; row < numTiles; row++) {
+        for (let col = 0; col < numTiles; col++) {
+            // Alternate between black and white
+            const isBlack = (row + col) % 2 === 0;
+            ctx2.fillStyle = isBlack ? 'black' : 'white';
+            ctx2.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+        }
+    }
 
 });
 
@@ -275,63 +419,15 @@ document.querySelector('#field-select').addEventListener('change', async () => {
 
 
 document.querySelector('#names-field').addEventListener('change', async () => {
-    // var search = document.getElementById('field-select');
-    // let nameString = queryToSelectbox(search);
-    let selection = document.getElementById("names-field");
-    var value = selection.value;
-    var queryName = selection.options[selection.selectedIndex].text;
-    var valueArr = singlularQuery(queryName);
-
-    var preloadedValues = JSON.parse(JSON.stringify(valueArr))[0];
-    const name         = preloadedValues.name;
-    const PUB_ID       = preloadedValues.PUB_ID;
-    const condition    = preloadedValues.condition;
-    const coordinates  = preloadedValues.coordinates;
-    const dataset      = preloadedValues.dataset;
-    const dimensions   = preloadedValues.dimensions;
-    const hic_path     = preloadedValues.hic_path;
-    const numpyArr     = preloadedValues.numpyarr;
-    const viewing_vmax = preloadedValues.viewing_vmax;
-
-    inspectedImageArray["name"]=name
-    inspectedImageArray["PUB_ID"]=PUB_ID
-    inspectedImageArray["condition"]=condition
-    inspectedImageArray["coordinates"]=coordinates
-    inspectedImageArray["dataset"]=dataset
-    inspectedImageArray["dimensions"]=dimensions
-    inspectedImageArray["hic_path"]=hic_path
-    inspectedImageArray["numpyarr"]=numpyArr
-    inspectedImageArray["viewing_vmax"]=viewing_vmax
-
-    //set input#filter1.value
-    var pixelMax = document.querySelector("input#filter1")
-    pixelMax.value = viewing_vmax;
-
-    //set canvas
-    const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
-    const float32Array = new Float32Array(decodedBytes.buffer);
-    const rows = dimensions, cols = dimensions;
-    const reshapedArray = [];
-    for (let i = 0; i < rows; i++) {
-        reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
-    }
-
-    const canvas = document.getElementById('canvas-inspect');
-    canvas.width = 450;
-    canvas.height = 450;
-    let finalarr = kronecker(reshapedArray,Math.floor(448/dimensions))
-    normalizeToImageData(finalarr, 0, viewing_vmax, canvas);
-    let divNames = document.getElementById("sql-query-payload");
-    let splitCoords = inspectedImageArray["coordinates"].split(',');
-    inspectedImageArray["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
-    divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray["coordinates"]}</p>`
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
 });
+
 
 document.querySelector('input#filter1').addEventListener('change', async () => {
     //load vmax value as default into pixelMax
     var pixelMaxValue = document.querySelector("input#filter1").value;
-    var numpyArr = inspectedImageArray["numpyarr"]
-    var dimensions = inspectedImageArray["dimensions"]
+    var numpyArr = inspectedImageArray[persistent_state]["numpyarr"]
+    var dimensions = inspectedImageArray[persistent_state]["dimensions"]
     const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
     const float32Array = new Float32Array(decodedBytes.buffer);
     const rows = dimensions, cols = dimensions;
@@ -343,7 +439,7 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     const canvas = document.getElementById('canvas-inspect');
     canvas.width = 450;
     canvas.height = 450;
-    let finalarr = kronecker(reshapedArray,Math.floor(448/dimensions))
+    let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
     normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
 });
 
@@ -354,6 +450,52 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 //     viewPortWindow.classList.toggle('hidden');
 //     };
 // });
+
+// var _myreq = {
+//   state: 0, //0 is no error, 4 is error with message, etc.
+//   message: "", //can include error message (if any)
+//   data: [0,4,6] //application data for request (String, Array, Object)
+// };
+// ipc.send('mychannel-functiona', _myreq);
+
+window.api.recieve("transmitSwapInspect", (message) =>{
+    console.log('at inspect, transmission here')
+    if (viewPortWindow.classList.contains('hidden')){
+        viewPortWindow.classList.toggle('hidden');
+    }
+
+    const sourceCanvas = document.getElementById("canvas-inspect")
+    // console.log(sourceCanvas);
+    // const sourceImage = sourceCanvas.toDataURL()
+    // console.log(sourceImage);
+    var sourcePixelMaxValue = document.querySelector("input#filter1").value;
+
+    const targetCanvas = document.getElementById("canvas-pop")
+    // const targetImage = targetCanvas.toDataURL()
+    // console.log(targetImage);
+    var targetPixelMaxValue = document.querySelector("input#filter1").value;
+
+    // const dcanvas = document.createElement("canvas");
+    // dcanvas.width = 450;
+    // dcanvas.height = 450;
+    // const dctx = dcanvas.getContext("2d");
+    // dctx.drawImage(targetCanvas, 0, 0);
+
+    const hideCanvas = document.getElementById("canvas-hidden")
+    const hideCanvas2 = document.getElementById("canvas-hidden-2")
+
+    const tctx = targetCanvas.getContext("2d");
+    const sctx = sourceCanvas.getContext("2d");
+    const hctx = hideCanvas.getContext("2d");
+    const hctx2 = hideCanvas2.getContext("2d");
+
+
+    hctx.drawImage(sourceCanvas, 0, 0, 450, 450)
+    tctx.drawImage(sourceCanvas, 0, 0, 350, 350);
+    sctx.drawImage(hideCanvas2, 0, 0, 450, 450);
+    hctx2.drawImage(hideCanvas, 0, 0, 450, 450);
+    // loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+});
 
 
 window.api.recieve("closePopView", (message) =>{

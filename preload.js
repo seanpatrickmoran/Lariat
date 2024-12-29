@@ -74,6 +74,7 @@ contextBridge.exposeInMainWorld("api", {
         channel,
         (event, ...args) => func(args),
         ),
+    // invoke: ,
 	talkToMain: (msg) => ipcRenderer.invoke('dialog:callMain', msg),
 	signalToMain: (channel, msg) => ipcRenderer.invoke(channel, msg),
 	mainDumpToPasteboard: (data) => ipcRenderer.invoke('dialog:chooseMain', data),

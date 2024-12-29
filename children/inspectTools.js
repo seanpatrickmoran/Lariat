@@ -1,6 +1,66 @@
-// const clickMap = new Map();
 
-// // set a map for all buttons
+
+
+
+
+
+
+
+
+
+
+
+// const executeIPCfunction = () => {                   //ipc or local functions go here
+    // window.api.func();
+// };
+
+function swapViews(msg){
+    console.log('swapped')
+    // window.api.send("transmitMainSwapInspect", '')
+    api.signalToMain('transmitMainSwapInspect', '')
+    // })
+    //open it.
+    //swap the image from inspectView and swap View.
+    // return
+};
+
+
+const clickMap = new Map();
+clickMap.set("big-button",swapViews)
+
+
+document.body.addEventListener('click', function (event) {
+    const namedId = event.target.id;
+    console.log(namedId)
+    if (!(clickMap.has(namedId))){
+        return
+        }
+    if (['big-button',"other_button_name"].includes(namedId)){ //non routed function should be caught.
+        console.log('click')
+        clickMap.get(namedId)();
+        return
+    }
+    console.log('not big button')
+    api.send(`${clickMap.get(event.target.id)}`); //IPC routed functions
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

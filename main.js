@@ -113,27 +113,6 @@ const createInspectToolsWindow = () => {
 	// inspectToolsWindow.setMenuBarVisibility(false);
 	// pasteboardWindow.api.send(browserWindowArray)
 	return undefined
-
-
-
-
-
-
-
-	console.log(browserWindowArray)
-	console.log('createInspectToolsWindow');
-	const allWindows = BrowserWindow.getAllWindows();
-	// Print each window's details
-	allWindows.forEach((win, index) => {
-	    console.log(`Window ${index + 1}:`);
-	    console.log(`ID: ${win.id}`);
-	    console.log(`Title: ${win.getTitle()}`);
-	    console.log(`Bounds:`, win.getBounds());
-	    console.log('---');
-	});
-
-
-
 }
 
 
@@ -141,11 +120,8 @@ const closeFocusWindow = () => {
 	const selectWindow = BrowserWindow.getFocusedWindow()
 	if (selectWindow != null) {
 		if (selectWindow.getURL()==="file://"+__dirname+"/children/inspect.html"){
-			//if inspect, handle specially
-			console.log('gone to inspect.')
 			selectWindow.webContents.send("closePopView",(''));
 		} else {
-			console.log(selectWindow.getTitle())
 			browserWindowArray[selectWindow.getTitle()] = -2;
 			selectWindow.close()
 		}
@@ -156,17 +132,8 @@ const closeFocusWindow = () => {
 
 
 ipcMain.handle('closeWindowConfirm', async (event, data) => {
-	console.log(data)
-	console.log(browserWindowArray)
-	console.log('closeWindowConfirm');
 	const allWindows = BrowserWindow.getAllWindows();
-	// Print each window's details
 	allWindows.forEach((win, index) => {
-	    console.log(`Window ${index + 1}:`);
-	    console.log(`ID: ${win.id}`);
-	    console.log(`Title: ${win.getTitle()}`);
-	    console.log(`Bounds:`, win.getBounds());
-	    console.log('---');
 	});
 
 			// (:
@@ -365,6 +332,15 @@ ipcMain.on('back-to-previous', ()=>{
 	};
 });
 
+
+ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
+// ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
+  console.log('at main, going to inspect')
+	const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+	console.log(selectWindow)
+	selectWindow.webContents.send("transmitSwapInspect",'');
+	return
+});
 
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {

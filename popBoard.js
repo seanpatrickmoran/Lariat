@@ -37,11 +37,6 @@ const pasteBoardDump = document.getElementById('pbDump');
 pasteBoardDump.addEventListener('click', async () => {
 	const pasteBoardSelectField = document.getElementById('pasteboard');
     window.api.talkToMain('true');
-    // write to sqlite3... 
-    // var names = $("#pasteboard tr.ui-selected td").map(function(){
-    // return this.innerHTML.split("class=\"ui-selectee\">")[1]
-	// }).get();
-	// window.api.pasteboardDumpToMain(names)
 });
 
 const pasteBoardTalk = document.getElementById('pbTalk');
@@ -49,40 +44,6 @@ pasteBoardTalk.addEventListener('click', async () => {
   // window.api.talkToMain("index.html", window.id)
   window.api.talkToMain(window.id)
 })
-
-
-//<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot">
-
-
-
-/* --------IPC type calls-------- */
-//To Main
-
-//To Query
-
-// function normalizeToImageData(reshapedArray, vMax, dimension) {
-//     const rows = dimension;
-//     const cols = dimension;
-//     const flatArray = reshapedArray.flat();
-//     const min = Math.min(...flatArray);
-//     const normalized = flatArray.map(value => Math.round(((value - min) / (vMax - min)) * 255));
-
-//     const imageDataArray = new Uint8ClampedArray(rows * cols * 4);
-//     for (let i = 0; i < normalized.length; i++) {
-//         const value = normalized[i];
-//         imageDataArray[i * 4] = value;     // Red
-//         imageDataArray[i * 4 + 1] = value; // Green
-//         imageDataArray[i * 4 + 2] = value; // Blue
-//         imageDataArray[i * 4 + 3] = 255;   // Alpha (fully opaque)
-//     }
-//     const imageData = new ImageData(imageDataArray, cols, rows);
-//     var canvas = document.createElement('canvas'),
-//     ctx = canvas.getContext('2d');
-//     canvas.width = 28;
-//     canvas.height = 28;
-//     ctx.drawImage(imageData, 0, 0, 28, 28);
-//     return canvas.toDataURL();
-// }
 
 
 function base64ToImage(base64, vMax, size) {
