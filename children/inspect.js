@@ -1,24 +1,24 @@
 
 
-var stName0;
-var stPUB_ID0;
-var stCondition0;
-var stCoordinates0;
-var stDataset0;
-var stDimensions0;
-var stHic_path0;
-var stNumpyArr0;
-var stViewing_vmax0;
+var stName0="";
+var stPUB_ID0="";
+var stCondition0="";
+var stCoordinates0="";
+var stDataset0="";
+var stDimensions0="";
+var stHic_path0="";
+var stNumpyArr0="";
+var stViewing_vmax0="";
 
-var stName1;
-var stPUB_ID1;
-var stCondition1;
-var stCoordinates1;
-var stDataset1;
-var stDimensions1;
-var stHic_path1;
-var stNumpyArr1;
-var stViewing_vmax1;
+var stName1="";
+var stPUB_ID1="";
+var stCondition1="";
+var stCoordinates1="";
+var stDataset1="";
+var stDimensions1="";
+var stHic_path1="";
+var stNumpyArr1="";
+var stViewing_vmax1="";
 
 var persistent_state = 0;
 /*
@@ -103,12 +103,14 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
     canvas.height = 450;
     let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
     normalizeToImageData(finalarr, 0, viewing_vmax, canvas);
-    let splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
-    inspectedImageArray[persistent_state]["coordinates"]= `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
-
+    if (inspectedImageArray[persistent_state]["coordinates"]===undefined){
+        splitCoords=""
+    } else {
+        splitCoords=inspectedImageArray[persistent_state]["coordinates"].split(",")
+    }
 
     let divNames = document.getElementById(divNamesId);
-    divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["coordinates"]}</p>`
+    divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
 
     persistent_state^=1;
 
@@ -118,22 +120,6 @@ document.querySelector('#viewPortWindow .close-box').addEventListener('click', (
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
   viewPortWindow.classList.toggle('hidden');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -359,6 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     var divNames = document.getElementById("names-field");
     divNames.innerHTML = "<option />" + nameString;
     loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+    persistent_state^=1;
 
     const canvas = document.getElementById('canvas-hidden');
     const ctx = canvas.getContext('2d');
@@ -459,6 +446,33 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 // ipc.send('mychannel-functiona', _myreq);
 
 window.api.recieve("transmitSwapInspect", (message) =>{
+    console.log(persistent_state)
+    let splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
+    // inspectedImageArray[persistent_state]["coordinates"] = `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}`
+    let divNames = document.getElementById("pop-payload");
+    if (inspectedImageArray[persistent_state]["coordinates"]===undefined){
+        splitCoords=""
+        divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">0: 0-0</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">0: 0-0</p>`
+    } else {
+        splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
+            divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
+    }
+    
+    persistent_state^=1;
+    divNames = document.getElementById("sql-query-payload");
+    if (inspectedImageArray[persistent_state]["coordinates"]===undefined){
+        splitCoords=""
+        divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">0: 0-0</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">0: 0-0</p>`
+    } else {
+        splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
+        divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
+    }
+
+
+    console.log(persistent_state)
+    console.log(inspectedImageArray[persistent_state])
+
+
     console.log('at inspect, transmission here')
     if (viewPortWindow.classList.contains('hidden')){
         viewPortWindow.classList.toggle('hidden');

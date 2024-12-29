@@ -18,6 +18,11 @@
   width: 50px;
 }
 
+#pop-rows{
+    margin-top: 0;
+}
+
+
 ul {
   list-style-type: none;
 }
@@ -81,7 +86,7 @@ ul {
 
 #viewPortWindow {
     width: 360px;
-    height: 450px;
+    height: 460px;
     left: 279px;
     top: -10px;
 }
