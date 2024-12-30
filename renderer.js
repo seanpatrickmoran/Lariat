@@ -34,6 +34,57 @@ window.api.recieve("show-start-mosaic",(value) => {
 	showStartMosaic.style = `visibility: ${value}`;
 });
 
+
+//function fetchAndGive() {
+//    console.log(message)
+//    const datasets = window.api.getDistinctItems("dataset");
+//    const resolutions = window.api.getDistinctItems("resolution");
+//    console.log(datasets, resolutions)
+//    window.api.returnSignal([datasets,resolutions]);
+//};
+
+//window.api.fetchSignal(fetchAndGive)
+
+window.api.recieve('fetch-dataset', (event, a) => {
+    console.log(event.sender)
+    let dset = window.api.getDistinctItems("dataset");
+    let res = window.api.getDistinctItems("resolution");
+    console.log(Object.values(dset))//, res)
+//    const dset_mapped = dset.map((elem) => elem["dataset"]);
+//    const rset_mapped = res.map((elem) => elem["resolution"])
+//    console.log(dset_mapped, rset_mapped)
+//    window.api.send('send-dataset',[dset,res]);
+    window.api.send('send-dataset',[Object.values(dset),Object.values(res)]);
+//    event.sender.send('send-dataset',[dset,res]);
+});
+
+
+//window.api.recieve("paste-board-to-noWindow",(values) => {
+//    var names = values[0];
+//    let divNames = document.getElementById("names");
+//    let nameString = names.map((elem) => {
+//        return elem
+//    }).join("<option />");
+//    divNames.innerHTML = "<option />" + nameString;
+//});
+
+
+//window.api.fetchSignal( () => {
+//    const datasets = window.api.getDistinctItems("dataset");
+//    const resolutions = window.api.getDistinctItems("resolution");
+//    console.log(datasets, resolutions)
+//    window.api.returnSignal([datasets,resolutions])
+//})
+//
+
+
+
+//window.api.recieve("retrieve-fields", () => {
+//    api.send("fetch-fields");
+//  console.log(customData); // 'something'
+//});
+
+
 // window.api.recieve("main-to-pasteboard",(valueArr) => {
 // 	const element = document.querySelector('select#pasteboard');
 // 	console.log('here');

@@ -96,6 +96,7 @@ exports.getDistinctItems = (name) => {
 	let stml = db.prepare(sql);
 	console.log(stml)
 	let result = stml.all();
+    console.log();
 	return result;
 }
 
