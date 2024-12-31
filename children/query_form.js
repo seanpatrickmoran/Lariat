@@ -162,7 +162,7 @@ function tailOfSQLClick(){
 
 
 function fetchDistinctQuery(key){
-    console.log('issue here')
+    // console.log('issue here')
     var names = window.api.getDistinctItems(key);
     let nameString = names.map((elem) => {
         return elem[key]

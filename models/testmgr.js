@@ -20,6 +20,16 @@ exports.getDataset = (name, offset) => {
 	return result;
 };
 
+
+exports.getDatasetAll = (name) => {
+	const sql = `SELECT * FROM imag WHERE dataset = '${name}'`; // LIMIT 3 OFFSET 0';
+	let stmt = db.prepare(sql);
+	let result = stmt.all();
+	// console.log(result);
+	return result;
+};
+
+
 exports.getCondition = (name) => {
 	const sql = 'SELECT * FROM imag WHERE condition = (?)';
 	let stmt = db.prepare(sql);

@@ -16,14 +16,12 @@ var tableMemory = {
             "NamesFields": "",
             "databaseName" : "",
             }
-
 var browserWindowArray = { "" : 0,
     'mainWindow': -2,
     'pasteboardWindow': -2,
     'inspectToolsWindow': -2,
     'levelsWindow': -2,
     }
-
 let mainWindowState = {
     'mainWindow': "",
     }
@@ -137,7 +135,7 @@ const createInspectToolsWindow = () => {
 
 
 const createlevelsWindow = () => {
-    if ((browserWindowArray['levelsWindow'] != -2) && (BrowserWindow.fromId(browserWindowArray['levelsWindow']) != null)){
+    if ((browserWindowArray['levelsWindow'] != -2)){
         return undefined
     }
 
@@ -154,9 +152,11 @@ const createlevelsWindow = () => {
     }
     });
 
-
     var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
     levelsWindow.setPosition(x+500,y+180);
+
+    // levelsWindow['levelsWindow'] = levelsWindow.id
+
     levelsWindow.loadFile("children/levels.html")
     levelsWindow.setMaximizable(false)
     levelsWindow.setHasShadow(false)
@@ -164,10 +164,7 @@ const createlevelsWindow = () => {
     console.log('hey!')
     console.log(levelsWindow.id)
     console.log(levelsWindow.getTitle())
-    levelsWindow.webContents.on('did-finish-load', ()=>{
-        levelsWindow['levelsWindow'] = levelsWindow.id
-        return undefined
-    });
+    return levelsWindow.id
 }
 
 
@@ -205,15 +202,20 @@ ipcMain.handle('closeWindowConfirm', async (event, data) => {
 });
 
 
+ipcMain.handle('closing', (id) => {
+    browserWindowArray[id] = -2
+    // BrowserWindow.fromId
+});
+
 
 app.whenReady().then(()=> {
     createMainWindow();
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu)
-    console.log(tableMemory)
+    // console.log(tableMemory)
     checkDatabase();
-    console.log(tableMemory)
-    console.log(BrowserWindow.getAllWindows)
+    // console.log(tableMemory)
+    // console.log(BrowserWindow.getAllWindows)
 });
 
 
@@ -229,6 +231,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     createMainWindow();
 });
+
 
 
 
@@ -267,6 +270,12 @@ ipcMain.on('back-to-previous', ()=>{
       });
     };
 });
+
+// ipcMain.on("inspect-sends-popboard", () => {
+    
+// })
+
+
 
 
 ipcMain.handle('get-tableMemory-datasets', async (event, message) =>{
@@ -316,7 +325,7 @@ ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
 
 
 ipcMain.handle("transmitMainLevels", async (event, msg) => {    
-    await createlevelsWindow();
+    browserWindowArray['levelsWindow'] = await createlevelsWindow();
     const selectWindow = BrowserWindow.fromId(browserWindowArray["mainWindow"])
     selectWindow.webContents.send("base64-to-levels", msg);
     console.log('2')
@@ -326,6 +335,8 @@ ipcMain.handle("transmitMainLevels", async (event, msg) => {
 
 ipcMain.handle("return-base64-to-levels", async (event, msg) => {
     const selectWindow = BrowserWindow.getFocusedWindow()//.fromId(browserWindowArray["levelsWindow"])
+    // console.log(browserWindowArray)
+    // console.log(selectWindow.id)
     selectWindow.webContents.on("did-finish-load", () => {
         selectWindow.webContents.send("base64-arrives-levels", msg);
     });

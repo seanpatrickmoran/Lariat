@@ -63,6 +63,10 @@ const getDatasetatRes = (name,resolution,offset) => {
 	return testmgr.getDatasetatRes(name,resolution,offset)
 }
 
+const getDatasetAll = (name) => {
+	return testmgr.getDatasetAll(name)
+}
+
 // contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer)
 contextBridge.exposeInMainWorld("api", {
 	getNames: getNames,
@@ -78,6 +82,7 @@ contextBridge.exposeInMainWorld("api", {
 	getDistinctDatasets: getDistinctDatasets,
 	countDistinctItems: countDistinctItems,
 	getDatasetatRes: getDatasetatRes,
+	getDatasetAll: getDatasetAll,
 	pragma: pragma,
     send: (channel, data) => ipcRenderer.send(channel, data),
     recieve: (channel, func) => ipcRenderer.on(

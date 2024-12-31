@@ -42,7 +42,7 @@
              <button type="button" id="inspectBtn">Inspect</button>
              <button type="button" id="popViewBtn">PopView</button> 
              <button type="button" id='tail-sql'>Filter</button>
-             <button type="button" id="resetBtn">Export</button> 
+             <button type="button" id="selectToPopboard">Copy</button> 
           </div>
 
 
@@ -52,8 +52,12 @@
                <label for="field-select">Dataset:</label>
               </div>
               <div class="row-container">
-                <label for="field-select">Choose:</label>
+                <label for="field-select">Resolution:</label>
               </div>
+<!--              <div class="row-container">
+               <label for="field-select">Choose:</label>
+             </div> -->
+
             </div>
 
 
@@ -61,16 +65,20 @@
               <div class="row-container">
                <select name="fields" id="field-select"></select>
               </div>
+
               <div class="row-container">
-               <select id="names-field"></select>
-              </div>  
-            </div>
+               <select id="resolution-field-select" value="resolution"></select>
+              </div>
+             </div>  
           </div>
+
+         <div class="row-container">
+            <select id="names-field" size="12"></select>
+         </div>  
 
           <div class="row-container">
                       <div class="column-container">
-               <div id="query-left-legend" class="column-container">
-                  <!-- <p align="right"> -->
+<!--                <div id="query-left-legend" class="column-container">
                   <p style="-webkit-user-select: text; margin-bottom: 1px; align="right">
                      <class "s">
                      Dataset
@@ -87,8 +95,7 @@
                      <class "s">
                      Y1-Y2
                   </p>
-                  <!-- </p> -->
-               </div>
+               </div> -->
                <div id="sql-query-payload" class="column-container">
                   <!-- <p id="sql-query-payload"><class "s"></p> -->
                   <!-- <p id="coordinates"><class "s">testing</p> -->

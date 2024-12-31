@@ -62,6 +62,17 @@ const toggleViewPortVisibility = () => {
     };
 };
 
+const inspectSendsToPopboard = () => {
+    window.api.talkToPBoard('true');
+    var selection = document.querySelector('select#names-field')
+    // window.send('to-pasteboard', selection.options[selection.selectedIndex].text)
+    // const optionsSelect = fieldSelect.selectedOptions;
+    console.log(window.api.getNames(selection.options[selection.selectedIndex].text))
+    const reply = JSON.parse(JSON.stringify(window.api.getNames(selection.options[selection.selectedIndex].text)))[0]
+    console.log(reply)
+    window.api.mainDumpToPasteboard([reply]);
+}
+
 const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger=0, vMaxTrigger=0) => {
 
     // persistent_state^=1;
@@ -139,6 +150,7 @@ clickMap.set("viewToQueryBtn", "change-view-to-query")
 clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("popViewBtn", toggleViewPortVisibility)
+clickMap.set("selectToPopboard", inspectSendsToPopboard)
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -149,11 +161,13 @@ clickMap.set("popViewBtn", toggleViewPortVisibility)
 
 document.body.addEventListener('click', function (event) {
     passive: true
+    // console.log(namedId)
     const namedId = event.target.id;
+    console.log(namedId)
     if (!(clickMap.has(namedId))){
         return
     }
-    if (["popViewBtn"].includes(namedId)){
+    if (["popViewBtn","selectToPopboard"].includes(namedId)){
         clickMap.get(namedId)();
         return
     }
@@ -224,32 +238,32 @@ window.api.recieve("paste-board-to-noWindow",(values) => {
 
 
 
-function optionFillViewer(idName){
-    var names = window.api.getDistinctDatasets();
-    let divNames = document.getElementById(idName);
-    let nameString = names.map((elem) => {
-        return elem.hic_path
-    }).join("<option />")
-    divNames.innerHTML =  "<option />" + nameString + "<option /> Pasteboard";
-};
+// function optionFillViewer(idName){
+//     var names = window.api.getDistinctDatasets();
+//     let divNames = document.getElementById(idName);
+//     let nameString = names.map((elem) => {
+//         return elem.hic_path
+//     }).join("<option />")
+//     divNames.innerHTML =  "<option />" + nameString + "<option /> Pasteboard";
+// };
 
-function tailOfSQLClick(){
-    var names = window.api.getTail();
-    let divNames = document.getElementById("names");
-    let nameString = names.map((elem) => {
-        return elem.name
-    }).join("<option />");
-    divNames.innerHTML = "<option />" + nameString;
-};
+// function tailOfSQLClick(){
+//     var names = window.api.getTail();
+//     let divNames = document.getElementById("names");
+//     let nameString = names.map((elem) => {
+//         return elem.name
+//     }).join("<option />");
+//     divNames.innerHTML = "<option />" + nameString;
+// };
 
-function defaultRender(){
-    var names = window.api.pragma();
-    let divNames = document.getElementById("names");
-    let nameString = names.map((elem) => {
-        return elem.name
-    }).join("");
-    divNames.innerHTML = nameString;
-};
+// function defaultRender(){
+//     var names = window.api.pragma();
+//     let divNames = document.getElementById("names");
+//     let nameString = names.map((elem) => {
+//         return elem.name
+//     }).join("");
+//     divNames.innerHTML = nameString;
+// };
 
 function singlularQuery(name){
     var names = window.api.getNames(name);
@@ -260,12 +274,39 @@ function singlularQuery(name){
 }
 
 function queryToSelectbox(search){
-    var names = window.api.getHiCPath(search);
+    console.log(search)
+    // var names = window.api.getHiCPath(search);
+    var names = window.api.getDatasetAll(search);
+    console.log(names)
+
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
     return nameString;
 }
+
+
+function fetchDistinctQuery(key){
+    // console.log('issue here')
+    var names = window.api.getDistinctItems(key);
+    let nameString = names.map((elem) => {
+        return elem[key]
+    }).join("<option />");
+    return nameString
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function query_with_textbox(keyname){
@@ -330,15 +371,49 @@ function kronecker(inputArray, scaleFactor) {
 
 
 
+
+
+
+
+window.api.recieve("transmit-tableMemory-dataset", (data) => {
+    console.log('hello!')
+    console.log(data[0])
+    var search = document.getElementById("field-select");
+    // var names = window.api.getDistinctItems(data);
+    let nameString = data[0].map((elem) => {
+        return elem["dataset"]
+    }).join("<option />");
+    // return nameString
+    search.innerHTML = "<option />" + nameString;
+    // search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+});
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     window.api.signalToMain('dialog:callInspectTools', true);
-    optionFillViewer("field-select");
-    var search = document.getElementById('field-select').value;
-    var nameString = queryToSelectbox(search);
-    var divNames = document.getElementById("names-field");
+    await window.api.invoke('get-tableMemory-datasets');
+    var divNames = document.getElementById("field-select");
+    divNames.innerHTML += "<option />Pasteboard</option>";
+    // optionFillViewer("field-select");
+    // var search = document.getElementById('field-select').value;
+    // console.log(search);
+    var nameString =fetchDistinctQuery("resolution")
+    divNames = document.getElementById("resolution-field-select");
     divNames.innerHTML = "<option />" + nameString;
-    var divNames = document.getElementById("names-field");
+
+    const dname = document.getElementById("field-select").value;
+    const res = document.getElementById("resolution-field-select").value;
+    data =window.api.getDatasetatRes(dname, res, 0)
+    console.log(nameString)
+    divNames = document.getElementById("names-field");
+    nameString = data.map((elem) => {
+        return elem["name"]
+    }).join("<option />");
     divNames.innerHTML = "<option />" + nameString;
+
+    //select first
+    $("#names-field")[0].selectedIndex = 0;
+
     loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
     persistent_state^=1;
 
