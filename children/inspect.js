@@ -64,6 +64,8 @@ const toggleViewPortVisibility = () => {
 
 const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
 
+    // persistent_state^=1;
+
     let selection = document.getElementById(selectionId);
     var value = selection.value;
     var queryName = selection.options[selection.selectedIndex].text;
@@ -117,8 +119,7 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
     let divNames = document.getElementById(divNamesId);
     divNames.innerHTML = `<p style="-webkit-user-select: text;margin-bottom: 1px"><class "s">${inspectedImageArray[persistent_state]["dataset"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${inspectedImageArray[persistent_state]["name"]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}<p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}</p>`
 
-    persistent_state^=1;
-
+    persistent_state ^= 1;
 };
 
 
@@ -387,7 +388,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             ctx2.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
         }
     }
-
 });
 
 document.querySelector('#field-select').addEventListener('change', async () => {
@@ -405,9 +405,10 @@ document.querySelector('#names-field').addEventListener('change', async () => {
 
 document.querySelector('input#filter1').addEventListener('change', async () => {
     //load vmax value as default into pixelMax
+    // persistent_state ^= 1
     var pixelMaxValue = document.querySelector("input#filter1").value;
-    var numpyArr = inspectedImageArray[persistent_state]["numpyarr"]
-    var dimensions = inspectedImageArray[persistent_state]["dimensions"]
+    var numpyArr = inspectedImageArray[persistent_state^1]["numpyarr"]
+    var dimensions = inspectedImageArray[persistent_state^1]["dimensions"]
     const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
     const float32Array = new Float32Array(decodedBytes.buffer);
     const rows = dimensions, cols = dimensions;
@@ -421,6 +422,7 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
     canvas.height = 450;
     let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
     normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
+    // persistent_state^=1;
 });
 
 

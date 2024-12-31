@@ -34,6 +34,10 @@ window.api.recieve("show-start-mosaic",(value) => {
 	showStartMosaic.style = `visibility: ${value}`;
 });
 
+// window.api.recieve('send-persisted-state', (values) => {
+//     const datasetValues = values;
+// });
+
 
 //function fetchAndGive() {
 //    console.log(message)
@@ -49,7 +53,10 @@ window.api.recieve('fetch-dataset', (event, a) => {
     console.log(event.sender)
     let dset = window.api.getDistinctItems("dataset");
     let res = window.api.getDistinctItems("resolution");
-    console.log(Object.values(dset))//, res)
+    // console.log(Object.values(dset))//, res)
+    console.log('fetch-dataset')
+    console.log(dset)
+    console.log(res)
 //    const dset_mapped = dset.map((elem) => elem["dataset"]);
 //    const rset_mapped = res.map((elem) => elem["resolution"])
 //    console.log(dset_mapped, rset_mapped)
@@ -58,6 +65,10 @@ window.api.recieve('fetch-dataset', (event, a) => {
 //    event.sender.send('send-dataset',[dset,res]);
 });
 
+
+// window.api.recieve('persist-state', (event, a) => {
+//     // selectWindow.webContents.send("transmitSwapInspect",'');
+// });
 
 //window.api.recieve("paste-board-to-noWindow",(values) => {
 //    var names = values[0];

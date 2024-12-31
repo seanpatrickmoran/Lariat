@@ -162,6 +162,7 @@ function tailOfSQLClick(){
 
 
 function fetchDistinctQuery(key){
+    console.log('issue here')
     var names = window.api.getDistinctItems(key);
     let nameString = names.map((elem) => {
         return elem[key]
@@ -189,27 +190,45 @@ function fetchDistinctQuery(key){
 //     return nameString;
 // };
 
-
+window.api.recieve("transmit-tableMemory-dataset", (data) => {
+    console.log('hello!')
+    console.log(data[0])
+    var search = document.getElementById('dataset-field-select')
+    // var names = window.api.getDistinctItems(data);
+    let nameString = data[0].map((elem) => {
+        return elem["dataset"]
+    }).join("<option />");
+    // return nameString
+    console.log(nameString)
+    search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+});
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    var search = document.getElementById('dataset-field-select')
-    var nameString = fetchDistinctQuery('dataset'); //store these. Otherwise, use a loading screen. 
-    console.log(nameString)
-    search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+    await window.api.invoke('get-tableMemory-datasets');
+// window.api.recieve('persist-state', (event, a) => {
+    // selectWindow.webContents.send("transmitSwapInspect",'');
+// };
 
-    // search = document.getElementById('resolution-field-select')
-    // nameString = fetchDistinctQuery('resolution');
+
+    // var search = document.getElementById('dataset-field-select')
+    // var nameString
+    // var nameString = fetchDistinctQuery('dataset'); //store these. Otherwise, use a loading screen. 
     // console.log(nameString)
-    // search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+    // search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+ 
+    var search = document.getElementById('resolution-field-select')
+    var nameString = fetchDistinctQuery('resolution');
+    console.log(nameString)
+    search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
 
     // search = document.getElementById('names-field-select')
     // var nameString = fetchDistinctQuery('names');
     // console.log(nameString)
     // search.innerHTML = "<option />All</option><option />" + nameString;
-
-
 });
+
+
 
 document.getElementById('dataset-field-select').addEventListener('change', async () => {
     var searchValue = document.getElementById('dataset-field-select').value;

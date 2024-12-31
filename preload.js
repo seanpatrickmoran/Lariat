@@ -84,7 +84,7 @@ contextBridge.exposeInMainWorld("api", {
         channel,
         (event, ...args) => func(args),
         ),
-    // invoke: ,
+    invoke: (channel, msg) => ipcRenderer.invoke(channel, msg),
 //    returnSignal: (message) => ipcRenderer.on('fetch-dataset', (message)),
 //    fetchSignal: (message) => ipcRenderer.send('give-dataset', (message) => callback(...message),),
 	talkToMain: (msg) => ipcRenderer.invoke('dialog:callMain', msg),
