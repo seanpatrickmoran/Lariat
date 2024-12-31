@@ -103,9 +103,6 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 	var namesMemory = new Map();
 	const strnames = document.getElementById('pasteboard').getElementsByClassName("strname");
 	const target = document.getElementById('pasteboard')
-	// document.getElementById("main").getElementsByClassName("test");
-	// console.log(target.options)
-
     if (strnames.length>1) {
         for (i=0;i<strnames.length;i++){
             if (namesMemory.has(strnames[i].innerText)){

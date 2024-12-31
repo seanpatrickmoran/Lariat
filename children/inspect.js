@@ -6,7 +6,7 @@ var stDataset0="";
 var stDimensions0="";
 var stHic_path0="";
 var stNumpyArr0="";
-var stViewing_vmax0="";
+var stViewing_vmax0=0;
 
 var stName1="";
 var stPUB_ID1="";
@@ -16,7 +16,7 @@ var stDataset1="";
 var stDimensions1="";
 var stHic_path1="";
 var stNumpyArr1="";
-var stViewing_vmax1="";
+var stViewing_vmax1=0;
 
 var persistent_state = 0;
 
@@ -62,7 +62,7 @@ const toggleViewPortVisibility = () => {
     };
 };
 
-const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
+const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger=0, vMaxTrigger=0) => {
 
     // persistent_state^=1;
 
@@ -80,7 +80,8 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
     const dimensions   = preloadedValues.dimensions;
     const hic_path     = preloadedValues.hic_path;
     const numpyArr     = preloadedValues.numpyarr;
-    const viewing_vmax = preloadedValues.viewing_vmax;
+    const viewing_vmax = vMaxTrigger > 0 ? vMaxTrigger : preloadedValues.viewing_vmax;
+    const viewing_min  = vMinTrigger > 0 ? vMinTrigger : 0;
 
     inspectedImageArray[persistent_state]["name"]=name
     inspectedImageArray[persistent_state]["PUB_ID"]=PUB_ID
@@ -108,8 +109,9 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId) => {
     const canvas = document.getElementById(canvasId);
     canvas.width = 450;
     canvas.height = 450;
+    console.log(reshapedArray);
     let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
-    normalizeToImageData(finalarr, 0, viewing_vmax, canvas);
+    normalizeToImageData(finalarr, viewing_min, viewing_vmax, canvas);
     if (inspectedImageArray[persistent_state]["coordinates"]===undefined){
         splitCoords=""
     } else {
@@ -137,7 +139,6 @@ clickMap.set("viewToQueryBtn", "change-view-to-query")
 clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("popViewBtn", toggleViewPortVisibility)
-
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -404,24 +405,25 @@ document.querySelector('#names-field').addEventListener('change', async () => {
 
 
 document.querySelector('input#filter1').addEventListener('change', async () => {
+    var pixelMaxValue = document.querySelector("input#filter1").value;
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", 0, pixelMaxValue);
     //load vmax value as default into pixelMax
     // persistent_state ^= 1
-    var pixelMaxValue = document.querySelector("input#filter1").value;
-    var numpyArr = inspectedImageArray[persistent_state^1]["numpyarr"]
-    var dimensions = inspectedImageArray[persistent_state^1]["dimensions"]
-    const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
-    const float32Array = new Float32Array(decodedBytes.buffer);
-    const rows = dimensions, cols = dimensions;
-    const reshapedArray = [];
-    for (let i = 0; i < rows; i++) {
-        reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
-    }
+    // var numpyArr = inspectedImageArray[persistent_state^1]["numpyarr"]
+    // var dimensions = inspectedImageArray[persistent_state^1]["dimensions"]
+    // const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
+    // const float32Array = new Float32Array(decodedBytes.buffer);
+    // const rows = dimensions, cols = dimensions;
+    // const reshapedArray = [];
+    // for (let i = 0; i < rows; i++) {
+    //     reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
+    // }
 
-    const canvas = document.getElementById('canvas-inspect');
-    canvas.width = 450;
-    canvas.height = 450;
-    let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
-    normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
+    // const canvas = document.getElementById('canvas-inspect');
+    // canvas.width = 450;
+    // canvas.height = 450;
+    // let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
+    // normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
     // persistent_state^=1;
 });
 
@@ -476,6 +478,16 @@ window.api.recieve("transmitSwapInspect", (message) =>{
     tctx.drawImage(sourceCanvas, 0, 0, 350, 350);
     sctx.drawImage(hideCanvas2, 0, 0, 450, 450);
     hctx2.drawImage(hideCanvas, 0, 0, 450, 450);
+});
+
+
+////recieve, relay image to levels.
+window.api.recieve("base64-to-levels",() => {
+    const canvas = document.getElementById("canvas-inspect")
+    const base64 = canvas.toDataURL();
+    console.log(base64)
+    console.log('3')
+    window.api.signalToMain("return-base64-to-levels", base64);
 });
 
 

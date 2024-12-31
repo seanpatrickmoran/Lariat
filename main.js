@@ -17,20 +17,20 @@ var tableMemory = {
             "databaseName" : "",
             }
 
-
-
-
-const isMac = process.platform === 'darwin';
-
-let browserWindowArray = { "" : 0,
+var browserWindowArray = { "" : 0,
     'mainWindow': -2,
     'pasteboardWindow': -2,
     'inspectToolsWindow': -2,
+    'levelsWindow': -2,
     }
 
 let mainWindowState = {
     'mainWindow': "",
     }
+
+
+
+const isMac = process.platform === 'darwin';
 
 const createMainWindow = () => {
     //Only one main window
@@ -66,6 +66,7 @@ const createMainWindow = () => {
     }
 
 
+
 const createAboutWindow = () => {
     const aboutWindow = new BrowserWindow({
         title: "About Lariat",
@@ -75,6 +76,7 @@ const createAboutWindow = () => {
     });
     aboutWindow.loadFile("about.html")
 }
+
 
 const createPopWindow = () => {
     if (browserWindowArray['pasteboardWindow'] != -2 && BrowserWindow.fromId(browserWindowArray['pasteboardWindow']) != undefined) {
@@ -96,6 +98,7 @@ const createPopWindow = () => {
     pasteboardWindow.setPosition(x+400,y-20);
     pasteboardWindow.loadFile("popBoard.html")
 }
+
 
 const createInspectToolsWindow = () => {
     if (browserWindowArray['inspectToolsWindow'] != -2) {
@@ -130,6 +133,45 @@ const createInspectToolsWindow = () => {
     // pasteboardWindow.api.send(browserWindowArray)
     return undefined
 }
+
+
+
+const createlevelsWindow = () => {
+    if ((browserWindowArray['levelsWindow'] != -2) && (BrowserWindow.fromId(browserWindowArray['levelsWindow']) != null)){
+        return undefined
+    }
+
+    const levelsWindow = new BrowserWindow({
+        title: "levelsWindow",
+        width: 500,
+        height: 420,
+        // hasShadow: false,
+        // transparent: true,
+        // frame: false,
+        webPreferences:{
+        nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js')
+    }
+    });
+
+
+    var [x, y] = BrowserWindow.fromId(browserWindowArray["mainWindow"]).getPosition();
+    levelsWindow.setPosition(x+500,y+180);
+    levelsWindow.loadFile("children/levels.html")
+    levelsWindow.setMaximizable(false)
+    levelsWindow.setHasShadow(false)
+    levelsWindow.invalidateShadow()
+    console.log('hey!')
+    console.log(levelsWindow.id)
+    console.log(levelsWindow.getTitle())
+    levelsWindow.webContents.on('did-finish-load', ()=>{
+        levelsWindow['levelsWindow'] = levelsWindow.id
+        return undefined
+    });
+}
+
+
+
 
 
 const closeFocusWindow = () => {
@@ -171,9 +213,7 @@ app.whenReady().then(()=> {
     console.log(tableMemory)
     checkDatabase();
     console.log(tableMemory)
-
-    // ipcMain.handle('dialog:callMain', talkToMain)
-    // ipcMain.handle('dialog:chooseData', mainDumpToPasteboard)
+    console.log(BrowserWindow.getAllWindows)
 });
 
 
@@ -228,12 +268,6 @@ ipcMain.on('back-to-previous', ()=>{
     };
 });
 
-ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
-// ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
-    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-    selectWindow.webContents.send("transmitSwapInspect",'');
-    return
-});
 
 ipcMain.handle('get-tableMemory-datasets', async (event, message) =>{
     // var messageDatasets = Object.values(tableMemory["datasetFields"])
@@ -271,6 +305,37 @@ ipcMain.handle('dialog:callInspectTools', async (event, data) => {
     }
     return
 });
+
+
+
+ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.webContents.send("transmitSwapInspect",'');
+    return
+});
+
+
+ipcMain.handle("transmitMainLevels", async (event, msg) => {    
+    await createlevelsWindow();
+    const selectWindow = BrowserWindow.fromId(browserWindowArray["mainWindow"])
+    selectWindow.webContents.send("base64-to-levels", msg);
+    console.log('2')
+    console.log(browserWindowArray)
+    return
+});
+
+ipcMain.handle("return-base64-to-levels", async (event, msg) => {
+    const selectWindow = BrowserWindow.getFocusedWindow()//.fromId(browserWindowArray["levelsWindow"])
+    selectWindow.webContents.on("did-finish-load", () => {
+        selectWindow.webContents.send("base64-arrives-levels", msg);
+    });
+    return
+});
+
+
+// ipcMain.handle('callLevels', async (event,data) => {
+//     return 
+// })
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
     const response = await data;

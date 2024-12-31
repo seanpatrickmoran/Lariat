@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X UA-Compatible" content="IE=edge"> -->
+    <meta name="levelsWindow" content="width=<device-width>, initial-scale=1.0">
+    <title>levelsWindow</title>
+    <nav class="row-container"> 
+    </nav>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+      // $( function() {
+      //     $( "#content" ).draggable({ handle: "h1.title" });
+      // } );
+      // $( function() {
+      //     $( "#main_docs" ).draggable({ handle: "h1.title" });
+      // } );
+      // function hide(obj) {
+        //   var el = document.getElementById(obj);
+        //   el.style.display = 'none';
+    //   };
+  </script>
+</head>
+<body>
+
+  <div id="content" class="content">
+      <div class="control-box close-box"><a class="control-box-inner"></a></div>
+      <div class="control-box zoom-box">
+         <div class="control-box-inner">
+            <div class="zoom-box-inner"></div>
+         </div>
+      </div>
+      <div class="control-box windowshade-box">
+         <div class="control-box-inner">
+            <div class="windowshade-box-inner"></div>
+         </div>
+      </div>
+      <h1 class="title">levelsWindow</h1>
+      <div id="viewPortRows" class="row-container">
+       <canvas id="levelsCanvas" width="400" height="400"></canvas>
+        <!-- <canvas id="canvas-pop" width="325" height="325"></canvas> -->
+      </div>
+
+        <p><span id="sliderMinimumSlider" class="sliderBg">Flying objects: <span id="innerLabelMinimumSlider">8</span><span id="sliderThumbMinimumSlider" class="sliderThumb"></span></span></p>
+        <p><span id="sliderFlyingObjects" class="sliderBg">Flying objects: <span id="innerLabelFlyingObjects">8</span><span id="sliderThumbFlyingObjects" class="sliderThumb"></span></span></p>
+
+<!-- 
+<div class="range_container">
+    <div class="sliders_control">
+        <span id="sliderThumbFlyingObjects" class="sliderThumb" style="left: 1px; opacity: 1;"></span>
+
+        <input id="fromSlider" type="range" value="10" min="0" max="100"/>
+        <input id="toSlider" type="range" value="40" min="0" max="100"/>
+    </div>
+    <div class="form_control">
+        <div class="form_control_container">
+            <div class="form_control_container__time">Min</div>
+            <input class="form_control_container__time__input" type="number" id="fromInput" value="10" min="0" max="100"/>
+        </div>
+        <div class="form_control_container">
+            <div class="form_control_container__time">Max</div>
+            <input class="form_control_container__time__input" type="number" id="toInput" value="40" min="0" max="100"/>
+        </div>
+    </div>
+</div>
+ -->
+    <canvas id="levelsCanvas" width="450" height="450"></canvas>
+    </div>
+    <script src="levels.js"></script>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="levels.css" />
+</body>
+</html>
