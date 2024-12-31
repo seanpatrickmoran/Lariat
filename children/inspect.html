@@ -63,7 +63,7 @@
 
             <div class="column-container">
               <div class="row-container">
-               <select name="fields" id="field-select"></select>
+               <select name="fields" id="field-select" value="dataset"></select>
               </div>
 
               <div class="row-container">
@@ -103,32 +103,37 @@
              </div>
           </div>
 
+         <div class="row-container offset-navigation" >
+            <button type="button" id="offSetLeftButton">&#8592;</button>
+            <button type="button" id="offSetRightButton">&#8594;</button>
+          </div>
+
       </div>
-
-
-         <div class="block">
+      <div class="block">
 <!--             <div class="row-container">
                <input type="text" name="filter" placeholder="PH1" id="filter2" style="width: 65px"/><input type="text" name="filter" placeholder="PH2" style="width: 65px"/><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
             </div>
             <div class="row-container">
                <select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select><select name="filter" id="imag-select" placeholder="PH3" style="width: 65px"></select>
             </div> -->
-            <div class="row-container">
-               <canvas id="canvas-inspect" width="450" height="450"></canvas>
+         <div class="row-container">
+            <canvas id="canvas-inspect" width="450" height="450"></canvas>
+         </div>
+
+         <div class="row-container">
+            <div id="query-right-legend" class="column-container">
+               <p align="right">pixelMax</p>
+            </div>
+            <div id="pMax" class="column-container">
+               <!-- <p align="right">Dataset<br>Data Id#<br>X1-X2<br>Y1-Y2</p> -->
+               <input type="text" name="filter" placeholder="pixelMax" id="filter1" style="margin-top: 10px; width: 65px"/>
             </div>
 
-            <div class="row-container">
-               <div id="query-right-legend" class="column-container">
-                  <p align="right">pixelMax</p>
-               </div>
-               <div id="pMax" class="column-container">
-                  <!-- <p align="right">Dataset<br>Data Id#<br>X1-X2<br>Y1-Y2</p> -->
-                  <input type="text" name="filter" placeholder="pixelMax" id="filter1" style="margin-top: 10px; width: 65px"/>
-               </div>
-            </div>
          </div>
       </div>
-    </section>
+  </section>
+   </div>
+
     <div id="viewPortWindow" class="content hidden">
     <!-- <div id="viewPortWindow" class="content"> -->
     <div class="control-box close-box"><a class="control-box-inner"></a></div>

@@ -51,6 +51,47 @@ var state1 = {
 let inspectedImageArray = Array(state0, state1)
 
 
+var searchPageOffset = 0;
+var offsetPage = Math.ceil(searchPageOffset/200);
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+
+const queryInspectToNamesField = (dname, res) =>{
+    // const dname = document.getElementById("field-select").value;
+    // const res = document.getElementById("resolution-field-select").value;
+    data =window.api.getDatasetatRes(dname, res, searchPageOffset)
+    // console.log(data)
+    divNames = document.getElementById("names-field");
+    nameString = data.map((elem) => {
+        return elem["name"]
+    }).join("<option />");
+    divNames.innerHTML = "<option />" + nameString;
+    $("#names-field")[0].selectedIndex = 0;
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+}
+
+
+const incrementAndQuery = () => {
+    searchPageOffset += 200;
+    console.log(searchPageOffset)
+    const dataset = document.getElementById("field-select").value;
+    const resolution = document.getElementById("resolution-field-select").value;
+    queryInspectToNamesField(dataset,resolution);
+};
+
+const decrementAndQuery = () => {
+    if (searchPageOffset === 0){
+        return
+    };
+    searchPageOffset -= 200;
+    console.log(searchPageOffset)
+    const dataset = document.getElementById("field-select").value;
+    const resolution = document.getElementById("resolution-field-select").value;
+    queryInspectToNamesField(dataset,resolution);
+};
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -136,6 +177,9 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger
 };
 
 
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
 document.querySelector('#viewPortWindow .close-box').addEventListener('click', () => {
   const viewPortWindow = document.querySelector('#viewPortWindow.content')
   viewPortWindow.classList.toggle('hidden');
@@ -151,6 +195,8 @@ clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("popViewBtn", toggleViewPortVisibility)
 clickMap.set("selectToPopboard", inspectSendsToPopboard)
+clickMap.set("offSetLeftButton", decrementAndQuery)
+clickMap.set("offSetRightButton", incrementAndQuery)
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -167,7 +213,7 @@ document.body.addEventListener('click', function (event) {
     if (!(clickMap.has(namedId))){
         return
     }
-    if (["popViewBtn","selectToPopboard"].includes(namedId)){
+    if (["popViewBtn","selectToPopboard", "offSetLeftButton","offSetRightButton"].includes(namedId)){
         clickMap.get(namedId)();
         return
     }
@@ -235,36 +281,6 @@ window.api.recieve("paste-board-to-noWindow",(values) => {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-
-
-
-// function optionFillViewer(idName){
-//     var names = window.api.getDistinctDatasets();
-//     let divNames = document.getElementById(idName);
-//     let nameString = names.map((elem) => {
-//         return elem.hic_path
-//     }).join("<option />")
-//     divNames.innerHTML =  "<option />" + nameString + "<option /> Pasteboard";
-// };
-
-// function tailOfSQLClick(){
-//     var names = window.api.getTail();
-//     let divNames = document.getElementById("names");
-//     let nameString = names.map((elem) => {
-//         return elem.name
-//     }).join("<option />");
-//     divNames.innerHTML = "<option />" + nameString;
-// };
-
-// function defaultRender(){
-//     var names = window.api.pragma();
-//     let divNames = document.getElementById("names");
-//     let nameString = names.map((elem) => {
-//         return elem.name
-//     }).join("");
-//     divNames.innerHTML = nameString;
-// };
-
 function singlularQuery(name){
     var names = window.api.getNames(name);
     let nameString = names.map((elem) => {
@@ -295,29 +311,6 @@ function fetchDistinctQuery(key){
     return nameString
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function query_with_textbox(keyname){
-    var search = document.getElementById('sqlite3-query').value;
-    var names = functionMapped[keyname](search);
-    let divNames = document.getElementById("names");
-    let nameString = names.map((elem) => {
-        return elem.name
-    }).join("<option />");
-    divNames.innerHTML = "<option />" + nameString;
-}
 
 function normalizeToImageData(reshapedArray, vMin, vMax, canvas) {
     const rows = reshapedArray.length;
@@ -372,9 +365,6 @@ function kronecker(inputArray, scaleFactor) {
 
 
 
-
-
-
 window.api.recieve("transmit-tableMemory-dataset", (data) => {
     console.log('hello!')
     console.log(data[0])
@@ -387,6 +377,8 @@ window.api.recieve("transmit-tableMemory-dataset", (data) => {
     search.innerHTML = "<option />" + nameString;
     // search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
 });
+
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -466,12 +458,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+
 document.querySelector('#field-select').addEventListener('change', async () => {
     var search = document.getElementById('field-select').value;
     let nameString = queryToSelectbox(search);
-    let divNames = document.getElementById("names-field");
+    let divNames = document.getElementById("resolution-field");
     divNames.innerHTML = "<option />" + nameString;
 });
+
+
+
+document.querySelector('#resolution-field-select').addEventListener('change', async () => {
+    searchPageOffset = 0;
+    const dname = document.getElementById("field-select").value;
+    const res = document.getElementById("resolution-field-select").value;
+    queryInspectToNamesField(dname, res)
+    // data =window.api.getDatasetatRes(dname, res, 0)
+    // console.log(data)
+    // divNames = document.getElementById("names-field");
+    // nameString = data.map((elem) => {
+    //     return elem["name"]
+    // }).join("<option />");
+    // divNames.innerHTML = "<option />" + nameString;
+});
+
 
 
 document.querySelector('#names-field').addEventListener('change', async () => {
@@ -482,24 +492,6 @@ document.querySelector('#names-field').addEventListener('change', async () => {
 document.querySelector('input#filter1').addEventListener('change', async () => {
     var pixelMaxValue = document.querySelector("input#filter1").value;
     loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", 0, pixelMaxValue);
-    //load vmax value as default into pixelMax
-    // persistent_state ^= 1
-    // var numpyArr = inspectedImageArray[persistent_state^1]["numpyarr"]
-    // var dimensions = inspectedImageArray[persistent_state^1]["dimensions"]
-    // const decodedBytes = Uint8Array.from(atob(numpyArr), c => c.charCodeAt(0));
-    // const float32Array = new Float32Array(decodedBytes.buffer);
-    // const rows = dimensions, cols = dimensions;
-    // const reshapedArray = [];
-    // for (let i = 0; i < rows; i++) {
-    //     reshapedArray.push(float32Array.slice(i * cols, (i + 1) * cols));
-    // }
-
-    // const canvas = document.getElementById('canvas-inspect');
-    // canvas.width = 450;
-    // canvas.height = 450;
-    // let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
-    // normalizeToImageData(finalarr, 0, pixelMaxValue, canvas);
-    // persistent_state^=1;
 });
 
 
