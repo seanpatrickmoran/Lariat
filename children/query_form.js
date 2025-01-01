@@ -83,8 +83,8 @@ const executeCopyToPasteboard = () => {
 const clickMap = new Map();
 clickMap.set("backBtn", "back-to-previous")
 clickMap.set("viewToInspectBtn", "change-view-to-inspect")
-clickMap.set("viewToViewerBtn", "change-view-to-viewer")
-clickMap.set("viewToPairsBtn", "change-view-to-pairs")
+// clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+// clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("queryBtn", executeQueryButton)
 clickMap.set("copyToPbBtn", executeCopyToPasteboard)
 clickMap.set("offSetLeftButton", decrementAndQuery)

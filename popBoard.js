@@ -7,7 +7,7 @@
 var queryMapped = new Map();
 var lastSelectedRow;
 // var trs = document.getElementById('pasteboard-table').tBodies[0].getElementsByTagName('tr');
-'use strict';$(function(){$("#pasteboard").selectable({stop:function(){$(".ui-selected",this).each(function(){$("#selectable tr").index(this)})}})});
+$(function(){$("#pasteboard").selectable({stop:function(){$(".ui-selected",this).each(function(){$("#selectable tr").index(this)})}})});
 
 
 const pasteBoardSelectAll = document.getElementById('pbSelect');
