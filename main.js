@@ -309,10 +309,26 @@ ipcMain.handle('get-tableMemory-datasets', async (event, message) =>{
     // var messageDatasets = Object.values(tableMemory["datasetFields"])
     console.log('at main')
     var messageDatasets = new Array()
-    messageDatasets = [...tableMemory["datasetFields"]]
+    var messageResolutions = new Array()
+    // messageDatasets = [...tableMemory["datasetFields"]]
+    messageDatasets = [...tableMemory["datasetFields"]] 
+    console.log(tableMemory["datasetFields"])
+    messageResolutions = tableMemory["resolutionFields"]
+    console.log(tableMemory["resolutionFields"])
     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-    selectWindow.webContents.send("transmit-tableMemory-dataset", messageDatasets);
+    // selectWindow.webContents.send("transmit-tableMemory-dataset", messageDatasets);
+    selectWindow.webContents.send("transmit-tableMemory-dataset", messageDatasets, messageResolutions);
 });
+
+// ipcMain.handle('get-tableMemory-resolution', async (event, message) =>{
+//     // var messageDatasets = Object.values(tableMemory["datasetFields"])
+//     console.log('at main')
+//     var messageResolutions = new Array()
+//     messageResolutions = [...tableMemory["resolutionFields"]]
+//     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+//     selectWindow.webContents.send("transmit-tableMemory-resolution", messageResolutions);
+// });
+
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
     await createMainWindow();

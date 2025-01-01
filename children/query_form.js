@@ -143,28 +143,44 @@ window.api.recieve("transmit-tableMemory-dataset", (data) => {
     }).join("<option />");
     console.log(nameString)
     search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+
+
+    search = document.getElementById('resolution-field-select')
+    nameString = data[1].map((elem) => {
+        return elem["resolution"]
+        // return elem["dataset"]["resolution"]
+    }).join("<option />");
+    console.log(nameString)
+    search.innerHTML = "<option value=\"dataset\" />Resolution</option><option />" + nameString;
+
+
 });
+
 
 
 document.addEventListener('DOMContentLoaded', async () => {
     await window.api.invoke('get-tableMemory-datasets');
-
- 
-    var search = document.getElementById('resolution-field-select')
-    var nameString = fetchDistinctQuery('resolution');
-    console.log(nameString)
-    search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+    // var search = document.getElementById('resolution-field-select')
+    // var nameString = fetchDistinctQuery('resolution');
+    // console.log(nameString)
+    // search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
 
 });
 
 
 
-document.getElementById('dataset-field-select').addEventListener('change', async () => {
-    var searchValue = document.getElementById('dataset-field-select').value;
-    let nameString = fetchDistinctQuery('resolution');
-    let divNames = document.getElementById("resolution-field-select");
-    divNames.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
-});
+// document.getElementById('dataset-field-select').addEventListener('change', async () => {
+//     //
+//     //
+//     //  Change to reflect the nested object values tableMemory[datasetName][search]
+//     //
+//     //
+
+//     // var searchValue = document.getElementById('dataset-field-select').value;
+//     // let nameString = fetchDistinctQuery('resolution');
+//     // let divNames = document.getElementById("resolution-field-select");
+//     // divNames.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+// });
 
 
 

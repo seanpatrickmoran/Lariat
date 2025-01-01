@@ -363,21 +363,83 @@ function kronecker(inputArray, scaleFactor) {
 ////////////////////////////////////////////////////////////////////////////
 
 
+window.api.recieve("transmit-tableMemory-dataset", (data,res) => {
+    console.log('hello!')  
+    console.log(data)
+    // console.log("you are inspect!")
+    // console.log(res)
 
-
-window.api.recieve("transmit-tableMemory-dataset", (data) => {
-    console.log('hello!')
-    console.log(data[0])
     var search = document.getElementById("field-select");
     // var names = window.api.getDistinctItems(data);
-    let nameString = data[0].map((elem) => {
+    var nameString = data[0].map((elem) => {
         return elem["dataset"]
     }).join("<option />");
     // return nameString
     search.innerHTML = "<option />" + nameString;
+
+    // var nameString =fetchDistinctQuery("resolution")
+    nameString = data[1].map((elem) => {
+        return elem["resolution"]
+    }).join("<option />");
+    divNames = document.getElementById("resolution-field-select");
+    divNames.innerHTML = "<option />" + nameString;
+
     // search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
 });
 
+// window.api.recieve("transmit-tableMemory-dataset", (data) => {
+//     console.log('hello!')
+//     console.log(data[0])
+//     var search = document.getElementById('dataset-field-select')
+//     let nameString = data[0].map((elem) => {
+//         return elem["dataset"]
+//     }).join("<option />");
+//     console.log(nameString)
+//     search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
+// });
+
+
+// window.api.recieve("transmit-tableMemory-resolution", (resolution) => {
+//     // var dataIndex = document.getElementById('resolution-field-select')
+//     // console.log(resolution[0]["dataset"])
+//     console.log('hello!')
+//     console.log(resolution[0])
+//     var search = document.getElementById('resolution-field-select')
+//     let nameString = resolution[0].map((elem) => {
+//         return elem["resolution"]
+//         // return elem["dataset"]["resolution"]
+//     }).join("<option />");
+//     console.log(nameString)
+//     search.innerHTML = "<option value=\"dataset\" />Resolution</option><option />" + nameString;
+// });
+//     // selectWindow.webContents.send("transmit-tableMemory-resolution", messageResolutions);
+
+
+
+// document.addEventListener('DOMContentLoaded', async () => {
+//     await window.api.invoke('get-tableMemory-datasets');
+//     await window.api.invoke('get-tableMemory-resolution');
+//     // var search = document.getElementById('resolution-field-select')
+//     // var nameString = fetchDistinctQuery('resolution');
+//     // console.log(nameString)
+//     // search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+
+// });
+
+
+
+// document.getElementById('dataset-field-select').addEventListener('change', async () => {
+//     //
+//     //
+//     //  Change to reflect the nested object values tableMemory[datasetName][search]
+//     //
+//     //
+
+//     // var searchValue = document.getElementById('dataset-field-select').value;
+//     // let nameString = fetchDistinctQuery('resolution');
+//     // let divNames = document.getElementById("resolution-field-select");
+//     // divNames.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
+// });
 
 
 
@@ -386,18 +448,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     await window.api.invoke('get-tableMemory-datasets');
     var divNames = document.getElementById("field-select");
     divNames.innerHTML += "<option />Pasteboard</option>";
-    // optionFillViewer("field-select");
-    // var search = document.getElementById('field-select').value;
-    // console.log(search);
-    var nameString =fetchDistinctQuery("resolution")
-    divNames = document.getElementById("resolution-field-select");
-    divNames.innerHTML = "<option />" + nameString;
+
+    // var nameString =fetchDistinctQuery("resolution")
+    // divNames = document.getElementById("resolution-field-select");
+    // divNames.innerHTML = "<option />" + nameString;
+
 
     const dname = document.getElementById("field-select").value;
     const res = document.getElementById("resolution-field-select").value;
     data =window.api.getDatasetatRes(dname, res, 0)
     console.log(nameString)
     divNames = document.getElementById("names-field");
+    var nameString;
     nameString = data.map((elem) => {
         return elem["name"]
     }).join("<option />");
