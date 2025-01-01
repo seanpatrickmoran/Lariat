@@ -1,5 +1,4 @@
-// var dbmgr = require("./dbmgr.js");
-var dbmgr = require("./test.js");
+var dbmgr = require("./dbmgr.js");
 var db = dbmgr.db;
 
 //"CREATE TABLE imag(name, dataset, condition, coordinates, numpyarr, viewing_vmax, dimensions, hic_path, PUB_ID, resolution, norm, meta)"

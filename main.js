@@ -1,15 +1,39 @@
-const path = require('path');
-const { BrowserWindow, app, Menu, ipcMain, dialog } = require('electron');
-const { globalShortcut } = require('electron');
-const fs = require('fs');
+// const path = require('path');
+import * as path from 'path';
+import { BrowserWindow, app, Menu, ipcMain, dialog } from 'electron';
+// const { BrowserWindow, app, Menu, ipcMain, dialog } = require('electron');
+// const { globalShortcut } = require('electron');
+import { globalShortcut } from 'electron'
+// const fs = require('fs');
+import * as fs from 'fs';
+// const Store = require('electron-store');
+import Store from 'electron-store'
+// import * as testmgr from "./models/testmgr.js";
+
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
+const store = new Store(); // Initialize electron-store
+import sqlite from "better-sqlite3";
+let db = null; // Global variable to store the database connection
+
+// const headBD = () => {
+
+// }
+
+
+
 
 var datasPath = app.getPath('userData')
-console.log(datasPath)
 var jsonFilePath = path.join(datasPath, "LariatApplication.json")
 console.log('booted')
 
 var boot_attempts = 0;
-var databaseIsValid = false
+// var databaseIsValid = false
 var tableMemory = {
             "datasetFields": Array(),
             "resolutionFields": Array(),
@@ -38,13 +62,15 @@ const createMainWindow = () => {
     }
     //show modal only the first time
     const flagVal = BrowserWindow.fromId(browserWindowArray['mainWindow']) === null;
+    console.log('here in create window')
+    console.log(path.join(__dirname, '/preload.mjs'))
     const mainWindow = new BrowserWindow({
         title: "mainWindow",
         width: 800,
         height: 600,
         webPreferences:{
             nodeIntegration: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, '/preload.mjs')
         }
     });
     if (browserWindowArray['mainWindow'] === -2 && flagVal === true){
@@ -88,7 +114,7 @@ const createPopWindow = () => {
         height: 360,
         webPreferences:{
         nodeIntegration: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(__dirname, '/preload.mjs')
     }
     });
     browserWindowArray['pasteboardWindow'] = pasteboardWindow.id
@@ -112,7 +138,7 @@ const createInspectToolsWindow = () => {
         frame: false,
         webPreferences:{
         nodeIntegration: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(__dirname, '/preload.mjs')
     }
     });
 
@@ -148,7 +174,7 @@ const createlevelsWindow = () => {
         // frame: false,
         webPreferences:{
         nodeIntegration: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(__dirname, '/preload.mjs')
     }
     });
 
@@ -377,10 +403,14 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 
 
 const checkDatabase = () => {
+    console.log('here')
     boot_attempts += 1 ;
     try {
         function isJSON(str) {try {return (JSON.parse(str) && !!str);} catch (e) {return false;}}
-        databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
+        console.log(jsonFilePath)
+        const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
+        console.log('heyo')
+
         if (!(JSON.stringify(isJSON(databaseReadIn)))){
             throw (
             new Error(`file @ filePath is not a JSON`)
@@ -416,26 +446,79 @@ const checkDatabase = () => {
 
 const mountDatabase = () => {
     if(checkDatabase()===true){
-        databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
+        const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
         console.log('@@@@@@@@@@@@')
         console.log(databaseReadIn)
         console.log('dbREAD okay')
-
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
         console.log('@@@@@@@@@@@@')
         console.log(tableMemory)
         console.log('peek tableMemory')
-
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')        
         tableMemory = { ...databaseReadIn};
-
+        const filePath = databaseReadIn["databaseName"]
+        db = new sqlite(filePath);
 
         console.log('@@@@@@@@@@@@')
         console.log(tableMemory)
         console.log('wrote tableMemory')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
+        console.log('@@@@@@@@@@@@')
     }else{
         dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "WARN\nfailed database load. rebuild!"})
 
     }
 };
+
+
+
+function openDatabase() {
+  dialog
+    .showOpenDialog(BrowserWindow.getFocusedWindow(), {
+      title: 'Select SQLite Database File',
+      filters: [{ name: 'SQLite Database', extensions: ['db', 'sqlite', 'sqlite3'] }],
+      properties: ['openFile'],
+    })
+    .then((result) => {
+      if (!result.canceled && result.filePaths.length > 0) {
+        const filePath = result.filePaths[0];
+        try {
+            db = new sqlite(filePath);
+            var sql = "SELECT DISTINCT dataset FROM imag ORDER BY name ASC;"
+            var stml = db.prepare(sql);
+            console.log( stml.all());
+            tableMemory["databaseName"] = filePath;
+            tableMemory["datasetFields"] = [...stml.all()]
+
+            var sql = "SELECT DISTINCT resolution FROM imag ORDER BY name ASC;"
+            var stml = db.prepare(sql);
+            console.log([...stml.all()])
+            tableMemory.resolutionFields = [...stml.all()]
+            fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
+            console.log(`Database connected: ${filePath}`);
+            mountDatabase();
+        } catch (err) {
+          console.error('Error opening database:', err.message);
+        }
+      }
+    })
+    .catch((err) => {
+      console.error('Dialog error:', err.message);
+    });
+}
+
+
+
+
+
+
 
 
 
@@ -754,8 +837,8 @@ const menu = [
       { label: 'New Main', accelerator: "CmdOrCtrl+N", click: createMainWindow,},
       { label: 'Open Pasteboard', accelerator: "CmdOrCtrl+T", click: createPopWindow,},
       { label: 'Close Window', accelerator: "CmdOrCtrl+W", click: closeFocusWindow, },
-      // { label: 'Database Intialize', accelerator: "CmdOrCtrl+D", click: initializeDatabase },
-      // { label: 'Database Load', accelerator: "CmdOrCtrl+L", click: loadDatabase },
+      // { label: 'DEV PEEK', accelerator: "CmdOrCtrl+Y", click: headBD },
+      { label: 'Database Load', accelerator: "CmdOrCtrl+O", click: openDatabase },
       // process.platform !== 'darwin' ? { role: 'close' } : { role: 'quit' },
       // { role: 'Quit' },
       {label: 'Quit', accelerator: "CmdOrCtrl+Q", click: app.exit, }

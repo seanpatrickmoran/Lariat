@@ -1,5 +1,4 @@
 // In renderer process (web page).
-// const ipcRenderer = require('electron');
 
 
 // const viewPopAboutButton = document.getElementById('aboutBtn');

@@ -2,7 +2,9 @@
   "name": "Lariat",
   "version": "0.0.1",
   "description": "GUI interface to compare chromatin features, reads from SQL",
+  "exports": "main.js",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "electron ."
   },
@@ -24,6 +26,10 @@
     "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
-    "better-sqlite3": "^11.7.0"
+    "better-sqlite3": "^11.7.0",
+    "electron-store": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
