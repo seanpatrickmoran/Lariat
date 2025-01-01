@@ -19,15 +19,15 @@ viewToInspectButton.addEventListener('click',()=>{
     api.send('change-view-to-inspect');
 });
 
-const viewToViewerButton = document.getElementById('viewToViewerBtn');
-viewToViewerButton.addEventListener('click',()=>{
-    api.send('change-view-to-viewer');
-});
+// const viewToViewerButton = document.getElementById('viewToViewerBtn');
+// viewToViewerButton.addEventListener('click',()=>{
+//     api.send('change-view-to-viewer');
+// });
 
-const viewToPairsButton = document.getElementById('viewToPairsBtn');
-viewToPairsButton.addEventListener('click',()=>{
-    api.send('change-view-to-pairs');
-});
+// const viewToPairsButton = document.getElementById('viewToPairsBtn');
+// viewToPairsButton.addEventListener('click',()=>{
+//     api.send('change-view-to-pairs');
+// });
 
 window.api.recieve("show-start-mosaic",(value) => {
 	const showStartMosaic = document.getElementById('showStartMosaic');
@@ -62,6 +62,7 @@ window.api.recieve('fetch-dataset', (event, a) => {
 //    console.log(dset_mapped, rset_mapped)
 //    window.api.send('send-dataset',[dset,res]);
     window.api.send('send-dataset',[Object.values(dset),Object.values(res)]);
+    console.log('7')
 //    event.sender.send('send-dataset',[dset,res]);
 });
 
