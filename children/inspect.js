@@ -51,6 +51,15 @@ var state1 = {
 let inspectedImageArray = Array(state0, state1)
 
 
+
+let tableMemory = {
+            "datasetFields": Array(),
+            "resolutionFields": {},
+            "NamesFields": "",
+            "databaseName" : "",
+            }
+
+
 var searchPageOffset = 0;
 var offsetPage = Math.ceil(searchPageOffset/200);
 
@@ -59,10 +68,7 @@ var offsetPage = Math.ceil(searchPageOffset/200);
 
 
 const queryInspectToNamesField = (dname, res) =>{
-    // const dname = document.getElementById("field-select").value;
-    // const res = document.getElementById("resolution-field-select").value;
     data = window.api.getDatasetatRes(dname, res, searchPageOffset)
-    // console.log(data)
     divNames = document.getElementById("names-field");
     nameString = data.map((elem) => {
         return elem["name"]
@@ -75,7 +81,6 @@ const queryInspectToNamesField = (dname, res) =>{
 
 const incrementAndQuery = () => {
     searchPageOffset += 200;
-    console.log(searchPageOffset)
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dataset,resolution);
@@ -86,7 +91,6 @@ const decrementAndQuery = () => {
         return
     };
     searchPageOffset -= 200;
-    console.log(searchPageOffset)
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dataset,resolution);
@@ -106,11 +110,9 @@ const toggleViewPortVisibility = () => {
 const inspectSendsToPopboard = () => {
     window.api.talkToPBoard('true');
     var selection = document.querySelector('select#names-field')
-    // window.send('to-pasteboard', selection.options[selection.selectedIndex].text)
-    // const optionsSelect = fieldSelect.selectedOptions;
-    console.log(window.api.getNames(selection.options[selection.selectedIndex].text))
+    // console.log(window.api.getNames(selection.options[selection.selectedIndex].text))
     const reply = JSON.parse(JSON.stringify(window.api.getNames(selection.options[selection.selectedIndex].text)))[0]
-    console.log(reply)
+    // console.log(reply)
     window.api.mainDumpToPasteboard([reply]);
 }
 
@@ -161,7 +163,6 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger
     const canvas = document.getElementById(canvasId);
     canvas.width = 450;
     canvas.height = 450;
-    console.log(reshapedArray);
     let finalarr = kronecker(reshapedArray,Math.round(450/dimensions))
     normalizeToImageData(finalarr, viewing_min, viewing_vmax, canvas);
     if (inspectedImageArray[persistent_state]["coordinates"]===undefined){
@@ -207,9 +208,7 @@ clickMap.set("offSetRightButton", incrementAndQuery)
 
 document.body.addEventListener('click', function (event) {
     passive: true
-    // console.log(namedId)
     const namedId = event.target.id;
-    console.log(namedId)
     if (!(clickMap.has(namedId))){
         return
     }
@@ -290,11 +289,7 @@ function singlularQuery(name){
 }
 
 function queryToSelectbox(search){
-    console.log(search)
-    // var names = window.api.getHiCPath(search);
     var names = window.api.getDatasetAll(search);
-    console.log(names)
-
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
@@ -303,7 +298,6 @@ function queryToSelectbox(search){
 
 
 function fetchDistinctQuery(key){
-    // console.log('issue here')
     var names = window.api.getDistinctItems(key);
     let nameString = names.map((elem) => {
         return elem[key]
@@ -363,98 +357,55 @@ function kronecker(inputArray, scaleFactor) {
 ////////////////////////////////////////////////////////////////////////////
 
 window.api.recieve("resolve-init-tableMemory-dataset", (data) => {
+    for (const [key, value] of Object.entries(data[0])) {
+        tableMemory["datasetFields"].push(value);
+        tableMemory["resolutionFields"][value] = data[1][value]
+    }
+
     var search = document.getElementById("field-select");
     var divNames = document.getElementById("resolution-field-select");
-    var names = data[0]
+    // // var names = data[0]
 
-    var nameString = names.map((elem) => {
+    // console.log(search)
+    // console.log(tableMemory)
+    // console.log(tableMemory["datasetFields"])
+    // console.log(tableMemory["resolutionFields"][tableMemory["datasetFields"][0]]);
+    var nameString = tableMemory["datasetFields"].map((elem) => {
+        console.log(elem)
         return elem
     }).join("<option />");
+
     search.innerHTML = "<option />" + nameString;
-    var resolutionnames = data[1][search.value]
-    nameString = resolutionnames.map((elem) => {
+    // var resolutionnames = data[1][search.value]
+    nameString = tableMemory["resolutionFields"][tableMemory["datasetFields"][0]].map((elem) => {
+        console.log(elem)
         return elem
     }).join("<option />");
     divNames.innerHTML = "<option />" + nameString;
 });
 
-// window.api.recieve("transmit-init-tableMemory-dataset", (data) => {
-//     var search = document.getElementById("field-select");
-//     var divNames = document.getElementById("resolution-field-select");
-//     var names = data[0]
-
-//     var nameString = names.map((elem) => {
-//         return elem
-//     }).join("<option />");
-//     search.innerHTML = "<option />" + nameString;
-//     var resolutionnames = data[1][search.value]
-//     nameString = resolutionnames.map((elem) => {
-//         return elem
-//     }).join("<option />");
-//     divNames.innerHTML = "<option />" + nameString;
-// });
-
 
 window.api.recieve("transmit-tableMemory-dataset", (data) => {
-    console.log('hello!')  
-    console.log(data)
-    
-// unspool these:
-
-// datasetFields: [ '5832_CD34neg', 'GM12878', 'GSM5688522_933.nodups' ],
-//   resolutionFields: {
-//     '5832_CD34neg': [ '5000', '10000' ],
-//     GM12878: [ '2000', '5000', '10000' ],
-//     'GSM5688522_933.nodups': [ '5000', '10000' ]
-//   },
-
-    console.log('huh')
     var search = document.getElementById("field-select");
     var divNames = document.getElementById("resolution-field-select");
-    // var names = window.api.getDistinctItems(data);
-
-    console.log('not hellos')
     var names = data[0]
-    console.log(names)
-
     var nameString = names.map((elem) => {
         return elem
     }).join("<option />");
-
-    // return nameString
     search.innerHTML = "<option />" + nameString;
-    console.log(data[1], names[0])
-    console.log(data[1][names[0]])
     var resolutionnames = data[1][names[0]]
-    // var nameString =fetchDistinctQuery("resolution")
     nameString = resolutionnames.map((elem) => {
         return elem
     }).join("<option />");
     divNames.innerHTML = "<option />" + nameString;
-
-    // search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
 });
 
 
 window.api.recieve("transmit-tableMemory-resolution", (res) => {
-    console.log('hello!')  
-    console.log(res)
-    
-// unspool these:
-
-// datasetFields: [ '5832_CD34neg', 'GM12878', 'GSM5688522_933.nodups' ],
-//   resolutionFields: {
-//     '5832_CD34neg': [ '5000', '10000' ],
-//     GM12878: [ '2000', '5000', '10000' ],
-//     'GSM5688522_933.nodups': [ '5000', '10000' ]
-//   },
     const search = document.getElementById("field-select");
     const searchValue = search.value;
-
-
     var divNames = document.getElementById("resolution-field-select");
     var resolutionnames = res[0][searchValue]
-    console.log(resolutionnames)
     nameString = resolutionnames.map((elem) => {
         return elem
     }).join("<option />");
@@ -470,15 +421,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     await window.api.invoke('request-init-tableMemory-dataset');
     var divNames = document.getElementById("field-select");
     divNames.innerHTML += "<option />Pasteboard</option>";
-
-    // var nameString =fetchDistinctQuery("resolution")
-    // divNames = document.getElementById("resolution-field-select");
-    // divNames.innerHTML = "<option />" + nameString;
-
-
     const dname = document.getElementById("field-select").value;
     const res = document.getElementById("resolution-field-select").value;
-    data = window.api.getDatasetatRes(dname, res, 0)
+    var data = window.api.getDatasetatRes(dname, res, 0)
     divNames = document.getElementById("names-field");
     var nameString;
     nameString = data.map((elem) => {
@@ -543,33 +488,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 document.querySelector('#field-select').addEventListener('change', async () => {
-    // var search = document.getElementById('field-select').value;
-    // let divNames = document.getElementById("resolution-field");
-
-    // console.log(search)
-    // var names = window.api.getHiCPath(search);
-    // var names = window.api.getDatasetAll(search);
-    await window.api.invoke("get-tableMemory-resolution")
-
+    const search = document.getElementById("field-select").value
+    var divNames = document.getElementById("resolution-field-select");
+    nameString = tableMemory["resolutionFields"][search].map((elem) => {
+        console.log(elem)
+        return elem
+    }).join("<option />");
+    divNames.innerHTML = "<option />" + nameString;
+    
     searchPageOffset = 0;
     const dname = document.getElementById("field-select").value;
     const res = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dname, res)
-    // loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", 0, pixelMaxValue);
-    //set values
-    //load 
-
-    // console.log(names)
-
-    // let nameString = names.map((elem) => {
-    //     return elem.name
-    // }).join("<option />");
-
-
-
-    // let nameString = queryToSelectbox(search);
-    // let divNames = document.getElementById("resolution-field");
-    // divNames.innerHTML = "<option />" + nameString;
 });
 
 
@@ -579,13 +509,6 @@ document.querySelector('#resolution-field-select').addEventListener('change', as
     const dname = document.getElementById("field-select").value;
     const res = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dname, res)
-    // data =window.api.getDatasetatRes(dname, res, 0)
-    // console.log(data)
-    // divNames = document.getElementById("names-field");
-    // nameString = data.map((elem) => {
-    //     return elem["name"]
-    // }).join("<option />");
-    // divNames.innerHTML = "<option />" + nameString;
 });
 
 
@@ -612,7 +535,6 @@ document.querySelector('input#filter1').addEventListener('change', async () => {
 
 
 window.api.recieve("transmitSwapInspect", (message) =>{
-    console.log(persistent_state)
     let splitCoords = inspectedImageArray[persistent_state]["coordinates"].split(',');
     // inspectedImageArray[persistent_state]["coordinates"] = `${splitCoords[0]}: ${splitCoords[1]}–${splitCoords[2]}</p><p style="-webkit-user-select: text;margin-top: 1px;margin-bottom: 1px">${splitCoords[3]}: ${splitCoords[4]}–${splitCoords[5]}`
     let divNames = document.getElementById("pop-payload");
@@ -661,19 +583,15 @@ window.api.recieve("transmitSwapInspect", (message) =>{
 window.api.recieve("base64-to-levels",() => {
     const canvas = document.getElementById("canvas-inspect")
     const base64 = canvas.toDataURL();
-    console.log(base64)
-    console.log('3')
     window.api.signalToMain("return-base64-to-levels", base64);
 });
 
 
 window.api.recieve("closePopView", (message) =>{
     const reply = viewPortWindow.classList.contains('hidden');
-    console.log(reply)
     if (!reply){
         viewPortWindow.classList.toggle('hidden')
     };
-    console.log(reply)
     window.api.signalToMain("closeWindowConfirm",reply)
 });
 

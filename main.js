@@ -36,6 +36,7 @@ var tableMemory = {
             "NamesFields": "",
             "databaseName" : "",
             }
+            
 var browserWindowArray = { "" : 0,
     'mainWindow': -2,
     'pasteboardWindow': -2,
@@ -386,8 +387,6 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
   selectWindow.once('did it load', () => {
 
   });
-
-
     selectWindow.webContents.send("paste-board-to-noWindow",(response));
     return
 });
@@ -435,12 +434,12 @@ const checkDatabase = () => {
 const mountDatabase = () => {
     if(checkDatabase()===true){
         const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
-        console.log('__@_@_@_@_@___')
-        console.log('dbREAD okay')
+        console.log('\n\n')
+        console.log(`MOUNTING @ ${jsonFilePath}`)
         console.log('\n\n\n')
-
         console.log('__@_@_@_@_@___')
-        console.log('peek tableMemory')
+        console.log('\nCHECK tableMemory\n')
+        console.log('__@_@_@_@_@___')
         console.log('\n\n\n')
       
         tableMemory = { ...databaseReadIn};
@@ -448,13 +447,17 @@ const mountDatabase = () => {
         db = new sqlite(filePath);
 
         console.log('__@_@_@_@_@___')
-        console.log('wrote tableMemory')
+        console.log('\nLOAD database\n')
+        console.log('__@_@_@_@_@___')
         console.log('\n\n\n')
-
     }else{
         dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "WARN\nfailed database load. rebuild!"})
 
     }
+        console.log('__@_@_@_@_@___')
+        console.log('\nSuccess\n')
+        console.log('__@_@_@_@_@___')
+        console.log('\n\n\n')
 };
 
 
@@ -470,63 +473,25 @@ function openDatabase() {
       if (!result.canceled && result.filePaths.length > 0) {
         const filePath = result.filePaths[0];
         try {
-
-
-            // var testMemory = {
-            // "datasetFields": Array(),
-            // "resolutionFields": {},
-            // "NamesFields": "",
-            // "databaseName" : "",
-            // }
-
             db = new sqlite(filePath);
             var sql = "SELECT DISTINCT dataset FROM imag ORDER BY name ASC;"
             var stml = db.prepare(sql);
             var dataArr = [...stml.all()]
             tableMemory["databaseName"] = filePath;
             tableMemory["datasetFields"] = new Array()
-            // testMemory["datasetFields"] = [...stml.all()]
             tableMemory["resolutionFields"] = {};
-            // here, something like  "SELECT DISTINCT resolution FROM imag ORDER BY name ASC;"
-/*
-
-
-{
-  datasetFields: [
-    { dataset: '5832_CD34neg' },
-    { dataset: 'GM12878' },
-    { dataset: 'GSM5688522_933.nodups' }
-  ],
-  resolutionFields: {
-    '5832_CD34neg': '1000',
-    '5832_CD34neg': '2000',
-    ...
-  }
-
-
-
-  [
-    { resolution: '10000' },
-    { resolution: '5000' },
-    { resolution: '2000' }
-  ],
-  NamesFields: '',
-  databaseName: '/Users/seanmoran/Documents/Master/2024/Dec2024/databaseDUMP/database5.db'
-}
-*/
             for (const [key, value] of Object.entries(dataArr)) {
                 tableMemory["datasetFields"].push(value.dataset);
                 tableMemory["resolutionFields"][value.dataset] = new Array(); 
                 var rsql = `SELECT DISTINCT resolution FROM imag WHERE dataset = '${value.dataset}'`;
                 var stmt = db.prepare(rsql);
                 var sqlResArr = [...stmt.all()];
-
                 for (const [rkey, rvalue] of Object.entries(sqlResArr)) {
                     tableMemory["resolutionFields"][value.dataset].push(rvalue.resolution);
                 }
             }
             fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
-            console.log(`Database connected: ${filePath}`);
+            console.log(`local store written: ${filePath}`);
             mountDatabase();
         } catch (err) {
           console.error('Error opening database:', err.message);
@@ -536,18 +501,6 @@ function openDatabase() {
     .catch((err) => {
       console.error('Dialog error:', err.message);
     });
-}
-
-
-const preLoadFromJSON = () => {
-    if (checkDatabase()===true){
-        mountDatabase();
-    } else {
-        const promise = dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "Database not initialized, please load one  (CMD D) to continue."}).then(function (response){
-
-        })
-
-    }
 }
 
 

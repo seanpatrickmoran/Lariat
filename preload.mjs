@@ -9,7 +9,7 @@ import * as testmgr from "./models/testmgr.js";
 // const { contextBridge, ipcRenderer } = require('electron');
 
 // import { db } from "./../main.js";
-console.log('hey')
+
 // const getNames = (name, colName) => {
 // 	return testmgr.getNames(name, colName);
 // }
