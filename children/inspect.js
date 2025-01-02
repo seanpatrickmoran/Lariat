@@ -127,23 +127,23 @@ const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger
 
     var preloadedValues = JSON.parse(JSON.stringify(valueArr))[0];
     const name         = preloadedValues.name;
-    const PUB_ID       = preloadedValues.PUB_ID;
-    const condition    = preloadedValues.condition;
+    // const PUB_ID       = preloadedValues.PUB_ID;
+    // const condition    = preloadedValues.condition;
     const coordinates  = preloadedValues.coordinates;
     const dataset      = preloadedValues.dataset;
     const dimensions   = preloadedValues.dimensions;
-    const hic_path     = preloadedValues.hic_path;
+    // const hic_path     = preloadedValues.hic_path;
     const numpyArr     = preloadedValues.numpyarr;
     const viewing_vmax = vMaxTrigger > 0 ? vMaxTrigger : preloadedValues.viewing_vmax;
     const viewing_min  = vMinTrigger > 0 ? vMinTrigger : 0;
 
     inspectedImageArray[persistent_state]["name"]=name
-    inspectedImageArray[persistent_state]["PUB_ID"]=PUB_ID
-    inspectedImageArray[persistent_state]["condition"]=condition
+    // inspectedImageArray[persistent_state]["PUB_ID"]=PUB_ID
+    // inspectedImageArray[persistent_state]["condition"]=condition
     inspectedImageArray[persistent_state]["coordinates"]=coordinates
     inspectedImageArray[persistent_state]["dataset"]=dataset
     inspectedImageArray[persistent_state]["dimensions"]=dimensions
-    inspectedImageArray[persistent_state]["hic_path"]=hic_path
+    // inspectedImageArray[persistent_state]["hic_path"]=hic_path
     inspectedImageArray[persistent_state]["numpyarr"]=numpyArr
     inspectedImageArray[persistent_state]["viewing_vmax"]=viewing_vmax
 

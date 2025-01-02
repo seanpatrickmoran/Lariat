@@ -445,6 +445,11 @@ const mountDatabase = () => {
         tableMemory = { ...databaseReadIn};
         const filePath = databaseReadIn["databaseName"]
         db = new sqlite(filePath);
+        // const dbBuffer = db.serialize();
+        // console.log(dbBuffer.toString());
+        db.pragma('cache_size = -32000');
+        console.log(db.pragma('cache_size'))//, { simple: true })); // => 32000
+        console.log(db.pragma('page_size'))//, { simple: true })); // => 32000
 
         console.log('__@_@_@_@_@___')
         console.log('\nLOAD database\n')

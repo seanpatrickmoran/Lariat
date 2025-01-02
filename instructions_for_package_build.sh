@@ -1,4 +1,7 @@
-git clone https://github.com/seanpatrickmoran/Lariat.git
+# git clone https://github.com/seanpatrickmoran/Lariat.git
+# cd Lariat
+
+rm package.json
 
 npm install better-sqlite3
 npm install --save-dev electron
