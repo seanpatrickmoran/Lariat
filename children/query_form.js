@@ -1,5 +1,5 @@
 var searchPageOffset = 0;
-var offsetPage = Math.ceil(searchPageOffset/200);
+var offsetPage = Math.ceil(searchPageOffset/100);
 
 
 let tableMemory = {
@@ -16,7 +16,7 @@ let tableMemory = {
 
 
 const incrementAndQuery = () => {
-    searchPageOffset += 200;
+    searchPageOffset += 100;
     console.log(searchPageOffset)
     let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
     let dataset = document.getElementById("dataset-field-select").value
@@ -27,7 +27,7 @@ const decrementAndQuery = () => {
     if (searchPageOffset === 0){
         return
     };
-    searchPageOffset -= 200;
+    searchPageOffset -= 100;
     console.log(searchPageOffset)
     let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
     let dataset = document.getElementById("dataset-field-select").value

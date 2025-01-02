@@ -17,7 +17,7 @@ export const getNames = (name) => {
 
 
 export const getDataset = (name, offset) => {
-	const sql = `SELECT * FROM imag WHERE dataset = '${name}' LIMIT 200 OFFSET ${offset};`; // LIMIT 3 OFFSET 0';
+	const sql = `SELECT * FROM imag WHERE dataset = '${name}' LIMIT 100 OFFSET ${offset};`; // LIMIT 3 OFFSET 0';
 	let stmt = db.prepare(sql);
 	let result = stmt.all();
 	return result;
@@ -105,7 +105,7 @@ export const getDistinctItemsAtRes = (key,resolution) => {
 
 export const countDistinctItems = (name, key, offset=0) => {
 	// const sql = `SELECT COUNT(*) FROM imag WHERE (?)  ORDER BY name ASC;`
-	const sql = `SELECT COUNT(*) FROM imag WHERE ${name} = '${key} LIMIT 200 OFFSET ${offset};`
+	const sql = `SELECT COUNT(*) FROM imag WHERE ${name} = '${key} LIMIT 100 OFFSET ${offset};`
 	let stml = db.prepare(sql);
 	let result = stml.get();
 	return  result['COUNT(*)']
@@ -113,7 +113,7 @@ export const countDistinctItems = (name, key, offset=0) => {
 };
 
 export const getDatasetatRes = (name, resolution, offset=0) => {
-	const sql = `SELECT * FROM imag WHERE dataset = '${name}' AND resolution = '${resolution}' LIMIT 200 OFFSET ${offset};` // LIMIT 3 OFFSET 0';
+	const sql = `SELECT * FROM imag WHERE dataset = '${name}' AND resolution = '${resolution}' LIMIT 100 OFFSET ${offset};` // LIMIT 3 OFFSET 0';
 	let stmt = db.prepare(sql);
 	let result = stmt.all();
 	return result;

@@ -61,7 +61,7 @@ let tableMemory = {
 
 
 var searchPageOffset = 0;
-var offsetPage = Math.ceil(searchPageOffset/200);
+var offsetPage = Math.ceil(searchPageOffset/100);
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -80,7 +80,7 @@ const queryInspectToNamesField = (dname, res) =>{
 
 
 const incrementAndQuery = () => {
-    searchPageOffset += 200;
+    searchPageOffset += 100;
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dataset,resolution);
@@ -90,7 +90,7 @@ const decrementAndQuery = () => {
     if (searchPageOffset === 0){
         return
     };
-    searchPageOffset -= 200;
+    searchPageOffset -= 100;
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dataset,resolution);
