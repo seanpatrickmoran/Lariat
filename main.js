@@ -264,6 +264,12 @@ ipcMain.on('change-view-to-inspect', ()=>{
 });
 
 
+ipcMain.on('change-view-to-pairs', ()=>{
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.loadFile('children/pairs.html')
+});
+
+
 
 ipcMain.on('back-to-previous', ()=>{
     const selectWindow = BrowserWindow.getFocusedWindow();//fromId(browserWindowArray['mainWindow'])

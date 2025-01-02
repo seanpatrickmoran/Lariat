@@ -130,3 +130,21 @@ export const getDatasetatRes = (name, resolution, offset=0) => {
 	return result;
 };
 
+
+
+
+export const getCoordsAtNameRes = (name, resolution, offset=0) => {
+	const sql = `SELECT name, coordinates, dataset FROM imag WHERE dataset = '${name}' AND resolution = '${resolution}' LIMIT 200 OFFSET ${offset};` // LIMIT 3 OFFSET 0';
+	// const sql = `SELECT * FROM imag WHERE dataset = '${name}' AND resolution = '${resolution}' LIMIT 200 OFFSET ${offset};` // LIMIT 3 OFFSET 0';
+	let stmt = db.prepare(sql);
+	let result = stmt.all();
+	return result;
+};
+
+
+
+
+
+
+
+

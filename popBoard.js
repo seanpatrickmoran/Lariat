@@ -1,10 +1,4 @@
-
-
-
-
-
-
-var queryMapped = new Map();
+let namesMemory = new Map();
 var lastSelectedRow;
 // var trs = document.getElementById('pasteboard-table').tBodies[0].getElementsByTagName('tr');
 $(function(){$("#pasteboard").selectable({stop:function(){$(".ui-selected",this).each(function(){$("#selectable tr").index(this)})}})});
@@ -98,39 +92,82 @@ function base64ToImage(base64, vMax, size) {
 	return resizedImageBase64
 };
 
+
+// async function asyncImageAbstract() {
+
+// }
+
+// function base64ToImage(base64, vMax, size) {
+
+
+
+
+
 window.api.recieve("main-to-pasteboard",(valueArr) => {
+	// const strnames = document.getElementById('pasteboard').getElementsByClassName("strname");
+	// const target = document.getElementById('pasteboard')
 
-	var namesMemory = new Map();
-	const strnames = document.getElementById('pasteboard').getElementsByClassName("strname");
-	const target = document.getElementById('pasteboard')
-    if (strnames.length>1) {
-        for (i=0;i<strnames.length;i++){
-            if (namesMemory.has(strnames[i].innerText)){
-                continue
-            } else {
-	            namesMemory.set(strnames[i].innerText, 2)
-        	}
-    	}
+    // if (strnames.length>1) {
+    //     for (i=0;i<strnames.length;i++){
+    //         if (namesMemory.has(strnames[i].innerText)){
+    //             continue
+    //         } else {
+	//             namesMemory.set(strnames[i].innerText, 2)
+    //     	}
+    // 	}
 
-	}
+	// }
 
-	if (strnames.length==1 && !namesMemory.has(strnames.innerText)) {
-		if (namesMemory.has(strnames.innerText)){
+	// if (strnames.length==1 && !namesMemory.has(strnames.innerText)) {
+	// 	if (namesMemory.has(strnames.innerText)){
 			
-		} else {
-    	namesMemory.set(strnames.innerText, 2)
-	    }
-	}
+	// 	} else {
+    // 	namesMemory.set(strnames.innerText, 2)
+	//     }
+	// }
 
     var names = valueArr[0];
+    console.log(valueArr, valueArr[0])
     for (let i = 0; i < names.length; i++) {
 		var substring = names[i];
 		if (namesMemory.has(substring.name)){
 			continue
 		} else {
-		namesMemory.set(substring.name,2)
-		resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
-	    target.innerHTML += `<tr id="selectable"><td class="thumbnail"><img class="thumbnail" src="${resizedImageBase64}"></td><td class="strname">${substring.name}</td></tr>`;
+
+
+
+
+			// Get the table element
+			var table = document.getElementById("pasteboard");
+			// Create a new row element
+			var newRow = document.createElement("tr");
+			// Create cells
+			var cell1 = document.createElement("td");
+			var cell2 = document.createElement("td");
+
+			// Add text to cells
+			// cell1.innerHTML = "Column 1";
+			const resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
+			cell1.innerHTML = `<img class="thumbnail" src="${resizedImageBase64}">`
+			cell1.className = "thumbnail"
+			cell2.innerHTML = `${substring.name}`
+			cell2.className = "strname"
+
+			// Add cells to row
+			newRow.appendChild(cell1);
+			newRow.appendChild(cell2);
+
+			// Add row to table
+			table.appendChild(newRow);
+			namesMemory.set(substring.name,2)
+		// const resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
+	    // target.innerHTML += `<tr id="selectable">
+	    // 						<td class="thumbnail">
+	    // 							<img class="thumbnail" src="${resizedImageBase64}">
+    	// 						</td>
+	    // 							<td class="strname">${substring.name}
+	    // 						</td>
+    	// 					</tr>`;
 		}		  
     };
 });

@@ -193,7 +193,7 @@ const clickMap = new Map();
 clickMap.set("backBtn", "back-to-previous")
 clickMap.set("viewToQueryBtn", "change-view-to-query")
 // clickMap.set("viewToViewerBtn", "change-view-to-viewer")
-// clickMap.set("viewToPairsBtn", "change-view-to-pairs")
+clickMap.set("viewToPairsBtn", "change-view-to-pairs")
 clickMap.set("popViewBtn", toggleViewPortVisibility)
 clickMap.set("selectToPopboard", inspectSendsToPopboard)
 clickMap.set("offSetLeftButton", decrementAndQuery)

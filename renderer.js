@@ -23,10 +23,10 @@ viewToInspectButton.addEventListener('click',()=>{
 //     api.send('change-view-to-viewer');
 // });
 
-// const viewToPairsButton = document.getElementById('viewToPairsBtn');
-// viewToPairsButton.addEventListener('click',()=>{
-//     api.send('change-view-to-pairs');
-// });
+const viewToPairsButton = document.getElementById('viewToPairsBtn');
+viewToPairsButton.addEventListener('click',()=>{
+    api.send('change-view-to-pairs');
+});
 
 window.api.recieve("show-start-mosaic",(value) => {
 	const showStartMosaic = document.getElementById('showStartMosaic');

@@ -1,7 +1,16 @@
+
+let tableMemory = {
+            "datasetFields": Array(),
+            "resolutionFields": {},
+            "NamesFields": "",
+            "databaseName" : "",
+            }
+
+
 const clickMap = new Map();
 clickMap.set("backBtn", "back-to-previous")
 clickMap.set("viewToQueryBtn", "change-view-to-query")
-clickMap.set("viewToViewerBtn", "change-view-to-viewer")
+// clickMap.set("viewToViewerBtn", "change-view-to-viewer")
 clickMap.set("viewToInspectBtn", "change-view-to-inspect")
 
 
@@ -11,6 +20,18 @@ document.body.addEventListener('click', function (event) {
         return
     }
     api.send(`${clickMap.get(event.target.id)}`);
+});
+
+
+
+// document.getElementById('selectAllBtn').addEventListener('click',()=>{
+//     $("#names *").find("option").prop("selected", true);
+// })
+
+$(document).ready(function() {
+  $("#selectAllBtn").click(function() {
+    $("#names").find("option").prop("selected", true);
+  });
 });
 
 
@@ -100,16 +121,16 @@ function intersectingRows(sqlRows1, sqlRows2) {
 }
 
 
-function query_with_textbox(keyname){
-    var search = document.getElementById('sqlite3-query').value;
-    var names = functionMapped[keyname](search);
-    let divNames = document.getElementById("names");
-    let nameString = names.map((elem) => {
-        return elem.name
-    }).join("<option />");
-    console.log(nameString);
-    divNames.innerHTML = "<option />" + nameString;
-}
+// function query_with_textbox(keyname){
+//     var search = document.getElementById('sqlite3-query').value;
+//     var names = functionMapped[keyname](search);
+//     let divNames = document.getElementById("names");
+//     let nameString = names.map((elem) => {
+//         return elem.name
+//     }).join("<option />");
+//     console.log(nameString);
+//     divNames.innerHTML = "<option />" + nameString;
+// }
 
 // function ShowImage(keyname){
 //     var search = document.getElementById('sqlite3-query').value;
@@ -127,10 +148,137 @@ function query_with_textbox(keyname){
 
 
 
+// document.addEventListener('DOMContentLoaded', async () => {
+//     optionFillViewer("left-select");
+//     optionFillViewer("right-select");
+// });
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', async () => {
-    optionFillViewer("left-select");
-    optionFillViewer("right-select");
+    window.api.signalToMain('dialog:callInspectTools', true);
+    await window.api.invoke('request-init-tableMemory-dataset');
+    var divNames = document.getElementById("dataset-left");
+    divNames.innerHTML += "<option />Pasteboard</option>";
+    divNames = document.getElementById("dataset-right");
+    divNames.innerHTML += "<option />Pasteboard</option>";
+    // const dname = document.getElementById("field-select").value;
+    // const res = document.getElementById("resolution-field-select").value;
+    // var data = window.api.getDatasetatRes(dname, res, 0)
+    // divNames = document.getElementById("names-field");
+    // var nameString;
+    // nameString = data.map((elem) => {
+        // return elem["name"]
+    // }).join("<option />");
+    // divNames.innerHTML = "<option />" + nameString;
 });
+
+
+function prepareQuery(){
+    const datasetA = document.getElementById("dataset-left").txt;
+    const resolutionA = document.getElementById("resolution-left").txt;
+    const datasetB = document.getElementById("dataset-right").txt;
+    const resolutionB = document.getElementById("resolution-right").txt;
+};
+
+const viewToPairsButton = document.getElementById('intersectBtn');
+intersectBtn.addEventListener('click',()=>{
+    // prepareQuery();
+    const datasetA = document.getElementById("dataset-left").value;
+    const resolutionA = document.getElementById("resolution-left").value;
+    const datasetB = document.getElementById("dataset-right").value;
+    const resolutionB = document.getElementById("resolution-right").value;
+    console.log(datasetA, resolutionA, datasetB, resolutionB)
+    const sqlRowsA = new Array()
+    const sqlRowsB = new Array()
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+        sqlRowsA.push(...ptrSQL)
+        page += 200;
+    }
+
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+        sqlRowsB.push(...ptrSQL)
+        page += 200;
+    }
+
+    console.log(sqlRowsA)
+    console.log(sqlRowsB)
+
+    // while(){
+    //     page += 200;
+    //     if 
+    // }
+    // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200))
+    // console.log(typeof window.api.getDatasetatRes(datasetA, resolutionA,200))
+    // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200).length===0)
+    const pairs = intersectingRows(sqlRowsA, sqlRowsB)
+    console.log(pairs)
+    //Query Left and Right ALL as specified. UNLESS PASTEBOARD
+    //return Intersected values...
+
+    let divNames = document.getElementById("names");
+    let nameString = pairs.map((elem) => {
+        return elem.join(" ... ")
+    }).join("<option />");
+    console.log(nameString);
+    divNames.innerHTML = "<option />" + nameString;
+
+
+
+
+});
+
+
+
+
+
+
+window.api.recieve("resolve-init-tableMemory-dataset", (data) => {
+    for (const [key, value] of Object.entries(data[0])) {
+        tableMemory["datasetFields"].push(value);
+        tableMemory["resolutionFields"][value] = data[1][value]
+    }
+
+    var search = document.getElementById("dataset-left");
+    var divNames = document.getElementById("resolution-left");
+    var nameString = tableMemory["datasetFields"].map((elem) => {
+        console.log(elem)
+        return elem
+    }).join("<option />");
+
+    search.innerHTML = "<option />" + nameString;
+    nameString = tableMemory["resolutionFields"][tableMemory["datasetFields"][0]].map((elem) => {
+        console.log(elem)
+        return elem
+    }).join("<option />");
+    divNames.innerHTML = "<option />Resolution</option><option />" + nameString;
+
+
+    search = document.getElementById("dataset-right");
+    divNames = document.getElementById("resolution-right");
+    var nameString = tableMemory["datasetFields"].map((elem) => {
+        console.log(elem)
+        return elem
+    }).join("<option />");
+
+    search.innerHTML = "<option />" + nameString;
+    nameString = tableMemory["resolutionFields"][tableMemory["datasetFields"][0]].map((elem) => {
+        console.log(elem)
+        return elem
+    }).join("<option />");
+    divNames.innerHTML = "<option />Resolution</option><option />" + nameString;
+});
+
+
+
 
 
 // document.querySelector('#leftInspectBtn').addEventListener('click', async () => {
