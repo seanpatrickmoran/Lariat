@@ -17,26 +17,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 
-const store = new Store(); // Initialize electron-store
+// const store = new Store(); // Initialize electron-store
 import sqlite from "better-sqlite3";
 let db = null; // Global variable to store the database connection
-
-// const headBD = () => {
-
-// }
 
 
 
 
 var datasPath = app.getPath('userData')
 var jsonFilePath = path.join(datasPath, "LariatApplication.json")
-console.log('booted')
 
 var boot_attempts = 0;
 // var databaseIsValid = false
 var tableMemory = {
             "datasetFields": Array(),
-            "resolutionFields": Array(),
+            // "resolutionFields": Array(),
+            "resolutionFields": {},
             "NamesFields": "",
             "databaseName" : "",
             }
@@ -62,8 +58,6 @@ const createMainWindow = () => {
     }
     //show modal only the first time
     const flagVal = BrowserWindow.fromId(browserWindowArray['mainWindow']) === null;
-    console.log('here in create window')
-    console.log(path.join(__dirname, '/preload.mjs'))
     const mainWindow = new BrowserWindow({
         title: "mainWindow",
         width: 800,
@@ -187,9 +181,6 @@ const createlevelsWindow = () => {
     levelsWindow.setMaximizable(false)
     levelsWindow.setHasShadow(false)
     levelsWindow.invalidateShadow()
-    console.log('hey!')
-    console.log(levelsWindow.id)
-    console.log(levelsWindow.getTitle())
     return levelsWindow.id
 }
 
@@ -238,11 +229,7 @@ app.whenReady().then(()=> {
     createMainWindow();
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu)
-    // console.log(tableMemory)
-    // preLoadFromJSON();
     mountDatabase();
-    // console.log(tableMemory)
-    // console.log(BrowserWindow.getAllWindows)
 });
 
 
@@ -269,20 +256,13 @@ ipcMain.on('change-view-to-query', ()=>{
     selectWindow.loadFile('children/query.html');
 });
 
+
 ipcMain.on('change-view-to-inspect', ()=>{
     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
     selectWindow.loadFile('children/inspect.html')
 });
 
-// ipcMain.on('change-view-to-viewer', ()=>{
-//     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-//     selectWindow.loadFile('children/viewer.html')
-// });
 
-// ipcMain.on('change-view-to-pairs', ()=>{
-//     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-//     selectWindow.loadFile('children/pairs.html')
-// });
 
 ipcMain.on('back-to-previous', ()=>{
     const selectWindow = BrowserWindow.getFocusedWindow();//fromId(browserWindowArray['mainWindow'])
@@ -298,36 +278,36 @@ ipcMain.on('back-to-previous', ()=>{
     };
 });
 
-// ipcMain.on("inspect-sends-popboard", () => {
-
-// })
-
-
-
 
 ipcMain.handle('get-tableMemory-datasets', async (event, message) =>{
-    // var messageDatasets = Object.values(tableMemory["datasetFields"])
-    console.log('at main')
     var messageDatasets = new Array()
     var messageResolutions = new Array()
-    // messageDatasets = [...tableMemory["datasetFields"]]
-    messageDatasets = [...tableMemory["datasetFields"]] 
-    console.log(tableMemory["datasetFields"])
+    messageDatasets = [...tableMemory["datasetFields"]]
     messageResolutions = tableMemory["resolutionFields"]
-    console.log(tableMemory["resolutionFields"])
     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-    // selectWindow.webContents.send("transmit-tableMemory-dataset", messageDatasets);
     selectWindow.webContents.send("transmit-tableMemory-dataset", messageDatasets, messageResolutions);
 });
 
-// ipcMain.handle('get-tableMemory-resolution', async (event, message) =>{
-//     // var messageDatasets = Object.values(tableMemory["datasetFields"])
-//     console.log('at main')
-//     var messageResolutions = new Array()
-//     messageResolutions = [...tableMemory["resolutionFields"]]
-//     const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
-//     selectWindow.webContents.send("transmit-tableMemory-resolution", messageResolutions);
-// });
+
+ipcMain.handle("get-tableMemory-resolution", async (event, message) =>{
+    var messageResolutions = new Array()
+    messageResolutions = tableMemory["resolutionFields"]
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.webContents.send("transmit-tableMemory-resolution", messageResolutions);
+});
+
+
+ipcMain.handle("request-init-tableMemory-dataset",  async (event, message) =>{
+    var messageDatasets = new Array()
+    var messageResolutions = new Array()
+    messageDatasets = [...tableMemory["datasetFields"]]
+    messageResolutions = tableMemory["resolutionFields"]
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    selectWindow.webContents.send("resolve-init-tableMemory-dataset", messageDatasets, messageResolutions);    
+})
+
+
+
 
 
 ipcMain.handle('dialog:callMain', async (event, msg) => {
@@ -335,22 +315,23 @@ ipcMain.handle('dialog:callMain', async (event, msg) => {
     return BrowserWindow.getFocusedWindow().getTitle();
 });
 
-//need to check if Pboard exists from query
+
+
 ipcMain.handle('dialog:callPBoard', async (event, data) => {
     await createPopWindow();
     BrowserWindow.fromId(browserWindowArray['pasteboardWindow']).isVisible()
     return
 });
 
+
+
 ipcMain.handle('dialog:callInspectTools', async (event, data) => {
     if (data===false){
             const inspectWindow = BrowserWindow.fromId(browserWindowArray['inspectToolsWindow'])
-            // inspectWindow.setClosable(true)
             browserWindowArray['inspectToolsWindow'] = -2;
             inspectWindow.close()
             return
     } else if (data === true) {
-    //but
     var selectWindow = BrowserWindow.getFocusedWindow()
     await createInspectToolsWindow();
     BrowserWindow.fromId(browserWindowArray['inspectToolsWindow']).isVisible()
@@ -371,15 +352,13 @@ ipcMain.handle("transmitMainLevels", async (event, msg) => {
     browserWindowArray['levelsWindow'] = await createlevelsWindow();
     const selectWindow = BrowserWindow.fromId(browserWindowArray["mainWindow"])
     selectWindow.webContents.send("base64-to-levels", msg);
-    console.log('2')
-    console.log(browserWindowArray)
     return
 });
 
+
+
 ipcMain.handle("return-base64-to-levels", async (event, msg) => {
     const selectWindow = BrowserWindow.getFocusedWindow()//.fromId(browserWindowArray["levelsWindow"])
-    // console.log(browserWindowArray)
-    // console.log(selectWindow.id)
     selectWindow.webContents.on("did-finish-load", () => {
         selectWindow.webContents.send("base64-arrives-levels", msg);
     });
@@ -387,9 +366,6 @@ ipcMain.handle("return-base64-to-levels", async (event, msg) => {
 });
 
 
-// ipcMain.handle('callLevels', async (event,data) => {
-//     return 
-// })
 
 ipcMain.handle('dialog:chooseMain', async (event, data) => {
     const response = await data;
@@ -419,19 +395,15 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 
 
 const checkDatabase = () => {
-    console.log('here')
     boot_attempts += 1 ;
     try {
         function isJSON(str) {try {return (JSON.parse(str) && !!str);} catch (e) {return false;}}
-        console.log(jsonFilePath)
         const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
-        console.log('heyo')
 
         if (!(JSON.stringify(isJSON(databaseReadIn)))){
             throw (
             new Error(`file @ filePath is not a JSON`)
             )};
-        console.log()
         if (!(isJSON(databaseReadIn["databaseName"].endsWith(".db")))){
             throw (
             new Error(`file is not a databse`)
@@ -440,7 +412,7 @@ const checkDatabase = () => {
             throw (
             new Error('file not found at path')
             )};
-        if ((databaseReadIn["resolutionFields"]===[]) || (databaseReadIn["resolutionFields"][0]<50) || (databaseReadIn["databasename"]==='')){
+        if ((databaseReadIn["datasetFields"]===[]) || (databaseReadIn["databasename"]==='')){
             throw (
             new Error("json corrupted or missing")
             )};   
@@ -463,30 +435,22 @@ const checkDatabase = () => {
 const mountDatabase = () => {
     if(checkDatabase()===true){
         const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
-        console.log('@@@@@@@@@@@@')
-        console.log(databaseReadIn)
+        console.log('__@_@_@_@_@___')
         console.log('dbREAD okay')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log(tableMemory)
+        console.log('\n\n\n')
+
+        console.log('__@_@_@_@_@___')
         console.log('peek tableMemory')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')        
+        console.log('\n\n\n')
+      
         tableMemory = { ...databaseReadIn};
         const filePath = databaseReadIn["databaseName"]
         db = new sqlite(filePath);
 
-        console.log('@@@@@@@@@@@@')
-        console.log(tableMemory)
+        console.log('__@_@_@_@_@___')
         console.log('wrote tableMemory')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
-        console.log('@@@@@@@@@@@@')
+        console.log('\n\n\n')
+
     }else{
         dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "WARN\nfailed database load. rebuild!"})
 
@@ -506,17 +470,61 @@ function openDatabase() {
       if (!result.canceled && result.filePaths.length > 0) {
         const filePath = result.filePaths[0];
         try {
+
+
+            // var testMemory = {
+            // "datasetFields": Array(),
+            // "resolutionFields": {},
+            // "NamesFields": "",
+            // "databaseName" : "",
+            // }
+
             db = new sqlite(filePath);
             var sql = "SELECT DISTINCT dataset FROM imag ORDER BY name ASC;"
             var stml = db.prepare(sql);
-            console.log( stml.all());
+            var dataArr = [...stml.all()]
             tableMemory["databaseName"] = filePath;
-            tableMemory["datasetFields"] = [...stml.all()]
+            tableMemory["datasetFields"] = new Array()
+            // testMemory["datasetFields"] = [...stml.all()]
+            tableMemory["resolutionFields"] = {};
+            // here, something like  "SELECT DISTINCT resolution FROM imag ORDER BY name ASC;"
+/*
 
-            var sql = "SELECT DISTINCT resolution FROM imag ORDER BY name ASC;"
-            var stml = db.prepare(sql);
-            console.log([...stml.all()])
-            tableMemory.resolutionFields = [...stml.all()]
+
+{
+  datasetFields: [
+    { dataset: '5832_CD34neg' },
+    { dataset: 'GM12878' },
+    { dataset: 'GSM5688522_933.nodups' }
+  ],
+  resolutionFields: {
+    '5832_CD34neg': '1000',
+    '5832_CD34neg': '2000',
+    ...
+  }
+
+
+
+  [
+    { resolution: '10000' },
+    { resolution: '5000' },
+    { resolution: '2000' }
+  ],
+  NamesFields: '',
+  databaseName: '/Users/seanmoran/Documents/Master/2024/Dec2024/databaseDUMP/database5.db'
+}
+*/
+            for (const [key, value] of Object.entries(dataArr)) {
+                tableMemory["datasetFields"].push(value.dataset);
+                tableMemory["resolutionFields"][value.dataset] = new Array(); 
+                var rsql = `SELECT DISTINCT resolution FROM imag WHERE dataset = '${value.dataset}'`;
+                var stmt = db.prepare(rsql);
+                var sqlResArr = [...stmt.all()];
+
+                for (const [rkey, rvalue] of Object.entries(sqlResArr)) {
+                    tableMemory["resolutionFields"][value.dataset].push(rvalue.resolution);
+                }
+            }
             fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
             console.log(`Database connected: ${filePath}`);
             mountDatabase();
@@ -531,76 +539,6 @@ function openDatabase() {
 }
 
 
-
-
-
-
-
-
-
-
-// const mountDatabase = () => {
-//     console.log(jsonFilePath)
-//     console.log('@ MOUNT')
-//     try {
-//         function isJSON(str) {try {return (JSON.parse(str) && !!str);} catch (e) {return false;}}
-//         console.log('@ MOUNT IS JSON')
-//         // var json;
-//         // fs.readFileSync(jsonFilePath)//.catch((e) => {return e})
-
-//         console.log(jsonFilePath)
-//         // const databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
-
-//         var databaseReadIn;
-//         // try {
-//         databaseReadIn = JSON.parse(fs.readFileSync(jsonFilePath))
-//         // } catch (err) {
-//         //     console.log('error caught')
-//         //     return err
-//         // }
-//         console.log('@@@@@@@@@@@@')
-//         console.log(databaseReadIn)
-//         console.log('dbREAD okay')
-
-//         console.log('@@@@@@@@@@@@')
-//         console.log(tableMemory)
-//         console.log('peek tableMemory')
-
-//         if (!(JSON.stringify(isJSON(databaseReadIn)))){
-//             throw (
-//             new Error(`file @ filePath is not a JSON`)
-//             )};
-//         console.log()
-//         if (!(isJSON(databaseReadIn["databaseName"].endsWith(".db")))){
-//             throw (
-//             new Error(`file is not a databse`)
-//             )};
-//          if (!(path.isAbsolute(databaseReadIn["databaseName"]))){
-//             throw (
-//             new Error('file not found at path')
-//             )};
-//         if ((databaseReadIn["resolutionFields"]===[]) || (databaseReadIn["resolutionFields"][0]<50) || (databaseReadIn["databasename"]==='')){
-//             throw (
-//             new Error("json corrupted or missing")
-//             )};
-//         console.log('mountDB OK')
-//         console.log(databaseReadIn)
-//         tableMemory = { ...databaseReadIn};
-//     } catch (error){
-//         console.log(error)
-//         // if (boot_attempts>1 || error===SyntaxError){
-//         if (boot_attempts>1){ // || error===SyntaxError){
-//             dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "Failed to load!"})}
-//         throw (error);
-//         return false
-//     }
-    
-//     console.log('end')
-//     return true
-// }
-
-
-
 const preLoadFromJSON = () => {
     if (checkDatabase()===true){
         mountDatabase();
@@ -613,218 +551,6 @@ const preLoadFromJSON = () => {
 }
 
 
-// const checkDatabase = () => {
-//     //this is only on startup. it should only work, if it doesnt work, never try again. 
-//     try {
-//     mountDatabase();
-//     } catch (error) {
-//         const promise = dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "Database not initialized, please load one to continue."}).then(function (response) {
-//             if (!response.canceled) {
-//                 var chosen = dialog.showOpenDialog()
-//                 .then((filePaths) => filePaths); //*** this works.
-//                 chosen.then((values) => {
-//                     console.log(values);
-//                     var payload = `const sqlite = require('better-sqlite3');\nconst db = new\nsqlite(\"${values[1]}\")\nexports.db = db;`
-
-
-//                     //to do, when we choose a path, rewrite the database import based on the filename.
-// //                    fs.writeFileSync(values.filepath, payload)
-//                     //our JSON should also be rewritten
-//                     // console.log(value)
-//                     console.log('readin')
-//                     console.log(jsonFilePath)
-//                     console.log(JSON.stringify(tableMemory))
-//                     fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
-//                     // mountDatabase();
-
-//                 });
-//                 chosen.catch((err) => {
-//                     console.log('there was a problem')
-//                     console.log(err)
-//                 })
-            
-//             } else {
-//                 //user declined to choose a file.
-//                 console.log(`stinky @ ${jsonFilePath}`)
-//                 console.log(promise)
-//                 //                fs.writeFileSync(filePath, `stinky @ ${promise.canceled}`)
-//             }})
-//         .catch((err) => {
-//             console.log(err)
-//         })
-//     }
-//     // import *  as fs from 'fs'
-// };
-
-
-
-// ipcMain.on('send-dataset', (event, messages) => {
-//     console.log(messages);
-//     [dnames, rnames] = [...messages];});
-
-// var dnames;
-// var rnames;
-
-// const fetchDataNames = () => {
-//     console.log('4')
-//     return dnames};
-
-
-// const fetchResNames = () => {
-//     return rnames};
-
-// function writeToJsonPage(){
-//     try{
-//     const focusWindow = BrowserWindow.getFocusedWindow()
-//     focusWindow.webContents.send('fetch-dataset');
-//     console.log('3')
-//     const dataNames = fetchDataNames();
-//     console.log(tableMemory["datasetFields"])
-//     console.log(dataNames)
-//     console.log(dnames)
-//     console.log('5')
-//     const resNames = fetchResNames();
-//     console.log(resNames)
-//     console.log('called sync write to json')
-//     if(checkDatabase()!=false){
-//         mountDatabase();
-//     } else {
-//         throw new Error();
-//     }
-//     console.log
-//     return [dataNames,resNames]
-//     }
-//     catch (error){
-//         console.error(error)
-//     }
-    
-// }
-
-// function callOpenDialog(){
-
-//     let createOrder = async function () { 
-//       let response = await dialog.showOpenDialog()
-//       return response 
-//     };
-
-//     // var openFilePromise = dialog.showOpenDialog().then(reply => reply.filePaths).then(fp => fp[0]).catch(error => console.error(error));
-//     console.log('0');
-//     return createOrder
-// }
-
-
-// const initializeDatabase =  async() =>{
-
-//     const files = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-//         properties: ['openFile']
-//     });
-
-//     if (!files) {
-//         return;
-//     }
-
-//     console.log('1')
-//     console.log(files)
-//     tableMemory["databaseName"] = files.filePaths[0];
-
-//     const payload = `const sqlite = require('better-sqlite3');\nconst db = new\nsqlite(\"${tableMemory["databaseName"]}\")\nexports.db = db;`
-//     fs.writeFileSync("models/test.js",payload,{encoding:'utf8',flag:'w'})
-//     fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
-
-// }
-
-
-
-// function loadDatabase(){
-//     console.log("@@@@@@@@@@@@@@@@@@@")
-//     console.log(tableMemory);
-//     console.log("loading");
-
-//     // console.log(rnames)
-//     // if (dnames != undefined){
-//     // tableMemory["datasetFields"] = [...Object.values(dnames)]
-//     // tableMemory["resolutionFields"] = [...Object.values(rnames)]
-//     // }
-//     // else{
-//     //     console.log('complain, main.js')
-//     //     throw new Error()
-//     // }
-//     let jsonPayload = JSON.stringify(tableMemory);
-//     console.log(tableMemory)
-//     console.log(dnames, rnames)
-//     mountDatabase();
-//     dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "Success!"});
-// }
-
-
-// const chooseAndLoadDatabase =  async() =>{
-
-    // const files = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
-    //     // The Configuration object sets different properties on the Open File Dialog 
-    //     properties: ['openFile']
-    // });
-
-    // // If we don't have any files, return early from the function
-    // if (!files) {
-    //     return;
-    // }
-
-    // // console.log(openFilePromise.then(reply => reply.filePaths).then(fp => fp[0]).catch(error => console.error(error)))
-    // console.log('1')
-    // console.log(files)
-    // tableMemory["databaseName"] = files.filePaths[0];
-    // console.log(tableMemory["databaseName"])
-    // const selectWindow = BrowserWindow.getFocusedWindow();
-    // const payload = `const sqlite = require('better-sqlite3');\nconst db = new\nsqlite(\"${tableMemory["databaseName"]}\")\nexports.db = db;`
-    // console.log(payload)
-    // fs.writeFileSync("models/test.js",payload,{encoding:'utf8',flag:'w'})
-
-    // console.log('2')
-    //   // let promise = new Promise((resolve, reject) => {
-    //   //   fetchDataNames(() => resolve("done!"))
-    //   // });
-    // // const dataNames = await fetchDataNames();
-    // // const resNames = await fetchResNames();
-    // var replyArray = writeToJsonPage();
-    // console.log(replyArray)
-    // // const callD = new Promise((resolve => fetchDataNames(),reject => null));
-    // // const callR = new Promise((resolve => fetchResNames(),reject => null);
-    // // AWAIT
-    // // AWAIT
-
-    // console.log('here')
-    // console.log(dnames)
-    // console.log(rnames)
-    // // console.log([...Object.values(dnames)])
-    // //
-    // //
-    // if (dnames != undefined){
-    // tableMemory["datasetFields"] = [...Object.values(dnames)]
-    // tableMemory["resolutionFields"] = [...Object.values(rnames)]
-    // }
-    // else{
-    //     console.log('complain, main.js')
-    //     throw new Error()
-    // }
-    // console.log(tableMemory)
-
-    // let jsonPayload = JSON.stringify(tableMemory);
-
-    // fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
-    // console.log(tableMemory)
-    // console.log('ok')
-    // if (boot_attempts>1){}
-    // const mtDB = await mountDatabase();
-    // await new Promise((resolve => mountDatabase(),reject));
-    // AWAIT
-    // await new Promise((resolve,reject) => resolve(mountDatabase()));
-//     mountDatabase();
-//     console.log('7')
-
-//     dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {message: "Success!"});
-//     // console.log('')
-
-// }
 
 const menu = [
   ...(isMac

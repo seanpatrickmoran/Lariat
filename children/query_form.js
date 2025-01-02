@@ -143,8 +143,6 @@ window.api.recieve("transmit-tableMemory-dataset", (data) => {
     }).join("<option />");
     console.log(nameString)
     search.innerHTML = "<option value=\"dataset\" />Dataset</option><option />" + nameString;
-
-
     search = document.getElementById('resolution-field-select')
     nameString = data[1].map((elem) => {
         return elem["resolution"]
@@ -160,11 +158,6 @@ window.api.recieve("transmit-tableMemory-dataset", (data) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await window.api.invoke('get-tableMemory-datasets');
-    // var search = document.getElementById('resolution-field-select')
-    // var nameString = fetchDistinctQuery('resolution');
-    // console.log(nameString)
-    // search.innerHTML = "<option value=\"resolution\" />Resolution</option><option />" + nameString;
-
 });
 
 
