@@ -10,11 +10,6 @@ let tableMemory = {
             }
 
 
-
-
-
-
-
 const incrementAndQuery = () => {
     searchPageOffset += 100;
     console.log(searchPageOffset)

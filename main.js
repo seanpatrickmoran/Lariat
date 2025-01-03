@@ -74,7 +74,9 @@ const createMainWindow = () => {
       });
     };
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV != 'production') {
+        console.log(process.env.NODE_ENV)
+        console.log(process.platform);
     mainWindow.webContents.openDevTools();
     }
 
@@ -239,7 +241,7 @@ app.whenReady().then(()=> {
 
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
+    if (process.platform != 'darwin') app.quit()
 
 });
 
@@ -560,7 +562,7 @@ const menu = [
       { role: 'cut' },
       { role: 'copy' },
       { role: 'paste' },
-  ...(process.platform !== 'darwin'
+  ...(process.platform != 'darwin'
         ? [
             { role: 'pasteAndMatchStyle' },
             { role: 'delete' },
@@ -596,7 +598,7 @@ const menu = [
       { role: 'togglefullscreen' }
     ]
   },
-  ...(process.platform !== 'darwin'
+  ...(process.platform != 'darwin'
     ? [
         {
           label: 'Help',
@@ -619,7 +621,7 @@ const menu = [
   //     },
   //   ],
   // },
-  ...(process.env.NODE_ENV !== 'production'
+  ...(process.env.NODE_ENV != 'production'
     ? [
         {
           label: 'Developer',

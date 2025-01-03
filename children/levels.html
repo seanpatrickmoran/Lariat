@@ -42,13 +42,16 @@
         <!-- <canvas id="canvas-pop" width="325" height="325"></canvas> -->
       </div>
 
-        <p><span id="sliderMinimumSlider" class="sliderBg">Flying objects: <span id="innerLabelMinimumSlider">8</span><span id="sliderThumbMinimumSlider" class="sliderThumb"></span></span></p>
-        <p><span id="sliderFlyingObjects" class="sliderBg">Flying objects: <span id="innerLabelFlyingObjects">8</span><span id="sliderThumbFlyingObjects" class="sliderThumb"></span></span></p>
+      <div id="viewPortRows" class="row-container">
+        <p><span id="sliderMinimumSlider" class="sliderBg">Minimum Slider: <span id="innerLabelMinimumSlider">8</span><span id="sliderThumbMinimumSlider" class="sliderThumb"></span></span></p>
+        <p><span id="sliderMaximumSlider" class="sliderBg">Maximum Slider: <span id="innerLabelMaximumSlider">8</span><span id="sliderThumbMaximumSlider" class="sliderThumb"></span></span></p>
+      </div>
+
 
 <!-- 
 <div class="range_container">
     <div class="sliders_control">
-        <span id="sliderThumbFlyingObjects" class="sliderThumb" style="left: 1px; opacity: 1;"></span>
+        <span id="sliderThumbMaximumSlider" class="sliderThumb" style="left: 1px; opacity: 1;"></span>
 
         <input id="fromSlider" type="range" value="10" min="0" max="100"/>
         <input id="toSlider" type="range" value="40" min="0" max="100"/>

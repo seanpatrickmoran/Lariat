@@ -158,7 +158,7 @@ function intersectingRows(sqlRows1, sqlRows2) {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    window.api.signalToMain('dialog:callInspectTools', true);
+    // window.api.signalToMain('dialog:callInspectTools', true);
     await window.api.invoke('request-init-tableMemory-dataset');
     var divNames = document.getElementById("dataset-left");
     divNames.innerHTML += "<option />Pasteboard</option>";

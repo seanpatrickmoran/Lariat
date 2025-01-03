@@ -23,7 +23,7 @@ cat <<EOF > package.json
   "scripts": {
     "start": "electron .",
     "app:dir": "electron-builder --dir",
-    "app:dist": "electron-builder"
+    "app:dist": "export NODE_ENV=production && electron-builder"
   },
   "build": {
     "appId": "your.id",

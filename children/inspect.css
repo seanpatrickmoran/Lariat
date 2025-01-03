@@ -27,6 +27,10 @@
     margin-top: 0;
 }
 
+#resetfiltersBtn{
+  margin-top: 10px;
+}
+
 
 ul {
   list-style-type: none;

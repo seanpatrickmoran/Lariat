@@ -121,14 +121,23 @@
          </div>
 
          <div class="row-container">
+            <div id="query-left-legend" class="column-container">
+               <p align="right">pixelMin</p>
+            </div>
+            <div id="pMin" class="column-container">
+               <!-- <p align="right">Dataset<br>Data Id#<br>X1-X2<br>Y1-Y2</p> -->
+               <input type="text" name="filter0" placeholder="pixelMin" id="filter0" value="0" style="margin-top: 10px; width: 65px"/>
+            </div>
             <div id="query-right-legend" class="column-container">
                <p align="right">pixelMax</p>
             </div>
             <div id="pMax" class="column-container">
                <!-- <p align="right">Dataset<br>Data Id#<br>X1-X2<br>Y1-Y2</p> -->
-               <input type="text" name="filter" placeholder="pixelMax" id="filter1" style="margin-top: 10px; width: 65px"/>
+               <input type="text" name="filter" placeholder="pixelMax" id="filter1" value="0" style="margin-top: 10px; width: 65px"/>
             </div>
-
+            <div class="column-container">
+               <button type="button" id="resetfiltersBtn">Reset Max</button>
+            </div>
          </div>
       </div>
   </section>

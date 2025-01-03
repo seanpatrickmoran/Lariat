@@ -9,7 +9,7 @@ var sliders={
     'sliderMin': 1,
     'sliderMax': 228
   },
-  'FlyingObjects': {
+  'MaximumSlider': {
     'valueMin': 1,
     'valueMax': 24,
     'value': 20,
@@ -31,12 +31,12 @@ function initSlider(id) {
   slider.sliderX=slider.value/(slider.valueMax-slider.valueMin) * slider.sliderSpan+slider.sliderMin;
   setSliderValue(id, slider.sliderX);
   if (id=='MinimumSlider') {
-    registerEvent(sliderElement, 'mousedown', sliderDownToasted);
-    registerEvent(sliderbg, 'mousedown', sliderBgDownToasted);
+    registerEvent(sliderElement, 'mousedown', sliderMinimumSlider);
+    registerEvent(sliderbg, 'mousedown', sliderBgMinimumSlider);
   }
   else {
-    registerEvent(sliderElement, 'mousedown', sliderDownFlyingObjects);
-    registerEvent(sliderbg, 'mousedown', sliderBgDownFlyingObjects);
+    registerEvent(sliderElement, 'mousedown', sliderDownMaximumSlider);
+    registerEvent(sliderbg, 'mousedown', sliderBgDownMaximumSlider);
   }
 }
 
@@ -46,32 +46,32 @@ function releaseSlider(id) {
   sliderElement=document.getElementById('sliderThumb'+id);
   sliderbg=document.getElementById('slider'+id);
   if (id=='MinimumSlider') {
-    releaseEvent(sliderElement, 'mousedown', sliderDownToasted);
-    releaseEvent(sliderbg, 'mousedown', sliderBgDownToasted);
+    releaseEvent(sliderElement, 'mousedown', sliderMinimumSlider);
+    releaseEvent(sliderbg, 'mousedown', sliderBgMinimumSlider);
   }
   else {
-    releaseEvent(sliderElement, 'mousedown', sliderDownFlyingObjects);
-    releaseEvent(sliderbg, 'mousedown', sliderBgDownFlyingObjects);
+    releaseEvent(sliderElement, 'mousedown', sliderDownMaximumSlider);
+    releaseEvent(sliderbg, 'mousedown', sliderBgDownMaximumSlider);
   }
 }
 
-function sliderDownToasted(e) {
+function sliderMinimumSlider(e) {
   currentSlider='MinimumSlider';
   sliderDown(e || window.event);
   return false;
 }
-function sliderDownFlyingObjects(e) {
-  currentSlider='FlyingObjects';
+function sliderDownMaximumSlider(e) {
+  currentSlider='MaximumSlider';
   sliderDown(e || window.event);
   return false;
 }
-function sliderBgDownToasted(e) {
+function sliderBgMinimumSlider(e) {
   currentSlider='MinimumSlider';
   sliderBgDown(e || window.event);
   return false;
 }
-function sliderBgDownFlyingObjects(e) {
-  currentSlider='FlyingObjects';
+function sliderBgDownMaximumSlider(e) {
+  currentSlider='MaximumSlider';
   sliderBgDown(e || window.event);
   return false;
 }
@@ -93,7 +93,7 @@ function setSliderValue(id, x, isFinal) {
     }
     else {
       // nFlyers=slider.value;
-      // updateDisplayFlyingObjects();
+      // updateDisplayMaximumSlider();
     }
     // if (isFinal) {
     //   updateShortcutLink();
@@ -181,7 +181,7 @@ function setSliderValue(id, x, isFinal) {
     }
     else {
       // nFlyers=slider.value;
-      // updateDisplayFlyingObjects();
+      // updateDisplayMaximumSlider();
     }
     if (isFinal) {
       // updateShortcutLink();
@@ -255,7 +255,7 @@ function stopEvent(e) {
 
 
 initSlider('MinimumSlider');
-initSlider('FlyingObjects');
+initSlider('MaximumSlider');
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -321,21 +321,36 @@ function createHistogramFromBase64(base64Image) {
   img.src = base64Image;
 }
 
+// function drawHistogram(canvas, histogram) {
+//   const ctx = canvas.getContext('2d');
+//   const maxFrequency = Math.max(...histogram);
+//   const barWidth = canvas.width / 256;
+//   ctx.fillStyle = "#fcf3e2"; 
+//   ctx.fillRect(0, 0, canvas.width, canvas.height);
+//   ctx.fillStyle = 'black';
+//   for (let i = 0; i < 256; i++) {
+//     const barHeight = (histogram[i] / maxFrequency) * canvas.height;
+//     ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+//   }
+// }
+
+
+
+
+
+
 function drawHistogram(canvas, histogram) {
   const ctx = canvas.getContext('2d');
   const maxFrequency = Math.max(...histogram);
-  const barWidth = canvas.width / 256;
-  ctx.fillStyle = "#fcf3e2"; 
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const scaleY = canvas.height / maxFrequency;
+  // ctx.fillStyle = "white"; 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = 'black';
-  for (let i = 0; i < 256; i++) {
-    const barHeight = (histogram[i] / maxFrequency) * canvas.height;
-    ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+  for (let i = 0; i < histogram.length; i++) {
+    const barHeight = histogram[i] * scaleY;
+    ctx.fillRect(i, canvas.height - barHeight, 1,  barHeight);
   }
 }
-
-
-
 
 
 

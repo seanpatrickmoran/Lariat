@@ -19,6 +19,7 @@ var stNumpyArr1="";
 var stViewing_vmax1=0;
 
 var persistent_state = 0;
+var isLogNorm = 0;
 
 /*
 current state is persistent_state, last 
@@ -306,12 +307,34 @@ function fetchDistinctQuery(key){
 };
 
 
+
+function logNormalize(avMax){
+    c = 255
+
+c = 255 / np.log(1 + np.max(image)) 
+log_image = c * (np.log(image + 1)) 
+};
+
+
+
+
+
+
+
+
+
+
 function normalizeToImageData(reshapedArray, vMin, vMax, canvas) {
     const rows = reshapedArray.length;
     const cols = reshapedArray[0].length;
 
     const flatArray = reshapedArray.flat();
-    const normalized = flatArray.map(value => Math.round(((value - vMin) / (vMax - vMin)) * 255));
+    const normalized = isLogNorm===true ? logNormalize(flatArray, vMax) : flatArray.map(value => Math.round(((value - vMin) / (vMax - vMin)) * 255));
+
+
+
+
+    // const normalized = flatArray.map(value => Math.round(((value - vMin) / (vMax - vMin)) * 255));
 
     const imageDataArray = new Uint8ClampedArray(rows * cols * 4);
     for (let i = 0; i < normalized.length; i++) {
@@ -516,15 +539,48 @@ document.querySelector('#resolution-field-select').addEventListener('change', as
 
 
 
+// document.querySelector('#names-field').addEventListener('change', async () => {
+//     loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+// });
+
+
+// document.querySelector('input#filter1').addEventListener('change', async () => {
+//     var pixelMaxValue = document.querySelector("input#filter1").value;
+//     loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", 0, pixelMaxValue);
+// });
+
+
+
+
+
+
+
 document.querySelector('#names-field').addEventListener('change', async () => {
-    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+    // document.querySelector("input#filter0").value = 0;
+    // var pixelMaxValue = document.querySelector("input#filter1").value;
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload")
+});
+
+document.querySelector('input#filter0').addEventListener('change', async () => {
+    var pixelMinValue = document.querySelector("input#filter0").value;
+    var pixelMaxValue = document.querySelector("input#filter1").value;
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", pixelMinValue, pixelMaxValue);
 });
 
 
 document.querySelector('input#filter1').addEventListener('change', async () => {
+    var pixelMinValue = document.querySelector("input#filter0").value;
     var pixelMaxValue = document.querySelector("input#filter1").value;
-    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", 0, pixelMaxValue);
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload", pixelMinValue, pixelMaxValue);
 });
+
+
+document.querySelector('#resetfiltersBtn').addEventListener('click', () => {
+    let selection = document.querySelector("input#filter1");
+    selection.value = inspectedImageArray[persistent_state]["viewing_vmax"];
+    loadImageToInspect("names-field","input#filter1","canvas-inspect","sql-query-payload");
+});
+
 
 
 

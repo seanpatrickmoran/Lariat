@@ -7,11 +7,24 @@
 
 
 #levelsCanvas {
-    top:0;
-    margin-left: 13px;
+    top:0px;
+    margin-top: 10px;
+/*    margin-left: 13px;*/
     display: block;
     z-index: 3;
 }
+
+
+#viewPortRows.row-container {
+  justify-content: center;
+}
+
+.row-container {
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+}
+
 
 div.settingsDialog,button.checkbox,span.sliderBg,span.sliderThumb,div.labelNumber,div#labelToasted,button#buttonOK,
 a#homeLink
@@ -110,7 +123,7 @@ span.sliderBg
 {
   display: block;
   position: absolute;
-  width: 240px;
+  width: 360px;
   height: 15px;
   background-image: url('../img/tooledscalebar.png');
   background-repeat: no-repeat;
@@ -127,13 +140,13 @@ span.sliderThumb
 }
 span#sliderMinimumSlider
 {
-  left: 93px;
+  left: 28px;
   top: 250px;
 }
 
-span#sliderFlyingObjects
+span#sliderMaximumSlider
 {
-  left: 93px;
+  left: 28px;
   top: 250px;
 }
 
@@ -144,7 +157,7 @@ span#sliderThumbMinimumSlider
   top: 0;
   z-index: 9;
 }
-span#sliderThumbFlyingObjects
+span#sliderThumbMaximumSlider
 {
   left: 30px;
   top: 0;
@@ -162,9 +175,9 @@ span#sliderThumbFlyingObjects
 }
 
 .title:before{
-  width: 40%;
+  width: 35%;
 }
 
 .title:after{
-  width: 40%;
+  width: 35%;
 }
