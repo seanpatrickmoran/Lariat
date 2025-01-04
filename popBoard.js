@@ -125,6 +125,7 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
     // 	namesMemory.set(strnames.innerText, 2)
 	//     }
 	// }
+	console.log('here')
 
     var names = valueArr[0];
     console.log(valueArr, valueArr[0])

@@ -183,7 +183,7 @@ function prepareQuery(){
     const resolutionB = document.getElementById("resolution-right").txt;
 };
 
-const viewToPairsButton = document.getElementById('intersectBtn');
+const intersectBtn = document.getElementById('intersectBtn');
 intersectBtn.addEventListener('click',()=>{
     // prepareQuery();
     const datasetA = document.getElementById("dataset-left").value;
@@ -211,18 +211,8 @@ intersectBtn.addEventListener('click',()=>{
 
     console.log(sqlRowsA)
     console.log(sqlRowsB)
-
-    // while(){
-    //     page += 200;
-    //     if 
-    // }
-    // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200))
-    // console.log(typeof window.api.getDatasetatRes(datasetA, resolutionA,200))
-    // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200).length===0)
     const pairs = intersectingRows(sqlRowsA, sqlRowsB)
     console.log(pairs)
-    //Query Left and Right ALL as specified. UNLESS PASTEBOARD
-    //return Intersected values...
 
     let divNames = document.getElementById("names");
     let nameString = pairs.map((elem) => {
@@ -230,9 +220,6 @@ intersectBtn.addEventListener('click',()=>{
     }).join("<option />");
     console.log(nameString);
     divNames.innerHTML = "<option />" + nameString;
-
-
-
 
 });
 
@@ -276,6 +263,117 @@ window.api.recieve("resolve-init-tableMemory-dataset", (data) => {
     }).join("<option />");
     divNames.innerHTML = "<option />Resolution</option><option />" + nameString;
 });
+
+
+
+
+
+
+
+const copyAButton = document.getElementById('copyAButton');
+copyAButton.addEventListener('click',()=>{
+    window.api.talkToPBoard('true');
+    let selection = document.getElementById("names");
+    const optionsSelect = selection.selectedOptions;
+    const dumpArr = new Array(optionsSelect.length);
+
+    for (let i = 0; i < optionsSelect.length; i++) {
+
+      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[0])))[0]
+    }if (dumpArr.length === 0){
+        return
+    }
+    window.api.mainDumpToPasteboard(dumpArr);
+});
+
+
+
+const copyBButton = document.getElementById('copyBButton');
+copyBButton.addEventListener('click',()=>{
+    window.api.talkToPBoard('true');
+    let selection = document.getElementById("names");
+    const optionsSelect = selection.selectedOptions;
+    const dumpArr = new Array(optionsSelect.length);
+
+    for (let i = 0; i < optionsSelect.length; i++) {
+
+      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[1])))[0]
+    }if (dumpArr.length === 0){
+        return
+    }
+    window.api.mainDumpToPasteboard(dumpArr);
+});
+
+    // const names = selection.options[selection.selectedIndex].text
+    // console.log(optionsSelect)
+
+
+    // let nameString = pairs.map((elem) => {
+    //     return elem.join(" ... ")
+    // }).join("<option />");
+    // console.log(nameString);
+    // divNames.innerHTML = "<option />" + nameString;
+
+
+
+    //take all selected values, split text on "...", send those to pasteboard.
+
+
+
+
+
+
+    // // prepareQuery();
+    // const datasetA = document.getElementById("dataset-left").value;
+    // const resolutionA = document.getElementById("resolution-left").value;
+    // const datasetB = document.getElementById("dataset-right").value;
+    // const resolutionB = document.getElementById("resolution-right").value;
+    // console.log(datasetA, resolutionA, datasetB, resolutionB)
+    // const sqlRowsA = new Array()
+    // const sqlRowsB = new Array()
+    // var ptrSQL = ['1'];
+    // page = 0;
+    // while(ptrSQL.length!==0){
+    //     ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+    //     sqlRowsA.push(...ptrSQL)
+    //     page += 200;
+    // }
+
+    // var ptrSQL = ['1'];
+    // page = 0;
+    // while(ptrSQL.length!==0){
+    //     ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+    //     sqlRowsB.push(...ptrSQL)
+    //     page += 200;
+    // }
+
+    // console.log(sqlRowsA)
+    // console.log(sqlRowsB)
+
+    // // while(){
+    // //     page += 200;
+    // //     if 
+    // // }
+    // // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200))
+    // // console.log(typeof window.api.getDatasetatRes(datasetA, resolutionA,200))
+    // // console.log(window.api.getDatasetatRes(datasetA, resolutionA,200).length===0)
+    // const pairs = intersectingRows(sqlRowsA, sqlRowsB)
+    // console.log(pairs)
+    // //Query Left and Right ALL as specified. UNLESS PASTEBOARD
+    // //return Intersected values...
+
+    // let divNames = document.getElementById("names");
+    // let nameString = pairs.map((elem) => {
+    //     return elem.join(" ... ")
+    // }).join("<option />");
+    // console.log(nameString);
+    // divNames.innerHTML = "<option />" + nameString;
+
+
+
+
+
+
 
 
 
