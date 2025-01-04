@@ -38,7 +38,7 @@
       </div>
       <h1 class="title">levelsWindow</h1>
       <div id="viewPortRows" class="row-container">
-       <canvas id="levelsCanvas" width="400" height="400"></canvas>
+       <canvas id="levelsCanvas" width="256" height="200"></canvas>
         <!-- <canvas id="canvas-pop" width="325" height="325"></canvas> -->
       </div>
 
@@ -46,6 +46,13 @@
         <p><span id="sliderMinimumSlider" class="sliderBg">Minimum Slider: <span id="innerLabelMinimumSlider">8</span><span id="sliderThumbMinimumSlider" class="sliderThumb"></span></span></p>
         <p><span id="sliderMaximumSlider" class="sliderBg">Maximum Slider: <span id="innerLabelMaximumSlider">8</span><span id="sliderThumbMaximumSlider" class="sliderThumb"></span></span></p>
       </div>
+      <div id="viewPortRows" class="row-container" style="margin-top: 10px">
+        <p>Min:</p> <p style="visibility: hidden;">Max:</p>  <p style="visibility: hidden;">  <p style="visibility: hidden;"> <p>Max:</p>
+      </div>
+      
+      <!-- <div id="viewPortRows" class="row-container" style="margin-top: 3px"> -->
+        <!-- <p>Max:</p> -->
+      <!-- </div> -->
 
 
 <!-- 
@@ -68,7 +75,7 @@
     </div>
 </div>
  -->
-    <canvas id="levelsCanvas" width="450" height="450"></canvas>
+    <canvas id="hiddenCanvas" width="450" height="450"></canvas>
     </div>
     <script src="levels.js"></script>
     <link rel="stylesheet" href="../style.css" />

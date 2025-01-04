@@ -357,6 +357,14 @@ ipcMain.handle("transmitMainSwapInspect", async (event, msg) => {
 });
 
 
+// ipcMain.handle("transmitMainLevels", async (event, msg) => {    
+//     browserWindowArray['levelsWindow'] = await createlevelsWindow();
+//     const selectWindow = BrowserWindow.fromId(browserWindowArray["mainWindow"])
+//     selectWindow.webContents.send("greyscale-to-levels", msg);
+//     return
+// });
+
+
 ipcMain.handle("transmitMainLevels", async (event, msg) => {    
     browserWindowArray['levelsWindow'] = await createlevelsWindow();
     const selectWindow = BrowserWindow.fromId(browserWindowArray["mainWindow"])
@@ -364,6 +372,15 @@ ipcMain.handle("transmitMainLevels", async (event, msg) => {
     return
 });
 
+
+
+// ipcMain.handle("return-greyscale-to-levels", async (event, msg) => {
+//     const selectWindow = BrowserWindow.getFocusedWindow()//.fromId(browserWindowArray["levelsWindow"])
+//     selectWindow.webContents.on("did-finish-load", () => {
+//         selectWindow.webContents.send("greyscale-arrives-levels", msg);
+//     });
+//     return
+// });
 
 
 ipcMain.handle("return-base64-to-levels", async (event, msg) => {

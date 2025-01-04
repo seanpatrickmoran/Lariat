@@ -7,7 +7,7 @@ var sliders={
     'sliderX': 0,
     'span': 0,
     'sliderMin': 1,
-    'sliderMax': 228
+    'sliderMax': 348
   },
   'MaximumSlider': {
     'valueMin': 1,
@@ -16,7 +16,7 @@ var sliders={
     'sliderX': 0,
     'span': 0,
     'sliderMin': 1,
-    'sliderMax': 228
+    'sliderMax': 348
   }
 };
 
@@ -295,7 +295,7 @@ function createHistogramFromBase64(base64Image) {
   const ctxh = canvashidden.getContext('2d');
 
   const canvas = document.getElementById('levelsCanvas');
-  canvas.width = 360;
+  canvas.width = 256;
   canvas.height = 200;
   const ctx = canvas.getContext('2d');
   const img = new Image();
