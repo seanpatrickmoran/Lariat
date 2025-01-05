@@ -1,5 +1,5 @@
-var searchPageOffset = 0;
-var offsetPage = Math.ceil(searchPageOffset/100);
+let searchPageOffset = 0;
+var offsetPage = Math.ceil(searchPageOffset/200);
 
 
 let tableMemory = {
@@ -11,58 +11,57 @@ let tableMemory = {
 
 
 const incrementAndQuery = () => {
-    searchPageOffset += 100;
+    // searchPageOffset += 200;
     console.log(searchPageOffset)
     let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
     let dataset = document.getElementById("dataset-field-select").value
-    query_with_textbox(dataset,resolution,searchPageOffset);
+    query_with_textbox(dataset,resolution, 200);
 };
 
 const decrementAndQuery = () => {
     if (searchPageOffset === 0){
         return
     };
-    searchPageOffset -= 100;
+    // searchPageOffset -= 200;
     console.log(searchPageOffset)
     let resolution = document.getElementById("resolution-field-select").value.replace("all", '');
     let dataset = document.getElementById("dataset-field-select").value
-    query_with_textbox(dataset,resolution,searchPageOffset);
+    query_with_textbox(dataset,resolution, -200);
 };
 
 
 const executeQueryButton = () => {
     searchPageOffset = 0;
     if (document.getElementById("names-field-select").value === "all") {
-        console.log('print')
         query_with_textbox('','names');
     } else {
-        console.log('else');
         query_with_textbox('', document.getElementById("dataset-field-select").value); //will this return more than one value?
     };
 };
 
-function query_with_textbox(keyname,route,searchPageOffset){
+function query_with_textbox(keyname,route,setPageOffset=0){
     let resolution = document.getElementById("resolution-field-select").value
     let dataset = document.getElementById("dataset-field-select").value
-    console.log(dataset)
     var names;
-    console.log(searchPageOffset)
+    searchPageOffset += setPageOffset
     if (resolution!=''){
         names = window.api.getDatasetatRes(dataset, parseInt(resolution), searchPageOffset)
-        console.log('accessed')
     } else {
-        console.log('else')
         names = window.api.getDataset(dataset, searchPageOffset)
+        searchPageOffset -= setPageOffset
+        return
     }
-    // if (names!=undefined){
+
+    if (names.length===0){
+        searchPageOffset -= setPageOffset
+        return
+    }
+
     let divNames = document.getElementById("names");
     let nameString = names.map((elem) => {
         return elem.name
     }).join("<option />");
-
-    console.log(nameString)
     divNames.innerHTML = "<option />" + nameString
-    // };
 };
 
 

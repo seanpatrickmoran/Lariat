@@ -61,15 +61,22 @@ let tableMemory = {
             }
 
 
-var searchPageOffset = 0;
-var offsetPage = Math.ceil(searchPageOffset/100);
+let searchPageOffset = 0;
+var offsetPage = Math.ceil(searchPageOffset/200);
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
 
-const queryInspectToNamesField = (dname, res) =>{
+const queryInspectToNamesField = (dname, res, setPageOffset=0) =>{
+    searchPageOffset += setPageOffset
     data = window.api.getDatasetatRes(dname, res, searchPageOffset)
+
+    if (data.length===0){
+        searchPageOffset -= setPageOffset
+        return
+    }
+
     divNames = document.getElementById("names-field");
     nameString = data.map((elem) => {
         return elem["name"]
@@ -81,20 +88,20 @@ const queryInspectToNamesField = (dname, res) =>{
 
 
 const incrementAndQuery = () => {
-    searchPageOffset += 100;
+    const setPageOffset = 200;
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
-    queryInspectToNamesField(dataset,resolution);
+    queryInspectToNamesField(dataset,resolution, setPageOffset);
 };
 
 const decrementAndQuery = () => {
     if (searchPageOffset === 0){
         return
     };
-    searchPageOffset -= 100;
+    const setPageOffset = -200;
     const dataset = document.getElementById("field-select").value;
     const resolution = document.getElementById("resolution-field-select").value;
-    queryInspectToNamesField(dataset,resolution);
+    queryInspectToNamesField(dataset,resolution, setPageOffset);
 };
 
 ////////////////////////////////////////////////////////////////////////////
