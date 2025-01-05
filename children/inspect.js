@@ -114,7 +114,8 @@ const inspectSendsToPopboard = () => {
     // console.log(window.api.getNames(selection.options[selection.selectedIndex].text))
     const reply = JSON.parse(JSON.stringify(window.api.getNames(selection.options[selection.selectedIndex].text)))[0]
     // console.log(reply)
-    window.api.mainDumpToPasteboard([reply]);
+    // window.api.mainDumpToPasteboard([reply]);
+    setTimeout(() => window.api.mainDumpToPasteboard([reply]), 100)
 }
 
 const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger=0, vMaxTrigger=0) => {

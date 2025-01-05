@@ -82,7 +82,8 @@ const executeCopyToPasteboard = () => {
     }if (dumpArr.length === 0){
         return
     }
-    window.api.mainDumpToPasteboard(dumpArr);
+    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 30)
+    // window.api.mainDumpToPasteboard(dumpArr);
 };
 
 

@@ -528,7 +528,8 @@ copyAButton.addEventListener('click',()=>{
         }
     }
 
-    window.api.mainDumpToPasteboard(dumpArr);
+    // window.api.mainDumpToPasteboard(dumpArr);
+    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 30)
 });
 
 
@@ -556,7 +557,8 @@ copyBButton.addEventListener('click',()=>{
         }
     }
 
-    window.api.mainDumpToPasteboard(dumpArr);
+    // window.api.mainDumpToPasteboard(dumpArr);
+    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 30)
 });
 
     // const names = selection.options[selection.selectedIndex].text
