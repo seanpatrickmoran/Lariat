@@ -121,6 +121,100 @@ function intersectingRows(sqlRows1, sqlRows2) {
 }
 
 
+
+
+function nonIntersectingRows(sqlRows1, sqlRows2, returnNonIntersectingFrom = 1) {
+    // Helper function to process SQL rows into a dictionary grouped by chromosome
+    function ingestToDict(sqlList) {
+        const outDict = {};
+
+        for (let i = 0; i < sqlList.length; i++) {
+            const row = sqlList[i];
+            const [c1, x1, x2, c2, y1, y2] = row.coordinates.split(",");
+            const [x1Int, x2Int, y1Int, y2Int] = [x1, x2, y1, y2].map(Number);
+
+            if (!outDict[c1]) {
+                outDict[c1] = [];
+            }
+            outDict[c1].push([row.name, [x1Int, x2Int, y1Int, y2Int]]);
+        }
+
+        return outDict;
+    }
+
+    // Helper function to find non-intersecting intervals
+    function filterNonIntersecting(list1, list2) {
+        const nonIntersecting = [];
+
+        for (let i = 0; i < list1.length; i++) {
+            const [name1, [x1Start, x1End, y1Start, y1End]] = list1[i];
+            let isIntersecting = false;
+
+            for (let j = 0; j < list2.length; j++) {
+                const [name2, [x2Start, x2End, y2Start, y2End]] = list2[j];
+
+                // Check for overlap in either the x or y intervals
+                const xOverlap = x1Start <= x2End && x2Start <= x1End;
+                const yOverlap = y1Start <= y2End && y2Start <= y1End;
+
+                if (xOverlap || yOverlap) {
+                    isIntersecting = true;
+                    break;
+                }
+            }
+
+            if (!isIntersecting) {
+                nonIntersecting.push(name1);
+            }
+        }
+
+        return nonIntersecting;
+    }
+
+    // Process both sets of SQL rows into dictionaries
+    const chrDict1 = ingestToDict(sqlRows1);
+    const chrDict2 = ingestToDict(sqlRows2);
+
+    // Determine which set to return non-intersecting rows from
+    const sourceDict = returnNonIntersectingFrom === 1 ? chrDict1 : chrDict2;
+    const compareDict = returnNonIntersectingFrom === 1 ? chrDict2 : chrDict1;
+
+    // Find non-intersecting rows for common chromosomes
+    const keys = Array.from({ length: 22 }, (_, i) => `chr${i + 1}`).concat("chrX");
+    const nonIntersectingRows = [];
+
+    for (const ch of keys) {
+        if (!sourceDict[ch]) {
+            continue;
+        }
+        if (!compareDict[ch]) {
+            nonIntersectingRows.push(...sourceDict[ch].map(([name]) => name));
+            continue;
+        }
+
+        nonIntersectingRows.push(...filterNonIntersecting(sourceDict[ch], compareDict[ch]));
+    }
+
+    return nonIntersectingRows;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // function query_with_textbox(keyname){
 //     var search = document.getElementById('sqlite3-query').value;
 //     var names = functionMapped[keyname](search);
@@ -183,45 +277,7 @@ function prepareQuery(){
     const resolutionB = document.getElementById("resolution-right").txt;
 };
 
-const intersectBtn = document.getElementById('intersectBtn');
-intersectBtn.addEventListener('click',()=>{
-    // prepareQuery();
-    const datasetA = document.getElementById("dataset-left").value;
-    const resolutionA = document.getElementById("resolution-left").value;
-    const datasetB = document.getElementById("dataset-right").value;
-    const resolutionB = document.getElementById("resolution-right").value;
-    console.log(datasetA, resolutionA, datasetB, resolutionB)
-    const sqlRowsA = new Array()
-    const sqlRowsB = new Array()
-    var ptrSQL = ['1'];
-    page = 0;
-    while(ptrSQL.length!==0){
-        ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
-        sqlRowsA.push(...ptrSQL)
-        page += 200;
-    }
 
-    var ptrSQL = ['1'];
-    page = 0;
-    while(ptrSQL.length!==0){
-        ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
-        sqlRowsB.push(...ptrSQL)
-        page += 200;
-    }
-
-    console.log(sqlRowsA)
-    console.log(sqlRowsB)
-    const pairs = intersectingRows(sqlRowsA, sqlRowsB)
-    console.log(pairs)
-
-    let divNames = document.getElementById("names");
-    let nameString = pairs.map((elem) => {
-        return elem.join(" ... ")
-    }).join("<option />");
-    console.log(nameString);
-    divNames.innerHTML = "<option />" + nameString;
-
-});
 
 
 
@@ -269,6 +325,183 @@ window.api.recieve("resolve-init-tableMemory-dataset", (data) => {
 
 
 
+const intersectBtn = document.getElementById('intersectBtn');
+intersectBtn.addEventListener('click',()=>{
+    // prepareQuery();
+    const datasetA = document.getElementById("dataset-left").value;
+    const resolutionA = document.getElementById("resolution-left").value;
+    const datasetB = document.getElementById("dataset-right").value;
+    const resolutionB = document.getElementById("resolution-right").value;
+    console.log(datasetA, resolutionA, datasetB, resolutionB)
+    const sqlRowsA = new Array()
+    const sqlRowsB = new Array()
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+        sqlRowsA.push(...ptrSQL)
+        page += 200;
+    }
+
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+        sqlRowsB.push(...ptrSQL)
+        page += 200;
+    }
+
+    console.log(sqlRowsA)
+    console.log(sqlRowsB)
+    const pairs = intersectingRows(sqlRowsA, sqlRowsB)
+    console.log(pairs)
+
+    let divNames = document.getElementById("names");
+    let nameString = pairs.map((elem) => {
+        return elem.join(" ... ")
+    }).join("<option />");
+    console.log(nameString);
+    divNames.innerHTML = "<option />" + nameString;
+
+});
+
+
+
+// const intersectBtn = document.getElementById('intersectBtn');
+// intersectBtn.addEventListener('click',()=>{
+//     // prepareQuery();
+//     const datasetA = document.getElementById("dataset-left").value;
+//     const resolutionA = document.getElementById("resolution-left").value;
+//     const datasetB = document.getElementById("dataset-right").value;
+//     const resolutionB = document.getElementById("resolution-right").value;
+//     console.log(datasetA, resolutionA, datasetB, resolutionB)
+//     const sqlRowsA = new Array()
+//     const sqlRowsB = new Array()
+//     var ptrSQL = ['1'];
+//     page = 0;
+//     while(ptrSQL.length!==0){
+//         ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+//         sqlRowsA.push(...ptrSQL)
+//         page += 200;
+//     }
+
+//     var ptrSQL = ['1'];
+//     page = 0;
+//     while(ptrSQL.length!==0){
+//         ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+//         sqlRowsB.push(...ptrSQL)
+//         page += 200;
+//     }
+
+//     console.log(sqlRowsA)
+//     console.log(sqlRowsB)
+//     const pairs = intersectingRows(sqlRowsA, sqlRowsB)
+//     console.log(pairs)
+
+//     let divNames = document.getElementById("names");
+//     let nameString = pairs.map((elem) => {
+//         return elem.join(" ... ")
+//     }).join("<option />");
+//     console.log(nameString);
+//     divNames.innerHTML = "<option />" + nameString;
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+const aNotbBtn = document.getElementById('aNotbBtn');
+aNotbBtn.addEventListener('click',()=>{
+    // prepareQuery();
+    const datasetA = document.getElementById("dataset-left").value;
+    const resolutionA = document.getElementById("resolution-left").value;
+    const datasetB = document.getElementById("dataset-right").value;
+    const resolutionB = document.getElementById("resolution-right").value;
+    console.log(datasetA, resolutionA, datasetB, resolutionB)
+    const sqlRowsA = new Array()
+    const sqlRowsB = new Array()
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+        sqlRowsA.push(...ptrSQL)
+        page += 200;
+    }
+
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+        sqlRowsB.push(...ptrSQL)
+        page += 200;
+    }
+
+    console.log(sqlRowsA)
+    console.log(sqlRowsB)
+    const pairs = nonIntersectingRows(sqlRowsA, sqlRowsB)
+    console.log(pairs)
+
+    let divNames = document.getElementById("names");
+    let nameString = pairs.map((elem) => {
+        return elem
+    }).join("<option />");
+    console.log(nameString);
+    divNames.innerHTML = "<option />" + nameString;
+
+});
+
+const bNotaBtn = document.getElementById('bNotaBtn');
+bNotaBtn.addEventListener('click',()=>{
+    // prepareQuery();
+    const datasetA = document.getElementById("dataset-left").value;
+    const resolutionA = document.getElementById("resolution-left").value;
+    const datasetB = document.getElementById("dataset-right").value;
+    const resolutionB = document.getElementById("resolution-right").value;
+    console.log(datasetA, resolutionA, datasetB, resolutionB)
+    const sqlRowsA = new Array()
+    const sqlRowsB = new Array()
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetA, resolutionA, page)
+        sqlRowsA.push(...ptrSQL)
+        page += 200;
+    }
+
+    var ptrSQL = ['1'];
+    page = 0;
+    while(ptrSQL.length!==0){
+        ptrSQL = window.api.getCoordsAtNameRes(datasetB, resolutionB, page)
+        sqlRowsB.push(...ptrSQL)
+        page += 200;
+    }
+
+    console.log(sqlRowsA)
+    console.log(sqlRowsB)
+    const pairs = nonIntersectingRows(sqlRowsA, sqlRowsB, 2)
+    console.log(pairs)
+
+    let divNames = document.getElementById("names");
+    let nameString = pairs.map((elem) => {
+        return elem
+    }).join("<option />");
+    console.log(nameString);
+    divNames.innerHTML = "<option />" + nameString;
+
+});
+
+
+
+
+
+
 
 const copyAButton = document.getElementById('copyAButton');
 copyAButton.addEventListener('click',()=>{
@@ -277,15 +510,26 @@ copyAButton.addEventListener('click',()=>{
     const optionsSelect = selection.selectedOptions;
     const dumpArr = new Array(optionsSelect.length);
 
-    for (let i = 0; i < optionsSelect.length; i++) {
 
-      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[0])))[0]
-    }if (dumpArr.length === 0){
+    var flag = false;
+    if (dumpArr.length === 0){
         return
+    } else if(optionsSelect[0].innerText.includes(" ... ")){
+        flag = true;
     }
+    
+    if(flag){
+        for (let i = 0; i < optionsSelect.length; i++) {
+          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[0])))[0]
+        }
+    } else {
+        for (let i = 0; i < optionsSelect.length; i++) {
+          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
+        }
+    }
+
     window.api.mainDumpToPasteboard(dumpArr);
 });
-
 
 
 const copyBButton = document.getElementById('copyBButton');
@@ -295,12 +539,23 @@ copyBButton.addEventListener('click',()=>{
     const optionsSelect = selection.selectedOptions;
     const dumpArr = new Array(optionsSelect.length);
 
-    for (let i = 0; i < optionsSelect.length; i++) {
-
-      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[1])))[0]
-    }if (dumpArr.length === 0){
+    var flag = false;
+    if (dumpArr.length === 0){
         return
+    } else if(optionsSelect[0].innerText.includes(" ... ")){
+        flag = true;
     }
+    
+    if(flag){
+        for (let i = 0; i < optionsSelect.length; i++) {
+          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[1])))[0]
+        }
+    } else {
+        for (let i = 0; i < optionsSelect.length; i++) {
+          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
+        }
+    }
+
     window.api.mainDumpToPasteboard(dumpArr);
 });
 
