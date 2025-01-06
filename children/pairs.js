@@ -520,16 +520,18 @@ copyAButton.addEventListener('click',()=>{
     
     if(flag){
         for (let i = 0; i < optionsSelect.length; i++) {
-          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[0])))[0]
+          // dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[0])))[0]
+            dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[0]
         }
     } else {
         for (let i = 0; i < optionsSelect.length; i++) {
-          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
+          // dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
+            dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[0][0]
         }
     }
 
     // window.api.mainDumpToPasteboard(dumpArr);
-    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 30)
+    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 60)
 });
 
 
@@ -549,16 +551,18 @@ copyBButton.addEventListener('click',()=>{
     
     if(flag){
         for (let i = 0; i < optionsSelect.length; i++) {
-          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[1])))[0]
+            dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[1]
+          // dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText.split(" ... ")[1])))[0]
         }
     } else {
         for (let i = 0; i < optionsSelect.length; i++) {
-          dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
+            dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[1][0]
+          // dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].innerText)))[0]
         }
     }
 
     // window.api.mainDumpToPasteboard(dumpArr);
-    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 30)
+    setTimeout(() => window.api.mainDumpToPasteboard(dumpArr), 100)
 });
 
     // const names = selection.options[selection.selectedIndex].text

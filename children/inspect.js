@@ -119,10 +119,17 @@ const inspectSendsToPopboard = () => {
     window.api.talkToPBoard('true');
     var selection = document.querySelector('select#names-field')
     // console.log(window.api.getNames(selection.options[selection.selectedIndex].text))
-    const reply = JSON.parse(JSON.stringify(window.api.getNames(selection.options[selection.selectedIndex].text)))[0]
-    // console.log(reply)
+    // const reply = JSON.parse(JSON.stringify(window.api.getNames(selection.options[selection.selectedIndex].text)))[0]
+    // const reply = window.api.getNames(selection.options[selection.selectedIndex].text)[0]
+    console.log(selection.options[selection.selectedIndex].text)
+
+
+    // dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[1]
+
+    // dumpArr[i] = optionsSelect[i].innerText.split(" ... ")[1][0]
+
     // window.api.mainDumpToPasteboard([reply]);
-    setTimeout(() => window.api.mainDumpToPasteboard([reply]), 100)
+    setTimeout(() => window.api.mainDumpToPasteboard([selection.options[selection.selectedIndex].text]), 100)
 }
 
 const loadImageToInspect = (selectionId,inputId,canvasId,divNamesId, vMinTrigger=0, vMaxTrigger=0) => {
@@ -521,6 +528,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.querySelector('#field-select').addEventListener('change', async () => {
     const search = document.getElementById("field-select").value
     var divNames = document.getElementById("resolution-field-select");
+
+    if(search==="Pasteboard"){
+        //
+    } else {
+
+
     nameString = tableMemory["resolutionFields"][search].map((elem) => {
         console.log(elem)
         return elem
@@ -531,6 +544,7 @@ document.querySelector('#field-select').addEventListener('change', async () => {
     const dname = document.getElementById("field-select").value;
     const res = document.getElementById("resolution-field-select").value;
     queryInspectToNamesField(dname, res)
+    }
 });
 
 

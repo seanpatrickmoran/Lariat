@@ -77,7 +77,11 @@ const executeCopyToPasteboard = () => {
     const optionsSelect = fieldSelect.selectedOptions;
     const dumpArr = new Array(optionsSelect.length);
     for (let i = 0; i < optionsSelect.length; i++) {
-      dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].value)))[0]
+      // dumpArr[i] = JSON.parse(JSON.stringify(window.api.getNames(optionsSelect[i].value)))[0]
+        dumpArr[i] = optionsSelect[i].value;
+        console.log(optionsSelect[i].value)
+        // dumpArr[i] = window.api.getNames(optionsSelect[i].value)[0]
+        // console.log(window.api.getNames(optionsSelect[i].value))
     }if (dumpArr.length === 0){
         return
     }

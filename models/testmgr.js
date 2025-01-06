@@ -26,6 +26,14 @@ export const getNames = (name) => {
 };
 
 
+export const getALL = (name) => {
+	const sql = 'SELECT * FROM imag WHERE name = (?)';
+	let stmt = db.prepare(sql);
+	let result = stmt.all(name);
+	return result;
+}
+
+
 export const getDataset = (name, offset) => {
 	const sql = `SELECT * FROM imag WHERE dataset = '${name}' LIMIT 200 OFFSET ${offset};`; // LIMIT 3 OFFSET 0';
 	let stmt = db.prepare(sql);

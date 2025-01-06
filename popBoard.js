@@ -13,7 +13,16 @@ pasteBoardSelectAll.addEventListener('click', async () => {
 
 const pasteBoardRemove = document.getElementById('pbRemove');
 pasteBoardRemove.addEventListener('click', async () => {
-   $("table tr.ui-selected").remove();
+   $("table tr.ui-selected").each(function(){
+	   	// this.children("td.strname");
+	   	const name = $(this).text();
+	   	// console.log($(this).children())
+   		namesMemory.delete(name)
+   		// console.log(this.children("td.strname"))
+   		this.remove()
+   });
+
+
 });
 
 const pasteBoardPasteTo = document.getElementById('pbPaste');
@@ -30,7 +39,13 @@ pasteBoardPasteTo.addEventListener('click', async () => {
 const pasteBoardDump = document.getElementById('pbDump');
 pasteBoardDump.addEventListener('click', async () => {
 	const pasteBoardSelectField = document.getElementById('pasteboard');
-    window.api.talkToMain('true');
+    var names = $("#pasteboard tr.ui-selected td.strname").map(function(){
+    return window.api.getALL(this.innerHTML)
+	}).get();
+	// console.log(names)
+	// $("table tr.ui-selected")
+	// this is identical to pasteBoardPasteTo... refactor?
+    window.api.signalToMain('dump-pasteboard', names);
 });
 
 const pasteBoardTalk = document.getElementById('pbTalk');
@@ -131,7 +146,8 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
     console.log(valueArr, valueArr[0])
     for (let i = 0; i < names.length; i++) {
 		var substring = names[i];
-		if (namesMemory.has(substring.name)){
+		if (namesMemory.has(substring)){
+		// if (namesMemory.has(substring.name)){
 			continue
 		} else {
 
@@ -148,10 +164,11 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 
 			// Add text to cells
 			// cell1.innerHTML = "Column 1";
-			const resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
-			cell1.innerHTML = `<img class="thumbnail" src="${resizedImageBase64}">`
+			// const resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
+			// cell1.innerHTML = `<img class="thumbnail" src="${resizedImageBase64}">`
 			cell1.className = "thumbnail"
-			cell2.innerHTML = `${substring.name}`
+			cell2.innerHTML = `${substring}`
+			// cell2.innerHTML = `${substring.name}`
 			cell2.className = "strname"
 
 			// Add cells to row
@@ -160,7 +177,8 @@ window.api.recieve("main-to-pasteboard",(valueArr) => {
 
 			// Add row to table
 			table.appendChild(newRow);
-			namesMemory.set(substring.name,2)
+			namesMemory.set(substring,2)
+			// namesMemory.set(substring.name,2)
 		// const resizedImageBase64 = base64ToImage(substring.numpyarr, substring.viewing_vmax, substring.dimensions)
 	    // target.innerHTML += `<tr id="selectable">
 	    // 						<td class="thumbnail">

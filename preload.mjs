@@ -14,9 +14,14 @@ import * as testmgr from "./models/testmgr.js";
 // 	return testmgr.getNames(name, colName);
 // }
 
+const getALL = (name) => {
+	return testmgr.getALL(name);
+}
+
 const getNames = (name) => {
 	return testmgr.getNames(name);
 }
+
 
 const getDataset = (name,offset) => {
 	return testmgr.getDataset(name,offset);
@@ -80,6 +85,7 @@ const getCoordsAtNameRes = (name, resolution, offset) => {
 
 // contextBridge.exposeInMainWorld('ipcRenderer', ipcRenderer)
 contextBridge.exposeInMainWorld("api", {
+	getALL: getALL,
 	getNames: getNames,
 	getDataset: getDataset,
 	getCondition: getCondition,

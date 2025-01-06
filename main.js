@@ -418,6 +418,25 @@ ipcMain.handle('dialog:PBoardToMain', async (event, data) => {
 
 
 
+
+ipcMain.handle('dump-pasteboard', async (event, msg) => {
+    const selectWindow = BrowserWindow.fromId(browserWindowArray['mainWindow'])
+    console.log('here')
+    console.log("dump-pasteboard")
+    // fs.writeFileSync(jsonFilePath, JSON.stringify(tableMemory))
+    dumpPasteBoardToCSV(msg);
+    // selectWindow.webContents.send("",'');
+    // return
+});
+
+
+
+
+
+
+
+
+
 const checkDatabase = () => {
     boot_attempts += 1 ;
     try {
@@ -489,6 +508,92 @@ const mountDatabase = () => {
         console.log('__@_@_@_@_@___')
         console.log('\n\n\n')
 };
+
+
+
+function dumpPasteBoardToCSV(data) {
+    //data is arr, unpack arr to get each name. should we query these?
+    console.log(data)
+    dialog
+        .showSaveDialog(BrowserWindow.getFocusedWindow(), {
+          title: 'Save file',
+          // filters: [{ name: 'SQLite Database', extensions: ['csv', 'txt', 'tsv'] }],
+          // properties: ['saveFile'],
+        }).then((result) => {
+            console.log(result)
+            if (!result.canceled){
+                let writetoFile = fs.createWriteStream(result.filePath) 
+                const selectWindow = BrowserWindow.getFocusedWindow()
+
+
+                // to write the file 
+
+// Read and display the file data on console 
+                // console.log(data)
+                data.forEach((elem) => {   
+                    // var payload = api.getNames(payload)
+                    // console.log()
+                    // newline.push(payload)
+                    console.log(elem.name)
+                    // var payload = data.pop()
+                    writetoFile.write(`${elem.name},${elem.coordinates},${elem.dataset},${elem.condition},${elem.hic_path},${elem.PUB_ID},${elem.resolution},${elem.dimensions},${elem.viewing_vmax},${elem.numpyarr},${elem.meta}\n`);
+
+
+                })
+                // writetoFile.destroy()
+
+
+
+                // const writetoFile = fs.createWriteStream('users.csv');
+                // writetoFile.write('name,coordinate,dataset,condition,hic_path,PUB_ID,resolution,dimensions,numpyarr,meta\n', 'utf8');
+// name,
+// coordinate,
+// dataset,
+// condition,
+// hic_path,
+// PUB_ID,
+// resolution,
+// dimensions,
+// numpyarr,
+// meta
+
+// function writeTenMillionUsers(writer, encoding, callback) {
+//   let i = 10000000;
+//   let id = 0;
+//   function write() {
+//     let ok = true;
+//     do {
+//       i -= 1;
+//       id += 1;
+//       const username = faker.internet.userName();
+//       const avatar = faker.image.avatar();
+//       const data = `${id},${username},${avatar}\n`;
+//       if (i === 0) {
+//         writer.write(data, encoding, callback);
+//       } else {
+// // see if we should continue, or wait
+// // don't pass the callback, because we're not done yet.
+//         ok = writer.write(data, encoding);
+//       }
+//     } while (i > 0 && ok);
+//     if (i > 0) {
+// // had to stop early!
+// // write some more once it drains
+//       writer.once('drain', write);
+//     }
+//   }
+// write()
+// }
+
+
+
+                // fs.writeFileSync(result.filePaths[0], "hello stinky")
+            }
+        // .catch((err) => {
+        //     console.error('whoops:',err.message)
+        // })
+})
+}
 
 
 
