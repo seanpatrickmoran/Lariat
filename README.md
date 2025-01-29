@@ -1,6 +1,6 @@
 # DEPRECATED
 
-The electron.js Lariat is no longer maintained except as an interesting reference to rolling vanilla JS with electron.JS. Instead, look here for the current web-development we're working on!
+The desktop application version Lariat is no longer maintained. Instead, look here for the current web-development we're working on!
 
 [https://github.com/seanpatrickmoran/lariat-web-prototype](https://github.com/seanpatrickmoran/lariat-web-prototype)
 
