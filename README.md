@@ -1,3 +1,18 @@
+# DEPRECATED
+
+The electron.js Lariat is no longer maintained except as an interesting reference to rolling vanilla JS with electron.JS. Instead, look here for the current web-development we're working on!
+
+[https://github.com/seanpatrickmoran/lariat-web-prototype](https://github.com/seanpatrickmoran/lariat-web-prototype)
+
+
+...
+
+...
+
+...
+
+
+
 <p float="center" align="left"><h1><image src="./src/lariattmp.png" width=32px /> </image> Lariat</h1></p>
 
 
